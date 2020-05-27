@@ -28,7 +28,7 @@ class Song: Hashable {
     var suggested_by: String
     var score: Int
     var time_added: Int
-    var upvoters: [String] //later User
+    var upvoters: [String]
     var downvoters: [String]
     var hashValue: Int {
          return id.hashValue
