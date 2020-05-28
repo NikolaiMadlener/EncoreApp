@@ -9,12 +9,15 @@
 import SwiftUI
 
 struct HomeView: View {
-    var songsList: [Song] = Mockmodel.getSongs()
+    
+    //@EnvironmentObject private var model: Model
+    private var queue: [Song] = Mockmodel.getSongs()
+    
     var body: some View {
         ScrollView {
             VStack {
-                ForEach(songsList, id: \.self) { song in
-                    SongListCell(song: song)
+                ForEach(queue, id: \.self) { song in
+                    SongListCell(song: song, rank: (self.queue.firstIndex(of: song) ?? -1) + 1)
                 }
             }
         }
