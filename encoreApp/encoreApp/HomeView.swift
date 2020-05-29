@@ -17,7 +17,10 @@ struct HomeView: View {
         ScrollView {
             VStack {
                 ForEach(queue, id: \.self) { song in
-                    SongListCell(song: song, rank: (self.queue.firstIndex(of: song) ?? -1) + 1)
+                    VStack {
+                        SongListCell(song: song, rank: (self.queue.firstIndex(of: song) ?? -1) + 1)
+                        Divider()
+                    }
                 }
             }
         }

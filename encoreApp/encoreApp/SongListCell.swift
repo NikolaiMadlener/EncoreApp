@@ -22,8 +22,6 @@ struct SongListCell: View {
             Spacer()
             voteView
         }
-        .padding(10)
-        .border(Color.black)
     }
     
     private var rankView: some View {
