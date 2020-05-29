@@ -14,7 +14,7 @@ struct AppContentView: View {
     var body: some View {
         return Group {
             if currentlyInSession {
-                HomeView(signInSuccess: $currentlyInSession)
+                HomeView(currentlyInSession: $currentlyInSession)
             }
             else {
                 ContentView(currentlyInSession: $currentlyInSession)
