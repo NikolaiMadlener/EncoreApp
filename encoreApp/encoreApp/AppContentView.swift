@@ -9,15 +9,15 @@
 import SwiftUI
 
 struct AppContentView: View {
-    @State var signInSuccess = false
+    @State var currentlyInSession = false
 
     var body: some View {
         return Group {
-            if signInSuccess {
-                HomeView()
+            if currentlyInSession {
+                HomeView(signInSuccess: $currentlyInSession)
             }
             else {
-                ContentView(signInSuccess: $signInSuccess)
+                ContentView(currentlyInSession: $currentlyInSession)
             }
         }
     }

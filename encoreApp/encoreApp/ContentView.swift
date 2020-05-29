@@ -10,22 +10,26 @@ import SwiftUI
 
 struct ContentView: View {
     @State var username: String = ""
-    @Binding var signInSuccess: Bool
+    @Binding var currentlyInSession: Bool
 
     var body: some View {
-        ZStack {
-            
-            //LinearGradient(gradient: Gradient(colors: [Color("lax"), Color("purple")]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
-            VStack {
-                Spacer().frame(height: 150)
-                Text("encore.").font(.largeTitle).bold()
-                Spacer().frame(height: 200)
-                TextField("Enter your Name", text: self.$username).padding(5).background(Color("lightgray")).cornerRadius(5).padding()
-                Button(action: { self.createSession(username: self.username) }) {
-                    Text("Create Session").padding(15).background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(15)//.shadow(radius: 5)
-                }.disabled(username == "")
-                Spacer()
-            }
+        VStack {
+            Spacer().frame(height: 150)
+            Text("encore.")
+                .font(.largeTitle)
+                .bold()
+            Spacer().frame(height: 200)
+            TextField("Enter your Name", text: self.$username)
+                .padding(5)
+                .background(Color("lightgray"))
+                .cornerRadius(5)
+                .padding()
+            Button(action: { self.createSession(username: self.username) }) {
+                Text("Create Session")
+                    .padding(15)
+                    .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)//.shadow(radius: 5)
+            }.disabled(username == "")
+            Spacer()
         }
     }
     
@@ -56,7 +60,7 @@ struct ContentView: View {
                     print("Response data string:\n \(dataString)")
                 }
             
-            self.signInSuccess = true
+            self.currentlyInSession = true
         }
         task.resume()
     }
@@ -66,6 +70,6 @@ struct ContentView_Previews: PreviewProvider {
     @State static var signInSuccess = false
     
     static var previews: some View {
-        ContentView(signInSuccess: $signInSuccess)
+        ContentView(currentlyInSession: $signInSuccess)
     }
 }
