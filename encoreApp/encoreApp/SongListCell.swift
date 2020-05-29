@@ -13,6 +13,7 @@ struct SongListCell: View {
     @ObservedObject var song: Song
     @EnvironmentObject private var model: Model
     var rank: Int
+    @State var voteState: VoteState = VoteState.NEUTRAL
 
     var body: some View {
         HStack {
@@ -57,20 +58,38 @@ struct SongListCell: View {
     
     private var upvoteButton: some View {
         Button(action: {
-            self.song.upvoters.append("Myself")
+            switch self.voteState {
+            case .NEUTRAL:
+                self.song.upvoters.append("Myself")
+                self.voteState = VoteState.UPVOTE
+            case .UPVOTE: break
+            case .DOWNVOTE:
+                self.song.upvoters.append("Myself")
+                self.voteState = VoteState.NEUTRAL
+            }
         }) {
             Image(systemName: "chevron.up")
                 .font(.system(size: 25, weight: .regular))
+                .foregroundColor(voteState != VoteState.DOWNVOTE ? voteState.color : Color.gray)
                 .padding(.bottom, 10)
         }
     }
     
     private var downvoteButton: some View {
         Button(action: {
-            self.song.downvoters.append("Myself")
+            switch self.voteState {
+            case .NEUTRAL:
+                self.song.downvoters.append("Myself")
+                self.voteState = VoteState.DOWNVOTE
+            case .UPVOTE:
+                self.song.downvoters.append("Myself")
+                self.voteState = VoteState.NEUTRAL
+            case .DOWNVOTE: break
+            }
         }) {
             Image(systemName: "chevron.down")
                 .font(.system(size: 25, weight: .regular))
+                .foregroundColor(voteState != VoteState.UPVOTE ? voteState.color : Color.gray)
                 .padding(.top, 10)
         }
     }
