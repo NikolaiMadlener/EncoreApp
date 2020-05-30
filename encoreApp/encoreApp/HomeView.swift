@@ -19,7 +19,7 @@ struct HomeView: View {
                     SongListCell(song: song, rank: (self.model.queue.firstIndex(of: song) ?? -1) + 1)
                     Divider()
                 }
-            }
+            }.animation(.easeInOut(duration: 0.30))
         }
     }
 }
