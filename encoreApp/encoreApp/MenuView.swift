@@ -19,10 +19,11 @@ struct MenuView: View {
             Image("qrcode").padding()
             Text("Copy the Session ID and share it with your Friends").font(.footnote)
             TextField("", text: self.$sessionID)
-                .padding(5)
-                .background(Color("lightgray"))
-                .cornerRadius(5)
-                .padding(.horizontal)
+                .padding(10)
+                .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.gray, lineWidth: 1)
+                ).padding(.horizontal, 25)
             Spacer()
             Button(action: { self.showAlert = true }) {
                 // if Host

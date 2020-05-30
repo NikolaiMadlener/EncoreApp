@@ -19,7 +19,6 @@ struct JoinSessionView: View {
             Spacer()
             TextField("Enter Session ID", text: self.$sessionID)
                 .padding(10)
-                //.background(Color.clear)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.gray, lineWidth: 1)
