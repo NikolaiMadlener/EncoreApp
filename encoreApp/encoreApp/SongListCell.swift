@@ -24,6 +24,7 @@ struct SongListCell: View {
 
 struct SongListCell_Previews: PreviewProvider {
     static var song = Song(id: UUID(), name: "Alle meine Entchen", artists: ["Etienne"], duration_ms: 123, cover_url: "", album_name: "Kinderlieder", preview_url: "", suggested_by: "", score: 3, time_added: 1, upvoters: [], downvoters: [])
+    
     static var previews: some View {
         SongListCell(song: self.song)
     }
