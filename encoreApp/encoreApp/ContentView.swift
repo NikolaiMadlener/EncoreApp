@@ -13,23 +13,32 @@ struct ContentView: View {
     @Binding var currentlyInSession: Bool
 
     var body: some View {
-        VStack {
-            Spacer().frame(height: 150)
-            Text("encore.")
-                .font(.largeTitle)
-                .bold()
-            Spacer().frame(height: 200)
-            TextField("Enter your Name", text: self.$username)
+        NavigationView {
+            VStack {
+                Spacer().frame(height: 50)
+                Text("encore.")
+                    .font(.largeTitle)
+                    .bold()
+                Spacer().frame(height: 200)
+                TextField("Enter your Name", text: self.$username)
+                    .padding(5)
+                    .background(Color("lightgray"))
+                    .cornerRadius(5)
+                    .padding()
+                Button(action: { self.createSession(username: self.username) }) {
+                    Text("Create Session")
+                        .padding(15)
+                        .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)//.shadow(radius: 5)
+                    }.disabled(username == "")
+                    .padding(5)
+                NavigationLink(destination: JoinSessionView(username: self.username, currentlyInSession: self.$currentlyInSession)) {
+                    Text("Join Session")
+                        .padding(15)
+                        .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)//.shadow(radius: 5)
+                }.disabled(username == "")
                 .padding(5)
-                .background(Color("lightgray"))
-                .cornerRadius(5)
-                .padding()
-            Button(action: { self.createSession(username: self.username) }) {
-                Text("Create Session")
-                    .padding(15)
-                    .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)//.shadow(radius: 5)
-            }.disabled(username == "")
-            Spacer()
+                Spacer()
+            }
         }
     }
     
