@@ -12,6 +12,7 @@ struct HomeView: View {
     var songsList: [Song] = Mockmodel.getSongs()
     @Binding var currentlyInSession: Bool
     @State var presentMenuSheet = false
+    @Binding var sessionID: String
     
     var body: some View {
         ZStack {
@@ -22,7 +23,7 @@ struct HomeView: View {
                         Image(systemName: "ellipsis").font(Font.system(.title))
                     }.padding()
                         .sheet(isPresented: self.$presentMenuSheet) {
-                            MenuView(currentlyInSession: self.$currentlyInSession)
+                            MenuView(currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
                     }
                 }
                 Spacer()
@@ -40,8 +41,9 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     @State static var currentlyInSession = true
+    @State static var sessionID = ""
     
     static var previews: some View {
-        HomeView(currentlyInSession: $currentlyInSession)
+        HomeView(currentlyInSession: $currentlyInSession, sessionID: $sessionID)
     }
 }

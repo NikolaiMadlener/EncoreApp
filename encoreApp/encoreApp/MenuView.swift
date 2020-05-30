@@ -11,11 +11,18 @@ import SwiftUI
 struct MenuView: View {
     @Binding var currentlyInSession: Bool
     @State var showAlert = false
+    @Binding var sessionID: String
     
     var body: some View {
         VStack {
             Spacer().frame(height: 50)
             Image("qrcode").padding()
+            Text("Copy the Session ID and share it with your Friends").font(.footnote)
+            TextField("", text: self.$sessionID)
+                .padding(5)
+                .background(Color("lightgray"))
+                .cornerRadius(5)
+                .padding(.horizontal)
             Spacer()
             Button(action: { self.showAlert = true }) {
                 // if Host
@@ -37,15 +44,16 @@ struct MenuView: View {
                           secondaryButton: .cancel(Text("Cancel"), action: {
                             self.showAlert = false
                           }))
-            }
+            }.padding()
         }
     }
 }
 
 struct MenuView_Previews: PreviewProvider {
     @State static var signInSuccess = false
+    @State static var sessionID = "b9b314695f504bfa66250d312ce5626d"
     
     static var previews: some View {
-        MenuView(currentlyInSession: $signInSuccess)
+        MenuView(currentlyInSession: $signInSuccess, sessionID: $sessionID)
     }
 }
