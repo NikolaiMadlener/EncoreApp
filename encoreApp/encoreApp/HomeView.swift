@@ -10,17 +10,14 @@ import SwiftUI
 
 struct HomeView: View {
     
-    //@EnvironmentObject private var model: Model
-    private var queue: [Song] = Mockmodel.getSongs()
+    @ObservedObject var model: Model = .shared
     
     var body: some View {
         ScrollView {
-            VStack {
-                ForEach(queue, id: \.self) { song in
-                    VStack {
-                        SongListCell(song: song, rank: (self.queue.firstIndex(of: song) ?? -1) + 1)
-                        Divider()
-                    }
+            ForEach(model.queue, id: \.self) { song in
+                VStack {
+                    SongListCell(song: song, rank: (self.model.queue.firstIndex(of: song) ?? -1) + 1)
+                    Divider()
                 }
             }
         }

@@ -11,9 +11,10 @@ import SwiftUI
 struct SongListCell: View {
     
     @ObservedObject var song: Song
-    @EnvironmentObject private var model: Model
-    var rank: Int
+    @ObservedObject var model: Model = .shared
     @State var voteState: VoteState = VoteState.NEUTRAL
+    var rank: Int
+    
 
     var body: some View {
         HStack {
@@ -60,16 +61,16 @@ struct SongListCell: View {
         Button(action: {
             switch self.voteState {
             case .NEUTRAL:
-                self.song.upvoters.append("Myself")
+                self.model.upvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.UPVOTE
             case .UPVOTE: break
             case .DOWNVOTE:
-                self.song.upvoters.append("Myself")
+                self.model.upvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.NEUTRAL
             }
         }) {
             Image(systemName: "chevron.up")
-                .font(.system(size: 25, weight: .regular))
+                .font(.system(size: 25, weight: .semibold))
                 .foregroundColor(voteState != VoteState.DOWNVOTE ? voteState.color : Color.gray)
                 .padding(.bottom, 10)
         }
@@ -79,16 +80,16 @@ struct SongListCell: View {
         Button(action: {
             switch self.voteState {
             case .NEUTRAL:
-                self.song.downvoters.append("Myself")
+                self.model.downvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.DOWNVOTE
             case .UPVOTE:
-                self.song.downvoters.append("Myself")
+                self.model.downvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.NEUTRAL
             case .DOWNVOTE: break
             }
         }) {
             Image(systemName: "chevron.down")
-                .font(.system(size: 25, weight: .regular))
+                .font(.system(size: 25, weight: .semibold))
                 .foregroundColor(voteState != VoteState.UPVOTE ? voteState.color : Color.gray)
                 .padding(.top, 10)
         }
