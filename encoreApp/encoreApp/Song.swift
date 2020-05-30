@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import SwiftUI
 
-class Song: Hashable {
+class Song: Hashable, ObservableObject {
     
     static func == (lhs: Song, rhs: Song) -> Bool {
         if lhs.id != rhs.id {
@@ -28,8 +29,9 @@ class Song: Hashable {
     var suggested_by: String
     var score: Int
     var time_added: Int
-    var upvoters: [String]
-    var downvoters: [String]
+    @Published var upvoters: [String]
+    @Published var downvoters: [String]
+    var album_image: Image   //temporary, can be deleted ounce we get images from spotify api
     var hashValue: Int {
          return id.hashValue
     }
@@ -45,7 +47,8 @@ class Song: Hashable {
         score: Int,
         time_added: Int,
         upvoters: [String], //later User
-        downvoters: [String]) {
+        downvoters: [String],
+        album_image: Image) {
         self.id = id
         self.name = name
         self.artists = artists
@@ -58,5 +61,6 @@ class Song: Hashable {
         self.time_added = time_added
         self.upvoters = upvoters
         self.downvoters = downvoters
+        self.album_image = album_image
     }
 }

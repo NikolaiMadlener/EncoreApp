@@ -17,6 +17,8 @@
 		23190676247DB75800DA550B /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190675247DB75800DA550B /* Song.swift */; };
 		23190678247DB92600DA550B /* Mockmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190677247DB92600DA550B /* Mockmodel.swift */; };
 		2319067C247DBDB600DA550B /* SongListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319067B247DBDB600DA550B /* SongListCell.swift */; };
+		8F108A992480537F00D5C27B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F108A982480537F00D5C27B /* Model.swift */; };
+		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
 		235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4CE247FB79A007A720D /* AppContentView.swift */; };
 		235EB4D12480F6CC007A720D /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D02480F6CC007A720D /* MenuView.swift */; };
 		235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D2248105A2007A720D /* JoinSessionView.swift */; };
@@ -35,6 +37,8 @@
 		23190675247DB75800DA550B /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		23190677247DB92600DA550B /* Mockmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mockmodel.swift; sourceTree = "<group>"; };
 		2319067B247DBDB600DA550B /* SongListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListCell.swift; sourceTree = "<group>"; };
+		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Model.swift; path = ../Model.swift; sourceTree = "<group>"; };
+		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
 		235EB4CE247FB79A007A720D /* AppContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentView.swift; sourceTree = "<group>"; };
 		235EB4D02480F6CC007A720D /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		235EB4D2248105A2007A720D /* JoinSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSessionView.swift; sourceTree = "<group>"; };
@@ -79,7 +83,9 @@
 				235EB4CE247FB79A007A720D /* AppContentView.swift */,
 				23190675247DB75800DA550B /* Song.swift */,
 				23190677247DB92600DA550B /* Mockmodel.swift */,
+				8F108A982480537F00D5C27B /* Model.swift */,
 				2319067B247DBDB600DA550B /* SongListCell.swift */,
+				8FE5348E24812EFB00D4D630 /* VoteState.swift */,
 				23190665247DA26400DA550B /* Assets.xcassets */,
 				2319066A247DA26400DA550B /* LaunchScreen.storyboard */,
 				2319066D247DA26400DA550B /* Info.plist */,
@@ -170,6 +176,7 @@
 				2319067C247DBDB600DA550B /* SongListCell.swift in Sources */,
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
+				8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */,
 				235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */,
 				23190674247DB53600DA550B /* HomeView.swift in Sources */,
 				235EB4D12480F6CC007A720D /* MenuView.swift in Sources */,
@@ -177,6 +184,7 @@
 				23190664247DA25F00DA550B /* ContentView.swift in Sources */,
 				235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
+				8F108A992480537F00D5C27B /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

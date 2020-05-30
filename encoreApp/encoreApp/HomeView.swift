@@ -9,9 +9,10 @@
 import SwiftUI
 
 struct HomeView: View {
-    var songsList: [Song] = Mockmodel.getSongs()
-    @Binding var currentlyInSession: Bool
+    
+    @ObservedObject var model: Model = .shared
     @State var presentMenuSheet = false
+    @Binding var currentlyInSession: Bool
     @Binding var sessionID: String
     
     var body: some View {
@@ -29,11 +30,12 @@ struct HomeView: View {
                 Spacer()
             }
             ScrollView {
-                VStack {
-                    ForEach(songsList, id: \.self) { song in
-                        SongListCell(song: song)
+                ForEach(model.queue, id: \.self) { song in
+                    VStack {
+                        SongListCell(song: song, rank: (self.model.queue.firstIndex(of: song) ?? -1) + 1)
+                        Divider()
                     }
-                }
+                }.animation(.easeInOut(duration: 0.30))
             }.padding(.top, 50)
         }
     }
