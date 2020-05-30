@@ -39,9 +39,10 @@ struct JoinSessionView: View {
     }
     
     func joinSession(username: String) {
-        guard let url = URL(string: "https://api.encore-fm.com/users/join/"+"\(username)"+"/session/"+"\(sessionID)") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/join/"+"\(sessionID)") else {
             print("Invalid URL")
             return
+            
         }
         var request = URLRequest(url: url)
         
