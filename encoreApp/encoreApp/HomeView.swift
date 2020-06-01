@@ -17,44 +17,17 @@ struct HomeView: View {
     
     var topSpacer_height: CGFloat = 400
     @State var scroll_offset: CGFloat = 200
-    @State var album_offset: CGFloat = 200
     
     var body: some View {
         ZStack {
-            /*VStack {
-                HStack {
-                    Spacer()
-                    Button(action: { self.presentMenuSheet = true }) {
-                        Image(systemName: "ellipsis").font(Font.system(.title))
-                    }.padding()
-                        .sheet(isPresented: self.$presentMenuSheet) {
-                            MenuView(currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
-                    }
-                }
-                Spacer()
-            }*/
-            
-            //Background Layer
+            //Layer 0: Background Layer
             LinearGradient(gradient: Gradient(colors: [
-                Color.blue,
+                Color.white,
                 Color.white,
                 Color.white
             ]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
             
-            //Album Cover Layer
-            /*VStack {
-                Spacer()
-                    .frame(height: 50)
-                Image("album1")
-                    .resizable()
-                    .frame(width: 200, height: 200)
-                Text("Title")
-                Text("Subtitle")
-                Spacer()
-                
-            }*/
-            
-            //Song Queue Layer
+            //Layer 1: Song Queue Layer
             ScrollView {
                 GeometryReader { geo -> AnyView? in
                     let thisOffset = geo.frame(in: .global).minY
@@ -63,13 +36,12 @@ struct HomeView: View {
                     } else {
                         self.scroll_offset = -250
                     }
-
+                    
                     return nil
                 }
                 VStack {
-                    //Spacer for Album Cover Layer
                     HStack {
-                        Spacer()
+                        Spacer()    //Spacer for Album Cover Layer
                             .frame(height: topSpacer_height)
                     }
                     VStack {
@@ -80,10 +52,27 @@ struct HomeView: View {
                             }
                         }.animation(.easeInOut(duration: 0.30))
                     }.background(Color.white)
-                }.background(Color.clear)//.padding(.top, 50)
+                }.background(Color.clear)
             }
             
-            //Song Title Layer
+            //Layer 2: Menu Layer
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: { self.presentMenuSheet = true }) {
+                        Image(systemName: "ellipsis")
+                            .font(Font.system(.title))
+                            .foregroundColor(Color.black)
+                    }.padding()
+                        .sheet(isPresented: self.$presentMenuSheet) {
+                            MenuView(currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
+                    }
+                }
+                Spacer()
+            }
+            
+            
+            //Layer 3: Song Title Layer
             VStack {
                 Spacer()
                     .frame(height: scroll_offset + 50)
@@ -94,9 +83,9 @@ struct HomeView: View {
                             Image("album1")
                                 .resizable()
                                 .frame(width: 200, height: 200)
-                            Text("Title")
+                            Text("\(model.getSongPlaying().name)")
                                 .font(.system(size: 25, weight: .bold))
-                            Text("Subtitle")
+                            Text("\(model.getSongPlaying().artists[0])")
                                 .font(.system(size: 20, weight: .semibold))
                         }
                     } else {
@@ -115,7 +104,7 @@ struct HomeView: View {
                 Spacer()
             }
             
-            //Observer Layer
+            //Layer4: Observer Layer (Debugging)
             VStack {
                 Text("\(scroll_offset)")
                     .foregroundColor(Color.yellow)
