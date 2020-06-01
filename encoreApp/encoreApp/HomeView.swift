@@ -16,7 +16,7 @@ struct HomeView: View {
     @Binding var sessionID: String
     
     var topSpacer_height: CGFloat = 400
-    @State var scroll_offset: CGFloat = 200
+    @State var current_title_offset: CGFloat = 200
     
     var body: some View {
         ZStack {
@@ -32,9 +32,9 @@ struct HomeView: View {
                 GeometryReader { geo -> AnyView? in
                     let thisOffset = geo.frame(in: .global).minY
                     if thisOffset > -250 {
-                        self.scroll_offset = thisOffset
+                        self.current_title_offset = thisOffset
                     } else {
-                        self.scroll_offset = -250
+                        self.current_title_offset = -250
                     }
                     
                     return nil
@@ -50,8 +50,8 @@ struct HomeView: View {
                                 SongListCell(song: song, rank: (self.model.queue.firstIndex(of: song) ?? -1) + 1)
                                 Divider()
                             }
-                        }.animation(.easeInOut(duration: 0.30))
-                    }.background(Color.white)
+                        }
+                    }.animation(.easeInOut(duration: 0.30))
                 }.background(Color.clear)
             }
             
@@ -75,10 +75,10 @@ struct HomeView: View {
             //Layer 3: Song Title Layer
             VStack {
                 Spacer()
-                    .frame(height: scroll_offset + 50)
+                    .frame(height: current_title_offset + 50)
                 
                 HStack {
-                    if (scroll_offset > -250) {
+                    if (current_title_offset > -250) {
                         VStack {
                             Image("album1")
                                 .resizable()
@@ -92,21 +92,20 @@ struct HomeView: View {
                         VStack {
                             Spacer()
                                 .frame(height: 200)
-                            Text("Title")
+                            Text("\(model.getSongPlaying().name)")
                                 .font(.system(size: 25, weight: .bold))
-                            Text("Subtitle")
+                            Text("\(model.getSongPlaying().artists[0])")
                                 .font(.system(size: 20, weight: .semibold))
                             Spacer()
                         }
                     }
                 }
-                
                 Spacer()
             }
             
             //Layer4: Observer Layer (Debugging)
             VStack {
-                Text("\(scroll_offset)")
+                Text("\(current_title_offset)")
                     .foregroundColor(Color.yellow)
                 Spacer()
             }
