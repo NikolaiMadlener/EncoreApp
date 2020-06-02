@@ -9,10 +9,12 @@
 import SwiftUI
 
 struct JoinSessionView: View {
+    @ObservedObject var user: User
     var username: String
     @Binding var currentlyInSession: Bool
     @State var sessionID = ""
     @State var showWrongIDAlert = false
+    @State var secret: String = ""
     
     var body: some View {
         VStack {
@@ -70,6 +72,25 @@ struct JoinSessionView: View {
                     self.showWrongIDAlert = true
                     return
                 } else {
+                    do {
+                        // make sure this JSON is in the format we expect
+                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            // try to read out a string array
+                            if let userInfo = json["user_info"] as? [String: Any] {
+                                self.sessionID = userInfo["session_id"] as! String
+                                self.secret = userInfo["secret"] as! String
+                            }
+                        }
+                    } catch let error as NSError {
+                        print("Failed to load: \(error.localizedDescription)")
+                    }
+                    DispatchQueue.main.async {
+                        self.user.username = username
+                        self.user.isAdmin = false
+                        self.user.secret = self.secret
+                        self.user.sessionID = self.sessionID
+                        print(self.user.username)
+                    }
                     self.showWrongIDAlert = false
                     self.currentlyInSession = true
                 }
@@ -82,8 +103,9 @@ struct JoinSessionView: View {
 struct JoinSessionView_Previews: PreviewProvider {
     static var username = "Etienne"
     @State static var currentlyInSession = false
+    static var user = User()
     
     static var previews: some View {
-        JoinSessionView(username: self.username, currentlyInSession: self.$currentlyInSession)
+        JoinSessionView(user: self.user, username: self.username, currentlyInSession: self.$currentlyInSession)
     }
 }

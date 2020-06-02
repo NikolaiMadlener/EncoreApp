@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    
+    @ObservedObject var user: User
     @ObservedObject var model: Model = .shared
     @State var presentMenuSheet = false
     @Binding var currentlyInSession: Bool
@@ -24,7 +24,7 @@ struct HomeView: View {
                         Image(systemName: "ellipsis").font(Font.system(.title))
                     }.padding()
                         .sheet(isPresented: self.$presentMenuSheet) {
-                            MenuView(currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
+                            MenuView(user: self.user, currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
                     }
                 }
                 Spacer()
@@ -37,15 +37,16 @@ struct HomeView: View {
                     }
                 }.animation(.easeInOut(duration: 0.30))
             }.padding(.top, 50)
-        }
+        }.onAppear{ print("onAppear: " + self.user.username) }
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     @State static var currentlyInSession = true
     @State static var sessionID = ""
+    static var user = User()
     
     static var previews: some View {
-        HomeView(currentlyInSession: $currentlyInSession, sessionID: $sessionID)
+        HomeView(user: user, currentlyInSession: $currentlyInSession, sessionID: $sessionID)
     }
 }

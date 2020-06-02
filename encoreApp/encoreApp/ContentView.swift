@@ -12,6 +12,8 @@ struct ContentView: View {
     @State var username: String = ""
     @Binding var currentlyInSession: Bool
     @Binding var sessionID: String
+    @State var secret: String = ""
+    @ObservedObject var user: User
     
     var body: some View {
         NavigationView {
@@ -33,7 +35,7 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray, lineWidth: 1)
                     ).padding(.horizontal, 25)
-                    NavigationLink(destination: JoinSessionView(username: self.username, currentlyInSession: self.$currentlyInSession)) {
+                    NavigationLink(destination: JoinSessionView(user: self.user, username: self.username, currentlyInSession: self.$currentlyInSession)) {
                         Text("Join Session")
                             .padding(15)
                             .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
@@ -86,6 +88,7 @@ struct ContentView: View {
                         // try to read out a string array
                         if let userInfo = json["user_info"] as? [String: Any] {
                             self.sessionID = userInfo["session_id"] as! String
+                            self.secret = userInfo["secret"] as! String
                         }
                     }
                 } catch let error as NSError {
@@ -93,9 +96,13 @@ struct ContentView: View {
                 }
                 
             }
-            
-            
-            
+            DispatchQueue.main.async {
+                self.user.username = username
+                self.user.isAdmin = true
+                self.user.secret = self.secret
+                self.user.sessionID = self.sessionID
+                print(self.user.username)
+            }
             self.currentlyInSession = true
         }
         task.resume()
@@ -105,8 +112,9 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     @State static var signInSuccess = false
     @State static var sessionID = ""
+    static var user = User()
     
     static var previews: some View {
-        ContentView(currentlyInSession: $signInSuccess, sessionID: $sessionID)
+        ContentView(currentlyInSession: $signInSuccess, sessionID: $sessionID, user: user)
     }
 }
