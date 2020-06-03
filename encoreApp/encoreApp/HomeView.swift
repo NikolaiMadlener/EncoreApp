@@ -35,11 +35,11 @@ struct HomeView: View {
             songTitle_layer
             
             //Layer4: Observer Layer (Debugging)
-            VStack {
-                Text("\(current_title_offset)")
-                    .foregroundColor(Color.yellow)
-                Spacer()
-            }
+//            VStack {
+//                Text("\(current_title_offset)")
+//                    .foregroundColor(Color.yellow)
+//                Spacer()
+//            }
         }
     }
     
