@@ -13,7 +13,6 @@ struct HomeView: View {
     @ObservedObject var model: Model = .shared
     @State var presentMenuSheet = false
     @Binding var currentlyInSession: Bool
-    @Binding var sessionID: String
     
     var body: some View {
         ZStack {
@@ -24,7 +23,7 @@ struct HomeView: View {
                         Image(systemName: "ellipsis").font(Font.system(.title))
                     }.padding()
                         .sheet(isPresented: self.$presentMenuSheet) {
-                            MenuView(user: self.user, currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
+                            MenuView(user: self.user, currentlyInSession: self.$currentlyInSession)
                     }
                 }
                 Spacer()
@@ -47,6 +46,6 @@ struct HomeView_Previews: PreviewProvider {
     static var user = User()
     
     static var previews: some View {
-        HomeView(user: user, currentlyInSession: $currentlyInSession, sessionID: $sessionID)
+        HomeView(user: user, currentlyInSession: $currentlyInSession)
     }
 }
