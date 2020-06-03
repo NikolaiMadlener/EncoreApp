@@ -84,7 +84,7 @@ struct HomeView: View {
                 Button(action: { self.presentMenuSheet = true }) {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
-                        .foregroundColor(Color.black)
+                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 }.padding()
                     .sheet(isPresented: self.$presentMenuSheet) {
                         MenuView(currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
@@ -120,8 +120,6 @@ struct HomeView: View {
                                     .frame(width: geo.size.width, height: 120)
                                     .foregroundColor(Color.clear)
                                     .background(Blur(colorScheme: self.colorScheme))
-                                    .padding(1)
-                                    .border(Color.gray, width: 1)
                                     .edgesIgnoringSafeArea(.top)
                                 HStack {
                                     Image("album1")
