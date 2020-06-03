@@ -18,7 +18,7 @@ struct SongListCell: View {
 
     var body: some View {
         HStack {
-            rankView
+            rankView.frame(width: 50)
             albumView
             songView
             Spacer()
@@ -36,7 +36,7 @@ struct SongListCell: View {
         song.album_image
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 70, height: 70)
+            .frame(width: 55, height: 55)
     }
     
     private var songView: some View {
@@ -54,7 +54,7 @@ struct SongListCell: View {
                 upvoteButton
                 downvoteButton
             }
-        }.padding(.horizontal, 10)
+        }.padding(.horizontal)
     }
     
     private var upvoteButton: some View {
@@ -70,9 +70,9 @@ struct SongListCell: View {
             }
         }) {
             Image(systemName: "chevron.up")
-                .font(.system(size: 25, weight: .semibold))
+                .font(.system(size: 30, weight: .semibold))
                 .foregroundColor(voteState != VoteState.DOWNVOTE ? voteState.color : Color.gray)
-                .padding(.bottom, 10)
+                .padding(.bottom, 5)
         }
     }
     
@@ -89,9 +89,9 @@ struct SongListCell: View {
             }
         }) {
             Image(systemName: "chevron.down")
-                .font(.system(size: 25, weight: .semibold))
+                .font(.system(size: 30, weight: .semibold))
                 .foregroundColor(voteState != VoteState.UPVOTE ? voteState.color : Color.gray)
-                .padding(.top, 10)
+                .padding(.top, 5)
         }
     }
 }

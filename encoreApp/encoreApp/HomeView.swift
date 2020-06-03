@@ -10,6 +10,8 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @ObservedObject var model: Model = .shared
     @State var presentMenuSheet = false
     @Binding var currentlyInSession: Bool
@@ -19,20 +21,20 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             //Layer 0: Background Layer
-            LinearGradient(gradient: Gradient(colors: [
-                Color.white,
-                Color.white,
-                Color.white
-            ]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
+//            LinearGradient(gradient: Gradient(colors: [
+//                Color.white,
+//                Color.white,
+//                Color.white
+//            ]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
             
             //Layer 1: Song Queue Layer
             songQueue_layer
             
-            //Layer 2: Menu Layer
-            menu_layer
-            
-            //Layer 3: Song Title Layer
+            //Layer 2: Song Title Layer
             songTitle_layer
+            
+            //Layer 3: Menu Layer
+            menu_layer
             
             //Layer4: Observer Layer (Debugging)
 //            VStack {
@@ -48,7 +50,7 @@ struct HomeView: View {
         ScrollView {
             GeometryReader { geo -> AnyView? in
                 let thisOffset = geo.frame(in: .global).minY
-                if thisOffset > -260 {
+                if thisOffset > -190 {
                     self.current_title_offset = thisOffset
                 } else {
                     self.current_title_offset = -260
@@ -58,13 +60,15 @@ struct HomeView: View {
             VStack {
                 HStack {
                     Spacer()    //Spacer for Album Cover Layer
-                        .frame(height: 400)
+                        .frame(height: 320)
                 }
                 VStack {
                     ForEach(model.queue, id: \.self) { song in
                         VStack {
                             SongListCell(song: song, rank: (self.model.queue.firstIndex(of: song) ?? -1) + 1)
                             Divider()
+                                .padding(.horizontal)
+                                .padding(.top, -5)
                         }
                     }
                 }.animation(.easeInOut(duration: 0.30))
@@ -89,37 +93,55 @@ struct HomeView: View {
             Spacer()
         }
     }
-
+    
     //Layer 3: Song Title Layer
     private var songTitle_layer: some View {
-        VStack {
-            Spacer()
-                .frame(height: current_title_offset + 50)
-            
-            HStack {
-                if (current_title_offset > -260) {
-                    VStack {
-                        Image("album1")
-                            .resizable()
-                            .frame(width: 200, height: 200)
-                        Text("\(model.getSongPlaying().name)")
-                            .font(.system(size: 25, weight: .bold))
-                        Text("\(model.getSongPlaying().artists[0])")
-                            .font(.system(size: 20, weight: .semibold))
-                    }
-                } else {
-                    VStack {
-                        Spacer()
-                            .frame(height: 210)
-                        Text("\(model.getSongPlaying().name)")
-                            .font(.system(size: 25, weight: .bold))
-                        Text("\(model.getSongPlaying().artists[0])")
-                            .font(.system(size: 20, weight: .semibold))
-                        Spacer()
+        GeometryReader { geo in
+            VStack {
+                Spacer()
+                    .frame(height: self.current_title_offset)
+                
+                HStack {
+                    if (self.current_title_offset > -260) {
+                        VStack {
+                            Image("album1")
+                                .resizable()
+                                .frame(width: 180, height: 180)
+                            Text("\(self.model.getSongPlaying().name)")
+                                .font(.system(size: 25, weight: .bold))
+                            Text("\(self.model.getSongPlaying().artists[0])")
+                                .font(.system(size: 20, weight: .semibold))
+                        }
+                    } else {
+                        VStack(alignment: .leading) {
+                            Spacer().frame(height: 260)
+                            ZStack(alignment: .top) {
+                                Rectangle()
+                                    .frame(width: geo.size.width, height: 120)
+                                    .foregroundColor(Color.clear)
+                                    .background(Blur(colorScheme: self.colorScheme))
+                                    .padding(1)
+                                    .border(Color.gray, width: 1)
+                                    .edgesIgnoringSafeArea(.top)
+                                HStack {
+                                    Image("album1")
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                    VStack(alignment: .leading) {
+                                        Text("\(self.model.getSongPlaying().name)")
+                                            .font(.system(size: 20, weight: .bold))
+                                        Text("\(self.model.getSongPlaying().artists[0])")
+                                            .font(.system(size: 15, weight: .semibold))
+                                    }
+                                    Spacer()
+                                    }.padding()
+                            }
+                            Spacer()
+                        }
                     }
                 }
+                Spacer()
             }
-            Spacer()
         }
     }
 }
