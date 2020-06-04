@@ -16,7 +16,7 @@ struct HomeView: View {
     @State var presentMenuSheet = false
     @Binding var currentlyInSession: Bool
     @Binding var sessionID: String
-    @State var current_title_offset: CGFloat = 200
+    @State var current_title_offset: CGFloat = 0
     
     var body: some View {
         ZStack {
@@ -47,21 +47,52 @@ struct HomeView: View {
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        ScrollView {
-            GeometryReader { geo -> AnyView? in
-                let thisOffset = geo.frame(in: .global).minY
-                if thisOffset > -190 {
-                    self.current_title_offset = thisOffset
-                } else {
-                    self.current_title_offset = -260
+        GeometryReader { geom in
+            ScrollView {
+                GeometryReader { geo -> AnyView? in
+                    let thisOffset = geo.frame(in: .global).minY
+                    if thisOffset > -190 {
+                        self.current_title_offset = thisOffset
+                    } else {
+                        self.current_title_offset = -260
+                    }
+                    return nil
                 }
-                return nil
-            }
-            VStack {
-                songTitle
+                if (self.current_title_offset > -260) {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            VStack {
+                                Image("album1")
+                                    .resizable()
+                                    .frame(width: 180, height: 180)
+                                Text("\(self.model.getSongPlaying().name)")
+                                    .font(.system(size: 25, weight: .bold))
+                                Text("\(self.model.getSongPlaying().artists[0])")
+                                    .font(.system(size: 20, weight: .semibold))
+                            }
+                            Spacer()
+                        }
+                        
+                        // later this will be the playbar
+                        HStack(spacing: 0) {
+                            Rectangle()
+                                .frame(width: geom.size.width * 0.5, height: 3)
+                                .foregroundColor(Color("purpleblue"))
+                            Rectangle()
+                                .frame(width: geom.size.width * 0.3, height: 3)
+                                .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+                        }.padding()
+                        
+                        Spacer()
+                    }
+                }
                 
                 VStack {
-                    ForEach(model.queue, id: \.self) { song in
+                    if (self.current_title_offset <= -260) {
+                        Spacer().frame(height: 300)
+                    }
+                    ForEach(self.model.queue, id: \.self) { song in
                         VStack {
                             SongListCell(song: song, rank: (self.model.queue.firstIndex(of: song) ?? -1) + 1)
                             Divider()
@@ -70,44 +101,10 @@ struct HomeView: View {
                         }
                     }
                 }.animation(.easeInOut(duration: 0.30))
-                    .offset(CGSize(width: 0, height: 300))
-            }.background(Color.clear)
-        }
-    }
-    
-    private var songTitle: some View {
-        GeometryReader { geo in
-            VStack {
-                HStack {
-                    Spacer()
-                    if (self.current_title_offset > -260) {
-                        VStack {
-                            Image("album1")
-                                .resizable()
-                                .frame(width: 180, height: 180)
-                            Text("\(self.model.getSongPlaying().name)")
-                                .font(.system(size: 25, weight: .bold))
-                            Text("\(self.model.getSongPlaying().artists[0])")
-                                .font(.system(size: 20, weight: .semibold))
-                        }
-                        Spacer()
-                    }
-                }
-                
-                // later this will be the playbar
-                HStack(spacing: 0) {
-                    Rectangle()
-                        .frame(width: geo.size.width * 0.5, height: 3)
-                        .foregroundColor(Color("purpleblue"))
-                    Rectangle()
-                        .frame(width: geo.size.width * 0.3, height: 3)
-                        .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
-                }.padding()
-                
-                Spacer()
             }
         }
     }
+    
     
     //MARK: Layer 2: Song Title Bar Layer
     private var songTitleBar_layer: some View {
@@ -135,12 +132,12 @@ struct HomeView: View {
                         HStack {
                             Image("album1")
                                 .resizable()
-                                .frame(width: 40, height: 40)
+                                .frame(width: 30, height: 30)
                             VStack(alignment: .leading) {
                                 Text("\(self.model.getSongPlaying().name)")
-                                    .font(.system(size: 20, weight: .bold))
+                                    .font(.system(size: 15, weight: .bold))
                                 Text("\(self.model.getSongPlaying().artists[0])")
-                                    .font(.system(size: 15, weight: .semibold))
+                                    .font(.system(size: 10, weight: .semibold))
                             }
                             Spacer()
                         }.padding()
