@@ -9,77 +9,96 @@
 import SwiftUI
 
 struct MenuView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @ObservedObject var user: User
     @Binding var currentlyInSession: Bool
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
     @State var members: [UserListElement] = []
+    @State var showShareSheet: Bool = false
     
     var body: some View {
-        VStack {
-            Spacer().frame(height: 50)
-            Image("qrcode").padding()
-            Text("Copy the Session ID and share it with your Friends").font(.footnote)
-            HStack {
-                Text("\(self.user.sessionID)").font(.caption)
-                Button(action: { UIPasteboard.general.string = self.user.sessionID }) {
-                    Image(systemName: "doc.on.clipboard")
-                    
-                }
-            }.padding(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20).stroke(Color.gray, lineWidth: 1)
-            ).padding()
-            VStack() {
-                HStack {
-                    Text("Members").font(.title)
-                    Spacer()
-                }.padding(.bottom, 5)
-                ForEach(members, id: \.self) { member in
-                    VStack {
-                        HStack {
-                            if member.is_admin {
-                                Text("\(member.username)").bold()
-                            } else {
-                                Text("\(member.username)")
+        GeometryReader { geo in
+            ZStack {
+                VStack {
+                    Spacer().frame(height: 25)
+                    Image("qrcode")
+                        .resizable()
+                        .frame(width: 150, height: 150)
+                        .padding(10)
+                    Text("Let your friends scan the QR-code \nOr share the link to let them join to your Session. ").font(.footnote).multilineTextAlignment(.center)
+                    Button(action: { self.showShareSheet.toggle() }) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 50).frame(width: geo.size.width*0.9, height: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                            HStack {
+                                Text("\(self.user.sessionID)")
+                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                                    .font(.caption)
+                                    .padding(.leading, 30)
+                                Spacer()
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                                    .font(.system(size: 20))
+                                    .padding(.trailing, 30)
                             }
-                            Spacer()
-                            if member.is_admin {
-                                Text("Host")
-                            }
-                            else if member.username == self.user.username {
-                                Text("You")
+                        }.padding(10)
+                    }
+                    VStack() {
+                        ForEach(self.members, id: \.self) { member in
+                            VStack {
+                                HStack {
+                                    if member.is_admin {
+                                        Text("\(member.username)").bold()
+                                    } else {
+                                        Text("\(member.username)")
+                                    }
+                                    Spacer()
+                                    if member.is_admin {
+                                        Text("Host")
+                                    }
+                                    else if member.username == self.user.username {
+                                        Text("You")
+                                    }
+                                }
+                                Divider()
                             }
                         }
-                        Divider()
-                    }
+                    }.padding()
+                    Spacer()
                 }
-            }.padding()
-            Spacer()
-            Button(action: { self.user.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.user.username)) }) {
-                Text( user.isAdmin ? "Delete Session" : "Leave Session")
-                    .padding(15)
-                    .background(Color.red)
-                    .foregroundColor(Color.white)
-                    .cornerRadius(25)
+                VStack {
+                    Spacer()
+                    Button(action: { self.user.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.user.username)) }) {
+                        Text( self.user.isAdmin ? "Delete Session" : "Leave Session")
+                            .padding(15)
+                            .background(Color.red)
+                            .foregroundColor(Color.white)
+                            .cornerRadius(25)
+                        
+                    }.alert(isPresented: self.$showAlert) {
+                        Alert(title: Text("Delete Session"),
+                              message: Text("By Deleting the current Session all Members will be kicked."),
+                              primaryButton: .destructive(Text("Delete"), action: {
+                                self.deleteSession(username: self.user.username)
+                              }),
+                              secondaryButton: .cancel(Text("Cancel"), action: {
+                                self.showAlert = false
+                              }))
+                        //            }.alert(isPresented: $showSessionExpiredAlert) {
+                        //                Alert(title: Text("Session Expired"),
+                        //                      message: Text("The Session was closed by the Host."),
+                        //                      dismissButton: .default(Text("OK"))
+                        //                )
+                    }.padding()
+                }
                 
-            }.alert(isPresented: $showAlert) {
-                Alert(title: Text("Delete Session"),
-                      message: Text("By Deleting the current Session all Members will be kicked."),
-                      primaryButton: .destructive(Text("Delete"), action: {
-                        self.deleteSession(username: self.user.username)
-                      }),
-                      secondaryButton: .cancel(Text("Cancel"), action: {
-                        self.showAlert = false
-                      }))
-//            }.alert(isPresented: $showSessionExpiredAlert) {
-//                Alert(title: Text("Session Expired"),
-//                      message: Text("The Session was closed by the Host."),
-//                      dismissButton: .default(Text("OK"))
-//                )
-            }.padding()
-        }.onAppear{ print("onappear")
-            self.getMembers(username: self.user.username) }
+            }.sheet(isPresented: self.$showShareSheet) {
+                ActivityViewController(activityItems: [self.user.sessionID] as [Any], applicationActivities: nil)
+            }
+            .onAppear{ print("onappear")
+                self.getMembers(username: self.user.username) }
+        }
     }
     
     func getMembers(username: String) {

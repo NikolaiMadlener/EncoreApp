@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23117C5224895F6B0023B680 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23117C5124895F6B0023B680 /* ActivityViewController.swift */; };
 		23190660247DA25F00DA550B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319065F247DA25F00DA550B /* AppDelegate.swift */; };
 		23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190661247DA25F00DA550B /* SceneDelegate.swift */; };
 		23190664247DA25F00DA550B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190663247DA25F00DA550B /* ContentView.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23117C5124895F6B0023B680 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		2319065C247DA25F00DA550B /* encoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = encoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2319065F247DA25F00DA550B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		23190661247DA25F00DA550B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				23190673247DB53600DA550B /* HomeView.swift */,
 				235EB4D02480F6CC007A720D /* MenuView.swift */,
 				235EB4CE247FB79A007A720D /* AppContentView.swift */,
+				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
 				23190675247DB75800DA550B /* Song.swift */,
 				234B8D942483A4BF00C0F7F3 /* User.swift */,
 				23190677247DB92600DA550B /* Mockmodel.swift */,
@@ -187,6 +190,7 @@
 				235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */,
 				234B8D952483A4BF00C0F7F3 /* User.swift in Sources */,
 				23190674247DB53600DA550B /* HomeView.swift in Sources */,
+				23117C5224895F6B0023B680 /* ActivityViewController.swift in Sources */,
 				235EB4D12480F6CC007A720D /* MenuView.swift in Sources */,
 				23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */,
 				23190664247DA25F00DA550B /* ContentView.swift in Sources */,
