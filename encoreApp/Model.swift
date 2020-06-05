@@ -19,6 +19,7 @@ public class Model: ObservableObject {
     init() {
         self.song_playing = Mockmodel.getSongs()[0]
         self.queue = Mockmodel.getSongs()
+        sortQueue()
     }
     
     func getQueue() -> [Song] {

@@ -9,6 +9,23 @@
 import SwiftUI
 
 struct HomeView: View {
+<<<<<<< HEAD
+    @ObservedObject var user: User
+    @ObservedObject var model: Model = .shared
+    @State var presentMenuSheet = false
+    @Binding var currentlyInSession: Bool
+    
+    var body: some View {
+        ZStack {
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: { self.presentMenuSheet = true }) {
+                        Image(systemName: "ellipsis").font(Font.system(.title))
+                    }.padding()
+                        .sheet(isPresented: self.$presentMenuSheet) {
+                            MenuView(user: self.user, currentlyInSession: self.$currentlyInSession)
+=======
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -55,6 +72,7 @@ struct HomeView: View {
                         self.current_title_offset = thisOffset
                     } else {
                         self.current_title_offset = -260
+>>>>>>> master
                     }
                     return nil
                 }
@@ -101,6 +119,10 @@ struct HomeView: View {
                         }
                     }
                 }.animation(.easeInOut(duration: 0.30))
+<<<<<<< HEAD
+            }.padding(.top, 50)
+        }.onAppear{ print("onAppear: " + self.user.username) }
+=======
             }
         }
     }
@@ -165,6 +187,7 @@ struct HomeView: View {
             }
             Spacer()
         }
+>>>>>>> master
     }
 }
 

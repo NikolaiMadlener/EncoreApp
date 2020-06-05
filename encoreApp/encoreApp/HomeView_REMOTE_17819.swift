@@ -171,9 +171,8 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     @State static var currentlyInSession = true
     @State static var sessionID = ""
-    static var user = User()
     
     static var previews: some View {
-        HomeView(user: user, currentlyInSession: $currentlyInSession)
+        HomeView(currentlyInSession: $currentlyInSession, sessionID: $sessionID)
     }
 }

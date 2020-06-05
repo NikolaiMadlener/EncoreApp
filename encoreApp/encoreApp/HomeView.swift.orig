@@ -12,6 +12,7 @@ struct HomeView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
+    @ObservedObject var user: User
     @ObservedObject var model: Model = .shared
     @State var presentMenuSheet = false
     @Binding var currentlyInSession: Bool
