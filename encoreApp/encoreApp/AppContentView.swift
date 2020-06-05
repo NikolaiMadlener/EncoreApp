@@ -11,11 +11,9 @@ import SwiftUI
 struct AppContentView: View {
     @ObservedObject var user = User()
     @State var currentlyInSession = false
-    //let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    @State var showJoinSheet: Bool = false
     var joinedViaURL: Bool
     var sessionID: String
-    
-    @State var showJoinSheet: Bool = false
     
     var body: some View {
         return Group {
@@ -23,12 +21,12 @@ struct AppContentView: View {
                     HomeView(user: user, currentlyInSession: $currentlyInSession)
                 }
                 else {
-                    ContentView(currentlyInSession: $currentlyInSession, user: self.user)
-                    .sheet(isPresented: self.$showJoinSheet) {
-                        JoinViaURLView(user: self.user, sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
+                    ContentView(user: self.user, currentlyInSession: $currentlyInSession)
+                        .sheet(isPresented: self.$showJoinSheet) {
+                            JoinViaURLView(user: self.user, sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
                     }
                 }
-        }.onAppear{ self.showJoinSheet = self.joinedViaURL}
+        }.onAppear{ self.showJoinSheet = self.joinedViaURL }
     }
 }
 

@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var username: String = ""
+    @ObservedObject var user: User
     @Binding var currentlyInSession: Bool
+    @State var username: String = ""
     @State var sessionID: String = ""
     @State var secret: String = ""
-    @ObservedObject var user: User
     
     var body: some View {
         NavigationView {
@@ -115,6 +115,6 @@ struct ContentView_Previews: PreviewProvider {
     static var user = User()
     
     static var previews: some View {
-        ContentView(currentlyInSession: $signInSuccess, user: user)
+        ContentView(user: user, currentlyInSession: $signInSuccess)
     }
 }
