@@ -13,9 +13,10 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var model: Model = .shared
+    
+    @ObservedObject var user: User
     @State var presentMenuSheet = false
     @Binding var currentlyInSession: Bool
-    @Binding var sessionID: String
     @State var current_title_offset: CGFloat = 0
     
     var body: some View {
@@ -160,7 +161,7 @@ struct HomeView: View {
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 }.padding()
                     .sheet(isPresented: self.$presentMenuSheet) {
-                        MenuView(currentlyInSession: self.$currentlyInSession, sessionID: self.$sessionID)
+                        MenuView(user: self.user, currentlyInSession: self.$currentlyInSession)
                 }
             }
             Spacer()
@@ -170,7 +171,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     @State static var currentlyInSession = true
-    @State static var sessionID = ""
     static var user = User()
     
     static var previews: some View {
