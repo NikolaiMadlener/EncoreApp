@@ -18,6 +18,7 @@
 		23190676247DB75800DA550B /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190675247DB75800DA550B /* Song.swift */; };
 		23190678247DB92600DA550B /* Mockmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190677247DB92600DA550B /* Mockmodel.swift */; };
 		2319067C247DBDB600DA550B /* SongListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319067B247DBDB600DA550B /* SongListCell.swift */; };
+		231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231B16C42489A1700006E78B /* JoinViaURLView.swift */; };
 		234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9224839C9200C0F7F3 /* UserListElement.swift */; };
 		234B8D952483A4BF00C0F7F3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* User.swift */; };
 		235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4CE247FB79A007A720D /* AppContentView.swift */; };
@@ -41,6 +42,7 @@
 		23190675247DB75800DA550B /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		23190677247DB92600DA550B /* Mockmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mockmodel.swift; sourceTree = "<group>"; };
 		2319067B247DBDB600DA550B /* SongListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListCell.swift; sourceTree = "<group>"; };
+		231B16C42489A1700006E78B /* JoinViaURLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViaURLView.swift; sourceTree = "<group>"; };
 		234B8D9224839C9200C0F7F3 /* UserListElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListElement.swift; sourceTree = "<group>"; };
 		234B8D942483A4BF00C0F7F3 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		235EB4CE247FB79A007A720D /* AppContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				2319065F247DA25F00DA550B /* AppDelegate.swift */,
 				23190661247DA25F00DA550B /* SceneDelegate.swift */,
 				23190663247DA25F00DA550B /* ContentView.swift */,
+				231B16C42489A1700006E78B /* JoinViaURLView.swift */,
 				235EB4D2248105A2007A720D /* JoinSessionView.swift */,
 				23190673247DB53600DA550B /* HomeView.swift */,
 				235EB4D02480F6CC007A720D /* MenuView.swift */,
@@ -195,6 +198,7 @@
 				23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */,
 				23190664247DA25F00DA550B /* ContentView.swift in Sources */,
 				235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */,
+				231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
 			);

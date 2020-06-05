@@ -32,7 +32,7 @@ struct MenuView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 50).frame(width: geo.size.width*0.9, height: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                             HStack {
-                                Text("\(self.user.sessionID)")
+                                Text("encoreApp://\(self.user.sessionID)")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                                     .font(.caption)
                                     .padding(.leading, 30)
@@ -94,7 +94,7 @@ struct MenuView: View {
                 }
                 
             }.sheet(isPresented: self.$showShareSheet) {
-                ActivityViewController(activityItems: [self.user.sessionID] as [Any], applicationActivities: nil)
+                ActivityViewController(activityItems: ["encoreApp://\(self.user.sessionID)"] as [Any], applicationActivities: nil)
             }
             .onAppear{ print("onappear")
                 self.getMembers(username: self.user.username) }
