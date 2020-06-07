@@ -13,14 +13,47 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var model = Model()
+    
 
+    // MARK: App IS NOT running and App is called from either Join Link or normally from App Icon
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-
+        var joinedViaURL = false
+        var sessionID = ""
+        if let url = connectionOptions.urlContexts.first?.url {
+            // Handle URL
+        let urlString = url.absoluteString
+            sessionID = url.absoluteString.substring(from: urlString.index(urlString.startIndex, offsetBy: 12))
+            if sessionID != "" {
+                joinedViaURL = true
+            }
+        }
+        
         // Create the SwiftUI view that provides the window contents.
-        let contentView = AppContentView()
+        let contentView = AppContentView(joinedViaURL: joinedViaURL, sessionID: sessionID)
+
+        // Use a UIHostingController as window root view controller.
+        if let windowScene = scene as? UIWindowScene {
+            let window = UIWindow(windowScene: windowScene)
+            window.rootViewController = UIHostingController(rootView: contentView)
+            self.window = window
+            window.makeKeyAndVisible()
+        }
+    }
+    
+    // MARK: App IS running and App is called from Join Link
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        var sessionID = ""
+        if let url = URLContexts.first?.url {
+            // Handle URL
+        let urlString = url.absoluteString
+        sessionID = url.absoluteString.substring(from: urlString.index(urlString.startIndex, offsetBy: 12))
+        print(sessionID)
+        }
+        
+        let contentView = AppContentView(joinedViaURL: true, sessionID: sessionID)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -58,7 +91,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
+   
 }
 
