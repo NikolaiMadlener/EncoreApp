@@ -25,6 +25,8 @@
 		235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4CE247FB79A007A720D /* AppContentView.swift */; };
 		235EB4D12480F6CC007A720D /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D02480F6CC007A720D /* MenuView.swift */; };
 		235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D2248105A2007A720D /* JoinSessionView.swift */; };
+		8F0488BC248ECAE10008F864 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F0488BB248ECA9A0008F864 /* SpotifyiOS.framework */; };
+		8F0488BE248ECE0E0008F864 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0488BD248ECE0E0008F864 /* Constants.swift */; };
 		8F108A992480537F00D5C27B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F108A982480537F00D5C27B /* Model.swift */; };
 		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
 /* End PBXBuildFile section */
@@ -50,7 +52,10 @@
 		235EB4CE247FB79A007A720D /* AppContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentView.swift; sourceTree = "<group>"; };
 		235EB4D02480F6CC007A720D /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		235EB4D2248105A2007A720D /* JoinSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSessionView.swift; sourceTree = "<group>"; };
+		8F0488BB248ECA9A0008F864 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
+		8F0488BD248ECE0E0008F864 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Model.swift; path = ../Model.swift; sourceTree = "<group>"; };
+		8F2ACC31248EC0A70025D654 /* encoreApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "encoreApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F0488BC248ECAE10008F864 /* SpotifyiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,9 +74,11 @@
 		23190653247DA25F00DA550B = {
 			isa = PBXGroup;
 			children = (
+				8F2ACC31248EC0A70025D654 /* encoreApp-Bridging-Header.h */,
 				234B8D9824884EBC00C0F7F3 /* Blur.swift */,
 				2319065E247DA25F00DA550B /* encoreApp */,
 				2319065D247DA25F00DA550B /* Products */,
+				8F0488BB248ECA9A0008F864 /* SpotifyiOS.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +113,7 @@
 				2319066A247DA26400DA550B /* LaunchScreen.storyboard */,
 				2319066D247DA26400DA550B /* Info.plist */,
 				23190667247DA26400DA550B /* Preview Content */,
+				8F0488BD248ECE0E0008F864 /* Constants.swift */,
 			);
 			path = encoreApp;
 			sourceTree = "<group>";
@@ -205,6 +214,7 @@
 				231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
+				8F0488BE248ECE0E0008F864 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,16 +352,22 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
-				DEVELOPMENT_TEAM = UB7P88VGXV;
+				DEVELOPMENT_TEAM = L3RMDJH374;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = encoreApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = nikolaietienne.encoreApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "encoreApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -363,16 +379,22 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
-				DEVELOPMENT_TEAM = UB7P88VGXV;
+				DEVELOPMENT_TEAM = L3RMDJH374;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = encoreApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = nikolaietienne.encoreApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "encoreApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
