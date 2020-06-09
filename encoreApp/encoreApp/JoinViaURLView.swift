@@ -32,10 +32,11 @@ struct JoinViaURLView: View {
                 Text("Join Session")
                     .padding(15)
                     .background( sessionID == "" ? Color("buttonDisabledGray") : Color("purpleblue") ).foregroundColor(sessionID == "" ? Color("lightgray") : Color.white).cornerRadius(25)
-            }.disabled(username == "").alert(isPresented: $showWrongIDAlert) {
-                Alert(title: Text("Session doesn't exist"),
-                      message: Text(""),
-                      dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                }.padding()
+                .disabled(username == "").alert(isPresented: $showWrongIDAlert) {
+                    Alert(title: Text("Session doesn't exist"),
+                          message: Text(""),
+                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
             }
         }
     }
