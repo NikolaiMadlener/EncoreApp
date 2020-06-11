@@ -18,6 +18,14 @@ struct MenuView: View {
     @State var members: [UserListElement] = []
     @State var showShareSheet: Bool = false
     
+    @ObservedObject var sse: SSE
+    
+    init(user: User, currentlyInSession: Binding<Bool>) {
+        self.user = user
+        sse = SSE(user: user)
+        self._currentlyInSession = currentlyInSession
+    }
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -45,7 +53,7 @@ struct MenuView: View {
                         }.padding(10)
                     }
                     VStack() {
-                        ForEach(self.members, id: \.self) { member in
+                        ForEach(self.sse.members, id: \.self) { member in
                             VStack {
                                 HStack {
                                     if member.is_admin {

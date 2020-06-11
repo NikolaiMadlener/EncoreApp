@@ -159,7 +159,8 @@ struct HomeView: View {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                }.padding()
+                        .padding()
+                }
                     .sheet(isPresented: self.$presentMenuSheet) {
                         MenuView(user: self.user, currentlyInSession: self.$currentlyInSession)
                 }

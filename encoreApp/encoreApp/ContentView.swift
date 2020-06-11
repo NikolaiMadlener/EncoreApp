@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var username: String = ""
     @State var sessionID: String = ""
     @State var secret: String = ""
+    @State var showServerErrorAlert = false
     
     var body: some View {
         NavigationView {
@@ -51,6 +52,11 @@ struct ContentView: View {
                     }.disabled(username == "")
                         .padding(5)
                     Spacer()
+                }
+                .alert(isPresented: $showServerErrorAlert) {
+                        Alert(title: Text("Server Error"),
+                              message: Text(""),
+                              dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
                 }
             }
         }
@@ -90,9 +96,11 @@ struct ContentView: View {
                             self.sessionID = userInfo["session_id"] as! String
                             self.secret = userInfo["secret"] as! String
                         }
+                        self.currentlyInSession = true
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
+                    self.showServerErrorAlert = true
                 }
                 
             }
@@ -103,7 +111,6 @@ struct ContentView: View {
                 self.user.sessionID = self.sessionID
                 print(self.user.username)
             }
-            self.currentlyInSession = true
         }
         task.resume()
     }
