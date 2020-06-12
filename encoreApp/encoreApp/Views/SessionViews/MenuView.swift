@@ -30,10 +30,8 @@ struct MenuView: View {
             ZStack {
                 VStack {
                     Spacer().frame(height: 25)
-                    Image("qrcode")
-                        .resizable()
-                        .frame(width: 150, height: 150)
-                        .padding(10)
+                    QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
+                        
                     Text("Let your friends scan the QR-code \nOr share the link to let them join to your Session. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
                         ZStack {

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,9 @@
 		2319067C247DBDB600DA550B /* SongListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319067B247DBDB600DA550B /* SongListCell.swift */; };
 		231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231B16C42489A1700006E78B /* JoinViaURLView.swift */; };
 		233D2ACE2491990100994038 /* UserListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2ACD2491990100994038 /* UserListVM.swift */; };
+		233D2AD6249381C600994038 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2AD5249381C600994038 /* QRCodeView.swift */; };
+		233D2AD82493D49E00994038 /* JoinViaScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2AD72493D49E00994038 /* JoinViaScanView.swift */; };
+		233D2ADD2493E36C00994038 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 233D2ADC2493E36C00994038 /* CodeScanner */; };
 		234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9224839C9200C0F7F3 /* UserListElement.swift */; };
 		234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* UserVM.swift */; };
 		234B8D9924884EBC00C0F7F3 /* Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9824884EBC00C0F7F3 /* Blur.swift */; };
@@ -47,6 +50,8 @@
 		2319067B247DBDB600DA550B /* SongListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListCell.swift; sourceTree = "<group>"; };
 		231B16C42489A1700006E78B /* JoinViaURLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViaURLView.swift; sourceTree = "<group>"; };
 		233D2ACD2491990100994038 /* UserListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListVM.swift; sourceTree = "<group>"; };
+		233D2AD5249381C600994038 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		233D2AD72493D49E00994038 /* JoinViaScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViaScanView.swift; sourceTree = "<group>"; };
 		234B8D9224839C9200C0F7F3 /* UserListElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListElement.swift; sourceTree = "<group>"; };
 		234B8D942483A4BF00C0F7F3 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		234B8D9824884EBC00C0F7F3 /* Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
@@ -65,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				233D2ADD2493E36C00994038 /* CodeScanner in Frameworks */,
 				9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				23190663247DA25F00DA550B /* ContentView.swift */,
+				233D2AD72493D49E00994038 /* JoinViaScanView.swift */,
 				231B16C42489A1700006E78B /* JoinViaURLView.swift */,
 				235EB4D2248105A2007A720D /* JoinSessionView.swift */,
 			);
@@ -131,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				23190673247DB53600DA550B /* HomeView.swift */,
+				233D2AD5249381C600994038 /* QRCodeView.swift */,
 				235EB4D02480F6CC007A720D /* MenuView.swift */,
 				2319067B247DBDB600DA550B /* SongListCell.swift */,
 				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
@@ -202,6 +210,9 @@
 			dependencies = (
 			);
 			name = encoreApp;
+			packageProductDependencies = (
+				233D2ADC2493E36C00994038 /* CodeScanner */,
+			);
 			productName = encoreApp;
 			productReference = 2319065C247DA25F00DA550B /* encoreApp.app */;
 			productType = "com.apple.product-type.application";
@@ -230,6 +241,9 @@
 				Base,
 			);
 			mainGroup = 23190653247DA25F00DA550B;
+			packageReferences = (
+				233D2ADB2493E36C00994038 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+			);
 			productRefGroup = 2319065D247DA25F00DA550B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -303,11 +317,13 @@
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
 				234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */,
+				233D2AD82493D49E00994038 /* JoinViaScanView.swift in Sources */,
 				8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */,
 				235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */,
 				234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */,
 				23190674247DB53600DA550B /* HomeView.swift in Sources */,
 				23117C5224895F6B0023B680 /* ActivityViewController.swift in Sources */,
+				233D2AD6249381C600994038 /* QRCodeView.swift in Sources */,
 				234B8D9924884EBC00C0F7F3 /* Blur.swift in Sources */,
 				235EB4D12480F6CC007A720D /* MenuView.swift in Sources */,
 				23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */,
@@ -514,6 +530,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		233D2ADB2493E36C00994038 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		233D2ADC2493E36C00994038 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 233D2ADB2493E36C00994038 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 23190654247DA25F00DA550B /* Project object */;
 }
