@@ -13,11 +13,13 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var model: Model = .shared
+    @ObservedObject var musicController: MusicController = .shared
     
     @ObservedObject var user: User
     @State var presentMenuSheet = false
     @Binding var currentlyInSession: Bool
     @State var current_title_offset: CGFloat = 0
+    @State var isPlay = false
     
     var body: some View {
         ZStack {
@@ -165,6 +167,20 @@ struct HomeView: View {
                 }
             }
             Spacer()
+            Button(action: {
+                self.isPlay ? self.musicController.startPlayback() : self.musicController.pausePlayback()
+                self.isPlay.toggle()
+            }) {
+                Image(systemName: self.isPlay ? "play.circle.fill" : "pause.circle.fill")
+                    .font(.system(size: 80, weight: .light))
+                    .foregroundColor(self.colorScheme == .dark ? Color.blue : Color.black)
+            }
+            
+            Button(action: { self.musicController.skipNext() }) {
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 80, weight: .light))
+                    .foregroundColor(self.colorScheme == .dark ? Color.blue : Color.black)
+            }
         }
     }
 }

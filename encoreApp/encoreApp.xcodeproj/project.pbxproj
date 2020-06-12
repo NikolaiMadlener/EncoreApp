@@ -27,6 +27,7 @@
 		235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D2248105A2007A720D /* JoinSessionView.swift */; };
 		8F0488BE248ECE0E0008F864 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0488BD248ECE0E0008F864 /* Constants.swift */; };
 		8F0488C2248FD2C60008F864 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F0488C1248FD2C60008F864 /* SpotifyiOS.framework */; };
+		8F0488C4248FDE380008F864 /* MusicContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0488C3248FDE380008F864 /* MusicContoller.swift */; };
 		8F108A992480537F00D5C27B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F108A982480537F00D5C27B /* Model.swift */; };
 		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,7 @@
 		235EB4D2248105A2007A720D /* JoinSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSessionView.swift; sourceTree = "<group>"; };
 		8F0488BD248ECE0E0008F864 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8F0488C1248FD2C60008F864 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyiOS.framework; path = "../../../../Downloads/ios-sdk-1.2-3.2/SpotifyiOS.framework"; sourceTree = "<group>"; };
+		8F0488C3248FDE380008F864 /* MusicContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicContoller.swift; sourceTree = "<group>"; };
 		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Model.swift; path = ../Model.swift; sourceTree = "<group>"; };
 		8F2ACC31248EC0A70025D654 /* encoreApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "encoreApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				2319066D247DA26400DA550B /* Info.plist */,
 				23190667247DA26400DA550B /* Preview Content */,
 				8F0488BD248ECE0E0008F864 /* Constants.swift */,
+				8F0488C3248FDE380008F864 /* MusicContoller.swift */,
 			);
 			path = encoreApp;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 				2319067C247DBDB600DA550B /* SongListCell.swift in Sources */,
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
+				8F0488C4248FDE380008F864 /* MusicContoller.swift in Sources */,
 				234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */,
 				8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */,
 				235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */,
@@ -352,7 +356,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
-				DEVELOPMENT_TEAM = UB7P88VGXV;
+				DEVELOPMENT_TEAM = L3RMDJH374;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -379,7 +383,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
-				DEVELOPMENT_TEAM = UB7P88VGXV;
+				DEVELOPMENT_TEAM = L3RMDJH374;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
