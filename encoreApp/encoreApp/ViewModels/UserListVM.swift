@@ -9,16 +9,16 @@
 import Foundation
 import IKEventSource
 
-class SSE: ObservableObject {
+class UserListVM: ObservableObject {
     @Published var members: [UserListElement] = []
     var serverURL: URL
-    var user: User
+    var userVM: UserVM
     var eventSource: EventSource
     
-    init(user: User) {
-        self.user = user
+    init(userVM: UserVM) {
+        self.userVM = userVM
         
-        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(user.username)/"+"\(user.sessionID)")!
+        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)/"+"\(userVM.sessionID)")!
         eventSource = EventSource(url: serverURL)
         
         eventSource.connect()

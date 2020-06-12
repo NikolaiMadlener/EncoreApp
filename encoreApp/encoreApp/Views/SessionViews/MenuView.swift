@@ -11,18 +11,17 @@ import SwiftUI
 struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @ObservedObject var user: User
+    @ObservedObject var userVM: UserVM
+    @ObservedObject var userListVM: UserListVM
+    
     @Binding var currentlyInSession: Bool
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
-    @State var members: [UserListElement] = []
     @State var showShareSheet: Bool = false
     
-    @ObservedObject var sse: SSE
-    
-    init(user: User, currentlyInSession: Binding<Bool>) {
-        self.user = user
-        sse = SSE(user: user)
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
+        self.userVM = userVM
+        self.userListVM = UserListVM(userVM: userVM)
         self._currentlyInSession = currentlyInSession
     }
     
@@ -40,7 +39,7 @@ struct MenuView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 50).frame(width: geo.size.width*0.9, height: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                             HStack {
-                                Text("encoreApp://\(self.user.sessionID)")
+                                Text("encoreApp://\(self.userVM.sessionID)")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                                     .font(.caption)
                                     .padding(.leading, 30)
@@ -53,7 +52,7 @@ struct MenuView: View {
                         }.padding(10)
                     }
                     VStack() {
-                        ForEach(self.sse.members, id: \.self) { member in
+                        ForEach(self.userListVM.members, id: \.self) { member in
                             VStack {
                                 HStack {
                                     if member.is_admin {
@@ -65,7 +64,7 @@ struct MenuView: View {
                                     if member.is_admin {
                                         Text("Host")
                                     }
-                                    else if member.username == self.user.username {
+                                    else if member.username == self.userVM.username {
                                         Text("You")
                                     }
                                 }
@@ -77,8 +76,8 @@ struct MenuView: View {
                 }
                 VStack {
                     Spacer()
-                    Button(action: { self.user.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.user.username)) }) {
-                        Text( self.user.isAdmin ? "Delete Session" : "Leave Session")
+                    Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
+                        Text( self.userVM.isAdmin ? "Delete Session" : "Leave Session")
                             .padding(15)
                             .background(Color.red)
                             .foregroundColor(Color.white)
@@ -88,7 +87,7 @@ struct MenuView: View {
                         Alert(title: Text("Delete Session"),
                               message: Text("By Deleting the current Session all Members will be kicked."),
                               primaryButton: .destructive(Text("Delete"), action: {
-                                self.deleteSession(username: self.user.username)
+                                self.deleteSession(username: self.userVM.username)
                               }),
                               secondaryButton: .cancel(Text("Cancel"), action: {
                                 self.showAlert = false
@@ -102,63 +101,61 @@ struct MenuView: View {
                 }
                 
             }.sheet(isPresented: self.$showShareSheet) {
-                ActivityViewController(activityItems: ["encoreApp://\(self.user.sessionID)"] as [Any], applicationActivities: nil)
+                ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }
-            .onAppear{ print("onappear")
-                self.getMembers(username: self.user.username) }
         }
     }
     
-    func getMembers(username: String) {
-        
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
-            print("Invalid URL")
-            return
-        }
-        var request = URLRequest(url: url)
-        
-        print("secret: " + self.user.secret)
-        print("sessionID: " + self.user.sessionID)
-        
-        request.httpMethod = "GET"
-        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
-        
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string:\n \(dataString)")
-                
-                do {
-                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
-                    DispatchQueue.main.async {
-                        self.members = decodedData
-                        print(self.members)
-                        print()
-                    }
-                } catch {
-                    print("Error")
-                    self.showSessionExpiredAlert = true
-                    self.currentlyInSession = false
-                }
-            }
-            self.currentlyInSession = true
-        }
-        task.resume()
-    }
+//    func getMembers(username: String) {
+//
+//        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
+//            print("Invalid URL")
+//            return
+//        }
+//        var request = URLRequest(url: url)
+//
+//        print("secret: " + self.user.secret)
+//        print("sessionID: " + self.user.sessionID)
+//
+//        request.httpMethod = "GET"
+//        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
+//        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
+//
+//
+//        // HTTP Request Parameters which will be sent in HTTP Request Body
+//        //let postString = "userId=300&title=My urgent task&completed=false";
+//        // Set HTTP Request Body
+//        //request.httpBody = postString.data(using: String.Encoding.utf8);
+//        // Perform HTTP Request
+//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+//
+//            // Check for Error
+//            if let error = error {
+//                print("Error took place \(error)")
+//                return
+//            }
+//
+//            // Convert HTTP Response Data to a String
+//            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+//                print("Response data string:\n \(dataString)")
+//
+//                do {
+//                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
+//                    DispatchQueue.main.async {
+//                        self.members = decodedData
+//                        print(self.members)
+//                        print()
+//                    }
+//                } catch {
+//                    print("Error")
+//                    self.showSessionExpiredAlert = true
+//                    self.currentlyInSession = false
+//                }
+//            }
+//            self.currentlyInSession = true
+//        }
+//        task.resume()
+//    }
     
     func deleteSession(username: String) {
         
@@ -168,12 +165,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.user.secret)
-        print("sessionID: " + self.user.sessionID)
+        print("secret: " + self.userVM.secret)
+        print("sessionID: " + self.userVM.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -206,12 +203,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.user.secret)
-        print("sessionID: " + self.user.sessionID)
+        print("secret: " + self.userVM.secret)
+        print("sessionID: " + self.userVM.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -240,9 +237,9 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     @State static var signInSuccess = false
     @State static var sessionID = "b9b314695f504bfa66250d312ce5626d"
-    static var user = User()
+    static var userVM = UserVM()
     
     static var previews: some View {
-        MenuView(user: user, currentlyInSession: $signInSuccess)
+        MenuView(userVM: userVM, currentlyInSession: $signInSuccess)
     }
 }

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var user: User
+    @ObservedObject var userVM: UserVM
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
     @State var sessionID: String = ""
@@ -36,7 +36,7 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray, lineWidth: 1)
                     ).padding(.horizontal, 25)
-                    NavigationLink(destination: JoinSessionView(user: self.user, username: self.username, currentlyInSession: self.$currentlyInSession)) {
+                    NavigationLink(destination: JoinSessionView(userVM: self.userVM, username: self.username, currentlyInSession: self.$currentlyInSession)) {
                         Text("Join Session")
                             .padding(15)
                             .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
@@ -105,11 +105,11 @@ struct ContentView: View {
                 
             }
             DispatchQueue.main.async {
-                self.user.username = username
-                self.user.isAdmin = true
-                self.user.secret = self.secret
-                self.user.sessionID = self.sessionID
-                print(self.user.username)
+                self.userVM.username = username
+                self.userVM.isAdmin = true
+                self.userVM.secret = self.secret
+                self.userVM.sessionID = self.sessionID
+                print(self.userVM.username)
             }
         }
         task.resume()
@@ -119,9 +119,9 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     @State static var signInSuccess = false
     @State static var sessionID = ""
-    static var user = User()
+    static var userVM = UserVM()
     
     static var previews: some View {
-        ContentView(user: user, currentlyInSession: $signInSuccess)
+        ContentView(userVM: userVM, currentlyInSession: $signInSuccess)
     }
 }
