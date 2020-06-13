@@ -66,7 +66,7 @@ struct HomeView: View {
                         HStack {
                             Spacer()
                             VStack {
-                                Image("album1")
+                                self.musicController.currentAlbumImage
                                     .resizable()
                                     .frame(width: 180, height: 180)
                                 Text("\(self.model.getSongPlaying().name)")

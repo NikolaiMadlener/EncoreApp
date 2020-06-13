@@ -122,6 +122,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     
     func connect() {
         self.appRemote.authorizeAndPlayURI(self.playURI)
+        self.appRemote.connect()
     }
     
     // MARK: AppRemoteDelegate
@@ -159,6 +160,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
             self.appRemote.disconnect()
         }
     }
+    
+    
     
 }
 

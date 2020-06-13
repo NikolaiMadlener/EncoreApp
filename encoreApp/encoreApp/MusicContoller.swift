@@ -15,11 +15,18 @@ class MusicController: NSObject, ObservableObject {
     static let shared = MusicController()
     
     private var currentPodcastSpeed: SPTAppRemotePodcastPlaybackSpeed?
-    @Published private var playerState: SPTAppRemotePlayerState?
+    @Published var playerState: SPTAppRemotePlayerState?
+    @Published var currentAlbumImage: Image = Image("album1")
     private var subscribedToPlayerState: Bool = false
     private var subscribedToCapabilities: Bool = false
     private let playURI = "spotify:album:1htHMnxonxmyHdKE2uDFMR"
     private let trackIdentifier = "spotify:track:32ftxJzxMPgUFCM6Km9WTS"
+    
+    func updateViewWithPlayerState(_ playerState: SPTAppRemotePlayerState) {
+        fetchAlbumArtForTrack(playerState.track) { (image) -> Void in
+            self.currentAlbumImage = Image(uiImage: image) //convert UIImage to Image
+        }
+    }
     
     var appRemote: SPTAppRemote? {
         get {
@@ -34,6 +41,15 @@ class MusicController: NSObject, ObservableObject {
                     //display error
                 }
             }
+        }
+    }
+    
+    private func getPlayerState() {
+        appRemote?.playerAPI?.getPlayerState { (result, error) -> Void in
+            guard error == nil else { return }
+
+            let playerState = result as! SPTAppRemotePlayerState
+            self.updateViewWithPlayerState(playerState)
         }
     }
     
@@ -52,10 +68,12 @@ class MusicController: NSObject, ObservableObject {
     }
     
     func startPlayback() {
+        getPlayerState()
         appRemote?.playerAPI?.resume(defaultCallback)
     }
     
     func pausePlayback() {
+        getPlayerState()
         appRemote?.playerAPI?.pause(defaultCallback)
     }
     
@@ -65,18 +83,50 @@ class MusicController: NSObject, ObservableObject {
     }
     
     func skipNext() {
+        getPlayerState()
         appRemote?.playerAPI?.skip(toNext: defaultCallback)
     }
-    /*
+    
+    func fetchAlbumArtForTrack(_ track: SPTAppRemoteTrack, callback: @escaping (UIImage) -> Void ) {
+        appRemote?.imageAPI?.fetchImage(forItem: track, with:CGSize(width: 1000, height: 1000), callback: { (image, error) -> Void in
+            guard error == nil else { return }
+
+            let image = image as! UIImage
+            callback(image)
+        })
+    }
     
     private func subscribeToPlayerState() {
         guard (!subscribedToPlayerState) else { return }
-        //appRemote?.playerAPI!.delegate = self
+        appRemote?.playerAPI!.delegate = self
         appRemote?.playerAPI?.subscribe { (_, error) -> Void in
             guard error == nil else { return }
             self.subscribedToPlayerState = true
         }
     }
+    
+    // MARK: - AppRemote
+    func appRemoteConnecting() {
+        
+    }
+
+    func appRemoteConnected() {
+        
+        subscribeToPlayerState()
+        //subscribeToCapabilityChanges()
+        getPlayerState()
+
+        //enableInterface(true)
+    }
+
+    func appRemoteDisconnect() {
+       
+        self.subscribedToPlayerState = false
+        self.subscribedToCapabilities = false
+        //enableInterface(false)
+    }
+    
+    /*
     
     private func getPlayerState() {
         appRemote?.playerAPI?.getPlayerState { (result, error) -> Void in
@@ -106,6 +156,8 @@ extension MusicController {
 extension MusicController: SPTAppRemotePlayerStateDelegate {
        func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
            self.playerState = playerState
+           updateViewWithPlayerState(playerState)
+            print("DelegateState")
        }
 }
 
