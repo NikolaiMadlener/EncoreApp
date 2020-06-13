@@ -21,7 +21,6 @@
 		231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231B16C42489A1700006E78B /* JoinViaURLView.swift */; };
 		233D2ACE2491990100994038 /* UserListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2ACD2491990100994038 /* UserListVM.swift */; };
 		233D2AD6249381C600994038 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2AD5249381C600994038 /* QRCodeView.swift */; };
-		233D2AD82493D49E00994038 /* JoinViaScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2AD72493D49E00994038 /* JoinViaScanView.swift */; };
 		233D2ADD2493E36C00994038 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 233D2ADC2493E36C00994038 /* CodeScanner */; };
 		234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9224839C9200C0F7F3 /* UserListElement.swift */; };
 		234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* UserVM.swift */; };
@@ -51,7 +50,6 @@
 		231B16C42489A1700006E78B /* JoinViaURLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViaURLView.swift; sourceTree = "<group>"; };
 		233D2ACD2491990100994038 /* UserListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListVM.swift; sourceTree = "<group>"; };
 		233D2AD5249381C600994038 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
-		233D2AD72493D49E00994038 /* JoinViaScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViaScanView.swift; sourceTree = "<group>"; };
 		234B8D9224839C9200C0F7F3 /* UserListElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListElement.swift; sourceTree = "<group>"; };
 		234B8D942483A4BF00C0F7F3 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		234B8D9824884EBC00C0F7F3 /* Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 			isa = PBXGroup;
 			children = (
 				23190663247DA25F00DA550B /* ContentView.swift */,
-				233D2AD72493D49E00994038 /* JoinViaScanView.swift */,
 				231B16C42489A1700006E78B /* JoinViaURLView.swift */,
 				235EB4D2248105A2007A720D /* JoinSessionView.swift */,
 			);
@@ -317,7 +314,6 @@
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
 				234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */,
-				233D2AD82493D49E00994038 /* JoinViaScanView.swift in Sources */,
 				8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */,
 				235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */,
 				234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */,

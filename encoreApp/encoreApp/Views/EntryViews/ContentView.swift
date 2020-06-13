@@ -41,31 +41,45 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray, lineWidth: 1)
                     ).padding(.horizontal, 25)
-                    Button(action: { self.showScannerSheet = true }) {
-                        Text("Join Session")
-                            .padding(15)
-                            .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
-                    }.disabled(username == "")
-                        .padding(5)
-                    Spacer().frame(height: 50)
-                    Text("Or create a new one and invite your Friends").font(.footnote)
-                    Button(action: { self.createSession(username: self.username) }) {
-                        Text("Create Session")
-                            .font(.headline)
-                            .foregroundColor(username == "" ? Color("lightgray") : Color("purpleblue"))
-                            .cornerRadius(25)
-                    }.disabled(username == "")
-                        .padding(5)
-                    Spacer()
+                    if username.count > 0 && username.count < 3 {
+                        Text("The Name should at least be three characters long.")
+                            .font(.footnote)
+                            .foregroundColor(.red)
+                    }
+                    Group {
+                        Button(action: { self.showScannerSheet = true }) {
+                            Text("Join Session")
+                                .padding(15)
+                                .background( username.count < 3 ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
+                        }.disabled(username.count < 3)
+                            .padding(5)
+                            
+                        Spacer().frame(height: 50)
+                        Text("Or create a new one and invite your Friends").font(.footnote)
+                        Button(action: { self.createSession(username: self.username) }) {
+                            Text("Create Session")
+                                .font(.headline)
+                                .foregroundColor(username.count < 3 ? Color("lightgray") : Color("purpleblue"))
+                                .cornerRadius(25)
+                        }.disabled(username.count < 3)
+                            .padding(5)
+                        Spacer()
+                    }.animation(.default)
                 }.sheet(isPresented: self.$showScannerSheet) {
-                    self.scannerSheet
+                    ZStack {
+                        self.scannerSheet
+                        VStack {
+                            Text("Scan the Session's QR code to join").padding()
+                            Spacer()
+                        }
+                    }
                 }
                 .alert(isPresented: $showServerErrorAlert) {
                     Alert(title: Text("Server Error"),
                           message: Text(""),
                           dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
                 }.alert(isPresented: $showWrongIDAlert) {
-                    Alert(title: Text("ID doesn't exist"),
+                    Alert(title: Text("Session doesn't exist"),
                           message: Text("Try again"),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                     
@@ -127,9 +141,11 @@ struct ContentView: View {
                                 self.sessionID = userInfo["session_id"] as! String
                                 self.secret = userInfo["secret"] as! String
                             }
+                            self.currentlyInSession = true
                         }
                     } catch let error as NSError {
                         print("Failed to load: \(error.localizedDescription)")
+                        self.showWrongIDAlert = true
                     }
                     DispatchQueue.main.async {
                         self.userVM.username = username
@@ -138,8 +154,6 @@ struct ContentView: View {
                         self.userVM.sessionID = self.sessionID
                         print(self.userVM.username)
                     }
-                    self.showWrongIDAlert = false
-                    self.currentlyInSession = true
                 }
             }
         }
