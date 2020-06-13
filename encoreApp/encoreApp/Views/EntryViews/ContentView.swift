@@ -33,7 +33,7 @@ struct ContentView: View {
                     Text("encore.")
                         .font(.largeTitle)
                         .bold()
-                    Spacer().frame(height: 150)
+                    Spacer().frame(height: 100)
                     TextField("Enter your Name", text: self.$username)
                         .padding(10)
                         //.background(Color.clear)
@@ -54,7 +54,7 @@ struct ContentView: View {
                         }.disabled(username.count < 3)
                             .padding(5)
                             
-                        Spacer().frame(height: 50)
+                        Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
                         Button(action: { self.createSession(username: self.username) }) {
                             Text("Create Session")
@@ -64,6 +64,7 @@ struct ContentView: View {
                         }.disabled(username.count < 3)
                             .padding(5)
                         Spacer()
+                        
                     }.animation(.default)
                 }.sheet(isPresented: self.$showScannerSheet) {
                     ZStack {
