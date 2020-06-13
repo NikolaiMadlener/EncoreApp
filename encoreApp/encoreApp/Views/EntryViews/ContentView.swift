@@ -21,6 +21,8 @@ struct ContentView: View {
     @State var showScannerSheet = false
     @State var scannedCode: String?
     
+    @State var invalidUsername = false
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -41,27 +43,33 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray, lineWidth: 1)
                     ).padding(.horizontal, 25)
-                    if username.count > 0 && username.count < 3 {
-                        Text("The Name should at least be three characters long.")
-                            .font(.footnote)
+                    if invalidUsername {
+                        Text("Name should at least be three characters long and free of special characters.")
+                            .font(.system(size: 12))
                             .foregroundColor(.red)
+                            .padding([.horizontal, .bottom])
                     }
                     Group {
-                        Button(action: { self.showScannerSheet = true }) {
-                            Text("Join Session")
-                                .padding(15)
-                                .background( username.count < 3 ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
-                        }.disabled(username.count < 3)
+                        Button(action: { if self.checkUsernameInvalid(username: self.username) {
+                            self.invalidUsername = true
+                        } else {
+                            self.showScannerSheet = true
+                            self.invalidUsername = false
+                            }}) {
+                                Text("Join Session")
+                                    .padding(15)
+                                    .background( username.count < 1 ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
+                        }.disabled(username.count < 1)
                             .padding(5)
-                            
+                        
                         Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
                         Button(action: { self.createSession(username: self.username) }) {
                             Text("Create Session")
                                 .font(.headline)
-                                .foregroundColor(username.count < 3 ? Color("lightgray") : Color("purpleblue"))
+                                .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
                                 .cornerRadius(25)
-                        }.disabled(username.count < 3)
+                        }.disabled(username.count < 1)
                             .padding(5)
                         Spacer()
                         
@@ -96,14 +104,40 @@ struct ContentView: View {
                 if case let .success(code) = result {
                     self.scannedCode = code
                     self.showScannerSheet = false
-                    self.sessionID = self.scannedCode!.substring(from: self.scannedCode!.index(self.scannedCode!.startIndex, offsetBy: 12))
+                    if let scannedCode = self.scannedCode {
+                        if scannedCode.count > 12 {
+                        self.sessionID = self.scannedCode!.substring(from: self.scannedCode!.index(self.scannedCode!.startIndex, offsetBy: 12))
+                        } else {
+                            self.sessionID = ""
+                        }
+                    }
                     self.joinSession(username: self.username)
                 }
         }
         )
     }
     
+    func checkUsernameInvalid(username: String) -> Bool {
+        let range = NSRange(location: 0, length: username.utf16.count)
+        let regex = try! NSRegularExpression(pattern: "[A-Za-z][A-Za-z][A-Za-z][A-Za-z]*")
+        if regex.firstMatch(in: username, options: [], range: range) == nil {
+            return true
+        }
+        if username.contains("ä") || username.contains("ö") || username.contains("ü") ||
+            username.contains("Ä") || username.contains("Ö") || username.contains("Ü") {
+            return true
+        }
+        return false
+    }
+    
     func joinSession(username: String) {
+        if checkUsernameInvalid(username: username) {
+            invalidUsername = true
+            return
+        } else {
+            invalidUsername = false
+        }
+        
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/join/"+"\(sessionID)") else {
             print("Invalid URL")
             return
@@ -163,6 +197,13 @@ struct ContentView: View {
     
     
     func createSession(username: String) {
+        if checkUsernameInvalid(username: username) {
+            invalidUsername = true
+            return
+        } else {
+            invalidUsername = false
+        }
+        
         guard let url = URL(string: "https://api.encore-fm.com/admin/"+"\(username)"+"/createSession") else {
             print("Invalid URL")
             return
