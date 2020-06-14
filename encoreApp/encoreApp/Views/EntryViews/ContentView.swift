@@ -75,15 +75,10 @@ struct ContentView: View {
                         
                     }.animation(.default)
                 }.sheet(isPresented: self.$showScannerSheet) {
-                    ZStack {
-                        self.scannerSheet
-                        VStack {
-                            Text("Scan the Session's QR code to join").padding()
-                            Spacer()
-                        }
-                    }
-                }
-                .alert(isPresented: $showServerErrorAlert) {
+                    
+                    self.scannerSheet
+                    
+                }.alert(isPresented: $showServerErrorAlert) {
                     Alert(title: Text("Server Error"),
                           message: Text(""),
                           dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
@@ -98,23 +93,36 @@ struct ContentView: View {
     }
     
     var scannerSheet : some View {
-        CodeScannerView(
-            codeTypes: [.qr],
-            completion: { result in
-                if case let .success(code) = result {
-                    self.scannedCode = code
-                    self.showScannerSheet = false
-                    if let scannedCode = self.scannedCode {
-                        if scannedCode.count > 12 {
-                        self.sessionID = self.scannedCode!.substring(from: self.scannedCode!.index(self.scannedCode!.startIndex, offsetBy: 12))
-                        } else {
-                            self.sessionID = ""
+        ZStack {
+            CodeScannerView(
+                codeTypes: [.qr],
+                completion: { result in
+                    if case let .success(code) = result {
+                        self.scannedCode = code
+                        self.showScannerSheet = false
+                        if let scannedCode = self.scannedCode {
+                            if scannedCode.count > 12 {
+                                self.sessionID = self.scannedCode!.substring(from: self.scannedCode!.index(self.scannedCode!.startIndex, offsetBy: 12))
+                            } else {
+                                self.sessionID = ""
+                            }
                         }
+                        self.joinSession(username: self.username)
                     }
-                    self.joinSession(username: self.username)
+            }
+            )
+            
+            VStack {
+                Button(action: { self.showScannerSheet = false }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.white)
+                        .font(.largeTitle)
+                        .padding()
                 }
+                Text("Scan the Session's QR code to join")
+                Spacer()
+            }
         }
-        )
     }
     
     func checkUsernameInvalid(username: String) -> Bool {

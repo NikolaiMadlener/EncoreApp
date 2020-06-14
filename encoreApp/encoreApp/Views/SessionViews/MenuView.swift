@@ -14,24 +14,32 @@ struct MenuView: View {
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
     
+    @Binding var showMenuSheet: Bool
     @Binding var currentlyInSession: Bool
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
     
-    init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
         self.userListVM = UserListVM(userVM: userVM)
         self._currentlyInSession = currentlyInSession
+        self._showMenuSheet = showMenuSheet
     }
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 VStack {
-                    Spacer().frame(height: 25)
+                    Button(action: { self.showMenuSheet = false }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                            .font(.largeTitle)
+                            .padding()
+                    }
+                    
                     QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
-                        
+                    
                     Text("Let your friends scan the QR-code \nOr share the link to let them join to your Session. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
                         ZStack {
@@ -50,26 +58,32 @@ struct MenuView: View {
                         }.padding(10)
                     }
                     VStack() {
-                        ForEach(self.userListVM.members, id: \.self) { member in
+                        List {
                             VStack {
-                                HStack {
-                                    if member.is_admin {
-                                        Text("\(member.username)").bold()
-                                    } else {
-                                        Text("\(member.username)")
-                                    }
-                                    Spacer()
-                                    if member.is_admin {
-                                        Text("Host")
-                                    }
-                                    else if member.username == self.userVM.username {
-                                        Text("You")
+                                ForEach(self.userListVM.members, id: \.self) { member in
+                                    VStack {
+                                        HStack {
+                                            if member.is_admin {
+                                                Text("\(member.username)").bold()
+                                            } else {
+                                                Text("\(member.username)")
+                                            }
+                                            Spacer()
+                                            if member.is_admin {
+                                                Text("Host")
+                                            }
+                                            else if member.username == self.userVM.username {
+                                                Text("You")
+                                            }
+                                        }
+                                        Divider()
                                     }
                                 }
-                                Divider()
                             }
-                        }
-                    }.padding()
+                            
+                        }.padding()
+                            .onAppear{ UITableView.appearance().separatorColor = .clear }
+                    }
                     Spacer()
                 }
                 VStack {
@@ -104,56 +118,56 @@ struct MenuView: View {
         }
     }
     
-//    func getMembers(username: String) {
-//
-//        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
-//            print("Invalid URL")
-//            return
-//        }
-//        var request = URLRequest(url: url)
-//
-//        print("secret: " + self.user.secret)
-//        print("sessionID: " + self.user.sessionID)
-//
-//        request.httpMethod = "GET"
-//        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
-//        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
-//
-//
-//        // HTTP Request Parameters which will be sent in HTTP Request Body
-//        //let postString = "userId=300&title=My urgent task&completed=false";
-//        // Set HTTP Request Body
-//        //request.httpBody = postString.data(using: String.Encoding.utf8);
-//        // Perform HTTP Request
-//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//
-//            // Check for Error
-//            if let error = error {
-//                print("Error took place \(error)")
-//                return
-//            }
-//
-//            // Convert HTTP Response Data to a String
-//            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-//                print("Response data string:\n \(dataString)")
-//
-//                do {
-//                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
-//                    DispatchQueue.main.async {
-//                        self.members = decodedData
-//                        print(self.members)
-//                        print()
-//                    }
-//                } catch {
-//                    print("Error")
-//                    self.showSessionExpiredAlert = true
-//                    self.currentlyInSession = false
-//                }
-//            }
-//            self.currentlyInSession = true
-//        }
-//        task.resume()
-//    }
+    //    func getMembers(username: String) {
+    //
+    //        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
+    //            print("Invalid URL")
+    //            return
+    //        }
+    //        var request = URLRequest(url: url)
+    //
+    //        print("secret: " + self.user.secret)
+    //        print("sessionID: " + self.user.sessionID)
+    //
+    //        request.httpMethod = "GET"
+    //        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
+    //        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
+    //
+    //
+    //        // HTTP Request Parameters which will be sent in HTTP Request Body
+    //        //let postString = "userId=300&title=My urgent task&completed=false";
+    //        // Set HTTP Request Body
+    //        //request.httpBody = postString.data(using: String.Encoding.utf8);
+    //        // Perform HTTP Request
+    //        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+    //
+    //            // Check for Error
+    //            if let error = error {
+    //                print("Error took place \(error)")
+    //                return
+    //            }
+    //
+    //            // Convert HTTP Response Data to a String
+    //            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+    //                print("Response data string:\n \(dataString)")
+    //
+    //                do {
+    //                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
+    //                    DispatchQueue.main.async {
+    //                        self.members = decodedData
+    //                        print(self.members)
+    //                        print()
+    //                    }
+    //                } catch {
+    //                    print("Error")
+    //                    self.showSessionExpiredAlert = true
+    //                    self.currentlyInSession = false
+    //                }
+    //            }
+    //            self.currentlyInSession = true
+    //        }
+    //        task.resume()
+    //    }
     
     func deleteSession(username: String) {
         
@@ -233,11 +247,11 @@ struct MenuView: View {
 }
 
 struct MenuView_Previews: PreviewProvider {
-    @State static var signInSuccess = false
-    @State static var sessionID = "b9b314695f504bfa66250d312ce5626d"
     static var userVM = UserVM()
+    @State static var currentlyInSession = false
+    @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, currentlyInSession: $signInSuccess)
+        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
     }
 }
