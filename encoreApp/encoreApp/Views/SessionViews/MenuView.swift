@@ -45,9 +45,9 @@ struct MenuView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 50).frame(width: geo.size.width*0.9, height: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                             HStack {
-                                Text("encoreApp://\(self.userVM.sessionID)")
+                                Text("Share Session-Link")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                                    .font(.caption)
+                                    .font(.system(size: 15))
                                     .padding(.leading, 30)
                                 Spacer()
                                 Image(systemName: "square.and.arrow.up")
