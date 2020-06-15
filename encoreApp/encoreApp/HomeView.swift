@@ -17,6 +17,7 @@ struct HomeView: View {
     
     @ObservedObject var user: User
     @State var presentMenuSheet = false
+    @State var showAddSongSheet = false
     @Binding var currentlyInSession: Bool
     @State var current_title_offset: CGFloat = 0
     @State var isPlay = false
@@ -119,8 +120,8 @@ struct HomeView: View {
                             Rectangle()
                                 .frame(width: geo.size.width, height: geo.size.height * 0.13)
                                 .foregroundColor(Color.clear)
-                                .background(Blur(colorScheme: self.colorScheme))
-                            
+                                //.background(Blur(colorScheme: self.colorScheme))
+                                .background(self.colorScheme == .dark ? Color(.black) : Color(.white))
                             // later this will be the playbar
                             HStack(spacing: 0) {
                                 Rectangle()
@@ -167,30 +168,70 @@ struct HomeView: View {
                 }
             }
             Spacer()
-            Button(action: {
-                //self.isPlay ? self.musicController.startPlayback() : self.musicController.pausePlayback()
-                self.musicController.playMusic()
-                self.isPlay.toggle()
-            }) {
-                Image(systemName: self.isPlay ? "play.circle.fill" : "pause.circle.fill")
-                    .font(.system(size: 80, weight: .light))
-                    .foregroundColor(self.colorScheme == .dark ? Color.blue : Color.black)
-            }
             
-            Button(action: { self.musicController.skipNext() }) {
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 80, weight: .light))
-                    .foregroundColor(self.colorScheme == .dark ? Color.blue : Color.black)
-            }
+            HStack {
+                Spacer()
+                if self.user.isAdmin {
+                    HStack {
+                        Button(action: {
+                            //self.isPlay ? self.musicController.startPlayback() : self.musicController.pausePlayback()
+                            self.musicController.playMusic()
+                            self.isPlay.toggle()
+                        }) {
+                            ZStack {
+                                Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
+                                Image(systemName: self.isPlay ? "play.circle.fill" : "pause.circle.fill")
+                                    .font(.system(size: 35, weight: .light))
+                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                            }
+                        }
+                        Spacer().frame(width: 40)
+                        Button(action: { self.showAddSongSheet = true }) {
+                            ZStack {
+                                Circle().frame(width: 65, height: 65).foregroundColor(Color.white).shadow(radius: 10)
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.system(size: 70, weight: .light))
+                                    .foregroundColor(Color("purpleblue"))
+                            }
+                        }.sheet(isPresented: self.$showAddSongSheet) {
+                            AddSongView()
+                        }
+                        Spacer().frame(width: 40)
+                        Button(action: { self.musicController.skipNext() }) {
+                            Image(systemName: "forward.end.fill")
+                                .font(.system(size: 35, weight: .light))
+                                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                        }
+                    }.padding(10).padding(.horizontal, 10).background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white).cornerRadius(100).shadow(radius: 10)
+                } else {
+                    Button(action: { self.showAddSongSheet = true }) {
+                        ZStack {
+                            Circle().frame(width: 70, height: 70).foregroundColor(Color.white).shadow(radius: 5)
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 70, weight: .light))
+                                .foregroundColor(Color("purpleblue"))
+                            
+                        }
+                    }.sheet(isPresented: self.$showAddSongSheet) {
+                        AddSongView()
+                    }
+                }
+                Spacer()
+            }.padding(.bottom)
         }
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
+    
     @State static var currentlyInSession = true
     static var user = User()
     
     static var previews: some View {
-        HomeView(user: user, currentlyInSession: $currentlyInSession)
+        Group {
+            HomeView(user: user, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .light)
+            
+            HomeView(user: user, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .dark)
+        }
     }
 }

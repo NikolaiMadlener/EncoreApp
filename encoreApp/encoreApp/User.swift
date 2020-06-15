@@ -23,7 +23,7 @@ public class User: ObservableObject {
     
     init() {
         self.username = ""
-        self.isAdmin = false
+        self.isAdmin = true
         self.sessionID = ""
         self.secret = ""
     }
