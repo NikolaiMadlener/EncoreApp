@@ -69,9 +69,9 @@ struct HomeView: View {
                                 self.musicController.currentAlbumImage
                                     .resizable()
                                     .frame(width: 180, height: 180)
-                                Text("\(self.model.getSongPlaying().name)")
+                                Text("\(self.musicController.trackName ?? "No Song")")
                                     .font(.system(size: 25, weight: .bold))
-                                Text("\(self.model.getSongPlaying().artists[0])")
+                                Text("\(self.musicController.artistName ?? "No Artist")")
                                     .font(.system(size: 20, weight: .semibold))
                             }
                             Spacer()
@@ -168,7 +168,8 @@ struct HomeView: View {
             }
             Spacer()
             Button(action: {
-                self.isPlay ? self.musicController.startPlayback() : self.musicController.pausePlayback()
+                //self.isPlay ? self.musicController.startPlayback() : self.musicController.pausePlayback()
+                self.musicController.playMusic()
                 self.isPlay.toggle()
             }) {
                 Image(systemName: self.isPlay ? "play.circle.fill" : "pause.circle.fill")

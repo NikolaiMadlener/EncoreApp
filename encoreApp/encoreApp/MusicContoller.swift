@@ -16,16 +16,23 @@ class MusicController: NSObject, ObservableObject {
     
     private var currentPodcastSpeed: SPTAppRemotePodcastPlaybackSpeed?
     @Published var playerState: SPTAppRemotePlayerState?
-    @Published var currentAlbumImage: Image = Image("album1")
+    var currentAlbumImage: Image = Image("album1")
+    var trackName: String?
+    var artistName: String?
+    var test = 1
     private var subscribedToPlayerState: Bool = false
     private var subscribedToCapabilities: Bool = false
-    private let playURI = "spotify:album:1htHMnxonxmyHdKE2uDFMR"
+    var playURI = ""
     private let trackIdentifier = "spotify:track:32ftxJzxMPgUFCM6Km9WTS"
     
     func updateViewWithPlayerState(_ playerState: SPTAppRemotePlayerState) {
+        print("UPDATE:\(playerState)")
+        self.playerState = playerState
         fetchAlbumArtForTrack(playerState.track) { (image) -> Void in
             self.currentAlbumImage = Image(uiImage: image) //convert UIImage to Image
         }
+        trackName = playerState.track.name
+        artistName = playerState.track.artist.name
     }
     
     var appRemote: SPTAppRemote? {
@@ -36,7 +43,7 @@ class MusicController: NSObject, ObservableObject {
     
     var defaultCallback: SPTAppRemoteCallback {
         get {
-            return {[weak self] _, error in
+            return { [weak self] _, error in
                 if let error = error {
                     //display error
                 }
@@ -51,17 +58,18 @@ class MusicController: NSObject, ObservableObject {
             let playerState = result as! SPTAppRemotePlayerState
             self.updateViewWithPlayerState(playerState)
         }
+        print("GETSTATE:\(playerState)")
     }
     
     func playMusic() {
         if appRemote?.isConnected == false {
-            if appRemote?.authorizeAndPlayURI(playURI) == false { //returns false when spotify not installed, if true, attempts to obtain access token and starts playback
+            if appRemote?.authorizeAndPlayURI(self.playURI) == false { //returns false when spotify not installed, if true, attempts to obtain access token and starts playback
                 // The Spotify app is not installed, present the user with an App Store page
                 showAppStoreInstall()
             }
         } else if playerState == nil || playerState!.isPaused {
-            print("IAMHERE")
             startPlayback()
+            print("PLAYERSTATE:\(playerState)")
         } else {
             pausePlayback()
         }
@@ -69,16 +77,17 @@ class MusicController: NSObject, ObservableObject {
     
     func startPlayback() {
         getPlayerState()
+        print("START")
         appRemote?.playerAPI?.resume(defaultCallback)
     }
     
     func pausePlayback() {
         getPlayerState()
+        print("PAUSE")
         appRemote?.playerAPI?.pause(defaultCallback)
     }
     
     func enqueueTrack() {
-        print("IAMHERE2")
         appRemote?.playerAPI?.enqueueTrackUri(trackIdentifier, callback: defaultCallback)
     }
     
@@ -103,6 +112,7 @@ class MusicController: NSObject, ObservableObject {
             guard error == nil else { return }
             self.subscribedToPlayerState = true
         }
+        print("SUBSCRIBE: \(subscribedToPlayerState)")
     }
     
     // MARK: - AppRemote
@@ -111,7 +121,6 @@ class MusicController: NSObject, ObservableObject {
     }
 
     func appRemoteConnected() {
-        
         subscribeToPlayerState()
         //subscribeToCapabilityChanges()
         getPlayerState()
@@ -125,24 +134,6 @@ class MusicController: NSObject, ObservableObject {
         self.subscribedToCapabilities = false
         //enableInterface(false)
     }
-    
-    /*
-    
-    private func getPlayerState() {
-        appRemote?.playerAPI?.getPlayerState { (result, error) -> Void in
-            guard error == nil else { return }
-
-            let playerState = result as! SPTAppRemotePlayerState
-        }
-    }
-    
-}
-
-// MARK: - SPTAppRemoteUserAPIDelegate
-extension MusicController: SPTAppRemoteUserAPIDelegate {
-    func userAPI(_ userAPI: SPTAppRemoteUserAPI, didReceive capabilities: SPTAppRemoteUserCapabilities) {
-        updateViewWithCapabilities(capabilities)
-    }*/
 }
 
 // MARK: SKStoreProductViewControllerDelegate
@@ -155,9 +146,8 @@ extension MusicController {
 // MARK: - SPTAppRemotePlayerStateDelegate
 extension MusicController: SPTAppRemotePlayerStateDelegate {
        func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
-           self.playerState = playerState
+            print("DELEGATE:\(playerState)")
            updateViewWithPlayerState(playerState)
-            print("DelegateState")
        }
 }
 
