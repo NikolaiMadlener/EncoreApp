@@ -22,6 +22,7 @@ struct HomeView: View {
     @State var current_title_offset: CGFloat = 0
     @State var isPlay = false
     
+    
     var body: some View {
         ZStack {
             //Layer 0: Background Layer
@@ -46,8 +47,9 @@ struct HomeView: View {
             //                    .foregroundColor(Color.yellow)
             //                Spacer()
             //            }
-        }
+        }.onAppear{ self.musicController.viewDidLoad() }
     }
+
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
@@ -79,13 +81,13 @@ struct HomeView: View {
                         }
                         
                         // later this will be the playbar
-                        HStack(spacing: 0) {
+                        ZStack(alignment: .leading) {
                             Rectangle()
-                                .frame(width: geom.size.width * 0.5, height: 3)
-                                .foregroundColor(Color("purpleblue"))
-                            Rectangle()
-                                .frame(width: geom.size.width * 0.3, height: 3)
+                                .frame(width: geom.size.width * 0.8, height: 3)
                                 .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+                            Rectangle()
+                                .frame(width: (self.musicController.normalizedPlaybackPosition! * geom.size.width * 0.8), height: 3)
+                            .foregroundColor(Color("purpleblue"))
                         }.padding()
                         
                         Spacer()
@@ -104,9 +106,11 @@ struct HomeView: View {
                                 .padding(.top, -5)
                         }
                     }
+                    Spacer().frame(height: 100)
                 }.animation(.easeInOut(duration: 0.30))
             }
         }
+        
     }
     
     
@@ -123,24 +127,24 @@ struct HomeView: View {
                                 //.background(Blur(colorScheme: self.colorScheme))
                                 .background(self.colorScheme == .dark ? Color(.black) : Color(.white))
                             // later this will be the playbar
-                            HStack(spacing: 0) {
+                            ZStack(alignment: .leading) {
                                 Rectangle()
-                                    .frame(width: geo.size.width * (2/3), height: 3)
-                                    .foregroundColor(Color("purpleblue"))
-                                Rectangle()
-                                    .frame(width: geo.size.width * (1/3), height: 3)
+                                    .frame(width: geo.size.width, height: 3)
                                     .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+                                Rectangle()
+                                    .frame(width: (self.musicController.normalizedPlaybackPosition! * geo.size.width), height: 3)
+                                .foregroundColor(Color("purpleblue"))
                             }
                             
                         }.edgesIgnoringSafeArea(.top)
                         HStack {
-                            Image("album1")
+                            self.musicController.currentAlbumImage
                                 .resizable()
                                 .frame(width: 30, height: 30)
                             VStack(alignment: .leading) {
-                                Text("\(self.model.getSongPlaying().name)")
+                                Text("\(self.musicController.trackName ?? "No Song")")
                                     .font(.system(size: 15, weight: .bold))
-                                Text("\(self.model.getSongPlaying().artists[0])")
+                                Text("\(self.musicController.artistName ?? "No Artist")")
                                     .font(.system(size: 10, weight: .semibold))
                             }
                             Spacer()
@@ -180,7 +184,7 @@ struct HomeView: View {
                         }) {
                             ZStack {
                                 Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                                Image(systemName: self.isPlay ? "play.circle.fill" : "pause.circle.fill")
+                                Image(systemName: self.isPlay ? "pause.circle.fill" : "play.circle.fill")
                                     .font(.system(size: 35, weight: .light))
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                             }
@@ -188,9 +192,9 @@ struct HomeView: View {
                         Spacer().frame(width: 40)
                         Button(action: { self.showAddSongSheet = true }) {
                             ZStack {
-                                Circle().frame(width: 65, height: 65).foregroundColor(Color.white).shadow(radius: 10)
+                                Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 10)
                                 Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 70, weight: .light))
+                                    .font(.system(size: 60, weight: .light))
                                     .foregroundColor(Color("purpleblue"))
                             }
                         }.sheet(isPresented: self.$showAddSongSheet) {
@@ -206,9 +210,9 @@ struct HomeView: View {
                 } else {
                     Button(action: { self.showAddSongSheet = true }) {
                         ZStack {
-                            Circle().frame(width: 70, height: 70).foregroundColor(Color.white).shadow(radius: 5)
+                            Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 5)
                             Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 70, weight: .light))
+                                .font(.system(size: 60, weight: .light))
                                 .foregroundColor(Color("purpleblue"))
                             
                         }
