@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-//MARK: !!!!!OBSOLETE!!!!!
 struct JoinViaURLView: View {
     @ObservedObject var userVM: UserVM
     

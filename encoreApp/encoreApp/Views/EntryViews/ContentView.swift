@@ -15,6 +15,7 @@ struct ContentView: View {
     @State var username: String = ""
     @State var sessionID: String = ""
     @State var secret: String = ""
+    
     @State var showServerErrorAlert = false
     @State var showWrongIDAlert = false
     
@@ -38,13 +39,12 @@ struct ContentView: View {
                     Spacer().frame(height: 100)
                     TextField("Enter your Name", text: self.$username)
                         .padding(10)
-                        //.background(Color.clear)
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray, lineWidth: 1)
                     ).padding(.horizontal, 25)
                     if invalidUsername {
-                        Text("Name should at least be three characters long and free of special characters.")
+                        Text("Name should at least be three characters long and free of special characters and spaces.")
                             .font(.system(size: 12))
                             .foregroundColor(.red)
                             .padding([.horizontal, .bottom])
@@ -68,16 +68,13 @@ struct ContentView: View {
                             Text("Create Session")
                                 .font(.headline)
                                 .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
-                                .cornerRadius(25)
                         }.disabled(username.count < 1)
                             .padding(5)
                         Spacer()
                         
                     }.animation(.default)
                 }.sheet(isPresented: self.$showScannerSheet) {
-                    
                     self.scannerSheet
-                    
                 }.alert(isPresented: $showServerErrorAlert) {
                     Alert(title: Text("Server Error"),
                           message: Text(""),
@@ -202,7 +199,6 @@ struct ContentView: View {
         }
         task.resume()
     }
-    
     
     func createSession(username: String) {
         if checkUsernameInvalid(username: username) {

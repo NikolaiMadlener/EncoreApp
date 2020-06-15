@@ -33,6 +33,6 @@ struct AppContentView: View {
 struct AppContentView_Previews: PreviewProvider {
 
     static var previews: some View {
-        AppContentView(joinedViaURL: false, sessionID: "123")
+        AppContentView(joinedViaURL: false, sessionID: "")
     }
 }

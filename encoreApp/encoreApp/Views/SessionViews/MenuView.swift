@@ -40,7 +40,7 @@ struct MenuView: View {
                     
                     QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
                     
-                    Text("Let your friends scan the QR-code \nOr share the link to let them join to your Session. ").font(.footnote).multilineTextAlignment(.center)
+                    Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 50).frame(width: geo.size.width*0.9, height: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
