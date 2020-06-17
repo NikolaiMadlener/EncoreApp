@@ -12,10 +12,10 @@ import IKEventSource
 class SongListVM: ObservableObject {
     @Published var songs: [Song] = []
     var serverURL: URL
-    var userVM: User
+    var userVM: UserVM
     var eventSource: EventSource
     
-    init(userVM: User) {
+    init(userVM: UserVM) {
         self.userVM = userVM
         
         serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)"+"/\(userVM.sessionID)")!

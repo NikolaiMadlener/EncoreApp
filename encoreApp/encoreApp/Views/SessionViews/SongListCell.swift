@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SongListCell: View {
     
-    @ObservedObject var user: User
+    @ObservedObject var user: UserVM
     var song: Song
     @State var voteState: VoteState = VoteState.NEUTRAL
     var rank: Int
@@ -192,6 +192,6 @@ struct SongListCell: View {
 
 struct SongListCell_Previews: PreviewProvider {
     static var previews: some View {
-        SongListCell(user: User(), song: Mockmodel.getSongs()[0], rank: 2)
+        SongListCell(user: UserVM(), song: Mockmodel.getSongs()[0], rank: 2)
     }
 }

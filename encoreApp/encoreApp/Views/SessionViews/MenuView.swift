@@ -11,7 +11,7 @@ import SwiftUI
 struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @ObservedObject var user: User
+    @ObservedObject var user: UserVM
     @Binding var currentlyInSession: Bool
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
@@ -232,7 +232,7 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     @State static var signInSuccess = false
     @State static var sessionID = "b9b314695f504bfa66250d312ce5626d"
-    static var user = User()
+    static var user = UserVM()
     
     static var previews: some View {
         MenuView(user: user, currentlyInSession: $signInSuccess)

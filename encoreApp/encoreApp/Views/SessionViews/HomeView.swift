@@ -14,7 +14,7 @@ struct HomeView: View {
     
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
-    @ObservedObject var user: User
+    @ObservedObject var user: UserVM
     
     @State var presentMenuSheet = false
     @State var showAddSongSheet = false
@@ -23,7 +23,7 @@ struct HomeView: View {
     @State var isPlay = false
     @State var songs: [Song] = []
     
-    init(user: User, currentlyInSession: Binding<Bool>) {
+    init(user: UserVM, currentlyInSession: Binding<Bool>) {
         self.user = user
         self._currentlyInSession = currentlyInSession
         songListVM = SongListVM(userVM: user)
@@ -186,7 +186,7 @@ struct HomeView: View {
             HStack {
                 Spacer()
                 if self.user.isAdmin {
-                    HStack {
+                    HStack {
                         Button(action: {
                             self.musicController.playMusic()
                             self.isPlay.toggle()
@@ -290,7 +290,7 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     
     @State static var currentlyInSession = true
-    static var user = User()
+    static var user = UserVM()
     
     static var previews: some View {
         Group {

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct JoinViaURLView: View {
-    @ObservedObject var user: User
+    @ObservedObject var user: UserVM
     
     var sessionID: String
     @State var username = ""
@@ -64,7 +64,6 @@ struct JoinViaURLView: View {
                 return
             }
             
-            
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
@@ -103,6 +102,6 @@ struct JoinViaURLView: View {
 struct JoinViaURLView_Previews: PreviewProvider {
     @State static var currentlyInSession = false
     static var previews: some View {
-        JoinViaURLView(user: User(), sessionID: "123", currentlyInSession: $currentlyInSession)
+        JoinViaURLView(user: UserVM(), sessionID: "123", currentlyInSession: $currentlyInSession)
     }
 }

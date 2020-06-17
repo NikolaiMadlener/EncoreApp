@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct AppContentView: View {
-    @ObservedObject var user = User()
+    @ObservedObject var user = UserVM()
     @State var currentlyInSession = false
     @State var showJoinSheet: Bool = false
     var joinedViaURL: Bool

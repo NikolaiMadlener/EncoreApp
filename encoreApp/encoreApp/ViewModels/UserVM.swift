@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class User: ObservableObject {
+public class UserVM: ObservableObject {
     @Published var username: String
     @Published var isAdmin: Bool
     @Published var sessionID: String

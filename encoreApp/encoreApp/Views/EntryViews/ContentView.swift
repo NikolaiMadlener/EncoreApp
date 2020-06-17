@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var user: User
+    @ObservedObject var user: UserVM
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
     @State var sessionID: String = ""
@@ -35,7 +35,7 @@ struct ContentView: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.gray, lineWidth: 1)
                     ).padding(.horizontal, 25)
-                    NavigationLink(destination: JoinSessionView(user: self.user, username: self.username, currentlyInSession: self.$currentlyInSession)) {
+                    NavigationLink(destination: JoinViaURLView(user: self.user, sessionID: sessionID, username: self.username, currentlyInSession: self.$currentlyInSession)) {
                         Text("Join Session")
                             .padding(15)
                             .background( username == "" ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
@@ -112,7 +112,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     @State static var signInSuccess = false
     @State static var sessionID = ""
-    static var user = User()
+    static var user = UserVM()
     
     static var previews: some View {
         ContentView(user: user, currentlyInSession: $signInSuccess)
