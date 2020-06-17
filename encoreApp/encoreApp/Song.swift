@@ -9,17 +9,9 @@
 import Foundation
 import SwiftUI
 
-class Song: Hashable, ObservableObject {
-    
-    static func == (lhs: Song, rhs: Song) -> Bool {
-        if lhs.id != rhs.id {
-            return false
-        } else {
-            return true
-        }
-    }
+struct Song: Codable, Hashable {
 
-    var id: UUID
+    var id: String
     var name: String
     var artists: [String]
     var duration_ms: Int
@@ -28,15 +20,24 @@ class Song: Hashable, ObservableObject {
     var preview_url: String
     var suggested_by: String
     var score: Int
-    var time_added: Int
-    @Published var upvoters: [String]
-    @Published var downvoters: [String]
-    var album_image: Image   //temporary, can be deleted ounce we get images from spotify api
-    var hashValue: Int {
-         return id.hashValue
-    }
+    var time_added: String
+    var upvoters: [String]
+    var downvoters: [String]
     
-    init(id: UUID,
+//    "id": "7unF2ARDGldwWxZWCmlwDM",
+//    "name": "A Love Supreme, Pt. II - Resolution",
+//    "artists": ["list", "of", "artists"],
+//    "duration_ms": 1337,
+//    "cover_url": "https://i.scdn.co/image/ab67616d0000b2737fe4eca2f931b806a9c9a9dc",
+//    "album_name": "A Love Supreme",
+//    "preview_url": "url to 30 second song preview",
+//    "suggested_by": "anton",
+//    "score": 3,
+//    "time_added": "time string",
+//    "upvoters": ["omar", "cybotter", "anton"],
+//    "downvoters": []
+    
+    init(id: String,
         name: String,
         artists: [String],
         duration_ms: Int,
@@ -45,10 +46,9 @@ class Song: Hashable, ObservableObject {
         preview_url: String,
         suggested_by: String,
         score: Int,
-        time_added: Int,
+        time_added: String,
         upvoters: [String], //later User
-        downvoters: [String],
-        album_image: Image) {
+        downvoters: [String]) {
         self.id = id
         self.name = name
         self.artists = artists
@@ -61,12 +61,6 @@ class Song: Hashable, ObservableObject {
         self.time_added = time_added
         self.upvoters = upvoters
         self.downvoters = downvoters
-        self.album_image = album_image
     }
 }
 
-struct Song_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
-    }
-}

@@ -12,26 +12,25 @@ struct HomeView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    @ObservedObject var model: Model = .shared
     @ObservedObject var musicController: MusicController = .shared
-    
+    @ObservedObject var songListVM: SongListVM
     @ObservedObject var user: User
+    
     @State var presentMenuSheet = false
     @State var showAddSongSheet = false
     @Binding var currentlyInSession: Bool
     @State var current_title_offset: CGFloat = 0
     @State var isPlay = false
+    @State var songs: [Song] = []
     
+    init(user: User, currentlyInSession: Binding<Bool>) {
+        self.user = user
+        self._currentlyInSession = currentlyInSession
+        songListVM = SongListVM(userVM: user)
+    }
     
     var body: some View {
         ZStack {
-            //Layer 0: Background Layer
-            //            LinearGradient(gradient: Gradient(colors: [
-            //                Color.white,
-            //                Color.white,
-            //                Color.white
-            //            ]), startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
-            
             //Layer 1: Song Queue Layer
             songQueue_layer
             
@@ -40,75 +39,87 @@ struct HomeView: View {
             
             //Layer 3: Menu Layer
             menu_layer
-            
-            //Layer4: Observer Layer (Debugging)
-            //            VStack {
-            //                Text("\(current_title_offset)")
-            //                    .foregroundColor(Color.yellow)
-            //                Spacer()
-            //            }
-        }.onAppear{ self.musicController.viewDidLoad() }
+        }.onAppear{ self.musicController.viewDidLoad() } // triggers updates on every second
     }
-
+    
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        GeometryReader { geom in
-            ScrollView {
-                GeometryReader { geo -> AnyView? in
-                    let thisOffset = geo.frame(in: .global).minY
-                    if thisOffset > -190 {
-                        self.current_title_offset = thisOffset
-                    } else {
-                        self.current_title_offset = -260
-                    }
-                    return nil
-                }
-                if (self.current_title_offset > -260) {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            VStack {
-                                self.musicController.currentAlbumImage
-                                    .resizable()
-                                    .frame(width: 180, height: 180)
-                                Text("\(self.musicController.trackName ?? "No Song")")
-                                    .font(.system(size: 25, weight: .bold))
-                                Text("\(self.musicController.artistName ?? "No Artist")")
-                                    .font(.system(size: 20, weight: .semibold))
-                            }
-                            Spacer()
+        var albumWidth = self.musicController.currentAlbumImage.size.width
+        var uiColorTopLeft = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.2))
+        var uiColorBottomRight = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
+        var uiColorBottomLeft = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
+        var uiColorTopRight = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
+        return
+            GeometryReader { geom in
+                ScrollView {
+                    GeometryReader { geo -> AnyView? in
+                        let thisOffset = geo.frame(in: .global).minY
+                        if thisOffset > -190 {
+                            self.current_title_offset = thisOffset
+                        } else {
+                            self.current_title_offset = -260
                         }
-                        
-                        // later this will be the playbar
-                        ZStack(alignment: .leading) {
-                            Rectangle()
-                                .frame(width: geom.size.width * 0.8, height: 3)
-                                .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
-                            Rectangle()
-                                .frame(width: (self.musicController.normalizedPlaybackPosition! * geom.size.width * 0.8), height: 3)
-                            .foregroundColor(Color("purpleblue"))
-                        }.padding()
-                        
-                        Spacer()
+                        return nil
                     }
-                }
-                
-                VStack {
-                    if (self.current_title_offset <= -260) {
-                        Spacer().frame(height: 300)
-                    }
-                    ForEach(self.model.queue, id: \.self) { song in
+                    if (self.current_title_offset > -260) {
                         VStack {
-                            SongListCell(song: song, rank: (self.model.queue.firstIndex(of: song) ?? -1) + 1)
-                            Divider()
-                                .padding(.horizontal)
-                                .padding(.top, -5)
+                            HStack {
+                                Spacer()
+                                VStack {
+                                    if self.colorScheme == .dark {
+                                        Image(uiImage: self.musicController.currentAlbumImage)
+                                            .resizable()
+                                            .frame(width: 180, height: 180)
+                                            .cornerRadius(10)
+                                    } else {
+                                        Image(uiImage: self.musicController.currentAlbumImage)
+                                            .resizable()
+                                            .frame(width: 180, height: 180)
+                                            .cornerRadius(10)
+                                            .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
+                                            .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
+                                            .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
+                                            .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
+                                            .blendMode(.multiply)
+                                    }
+                                    Text("\(self.musicController.trackName ?? "No Song")")
+                                        .font(.system(size: 25, weight: .bold))
+                                    Text("\(self.musicController.artistName ?? "No Artist")")
+                                        .font(.system(size: 20, weight: .semibold))
+                                }
+                                Spacer()
+                            }
+                            
+                            // later this will be the playbar
+                            ZStack(alignment: .leading) {
+                                Rectangle()
+                                    .frame(width: geom.size.width * 0.8, height: 3)
+                                    .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+                                Rectangle()
+                                    .frame(width: (self.musicController.normalizedPlaybackPosition! * geom.size.width * 0.8), height: 3)
+                                    .foregroundColor(Color("purpleblue"))
+                            }.padding()
+                            
+                            Spacer()
                         }
                     }
-                    Spacer().frame(height: 100)
-                }.animation(.easeInOut(duration: 0.30))
-            }
+                    
+                    VStack {
+                        if (self.current_title_offset <= -260) {
+                            Spacer().frame(height: 300)
+                        }
+                        ForEach(self.songListVM.songs, id: \.self) { song in
+                            VStack {
+                                SongListCell(user: self.user, song: song, rank: (self.songs.firstIndex(of: song) ?? -1) + 1)
+                                Divider()
+                                    .padding(.horizontal)
+                                    .padding(.top, -5)
+                            }
+                        }
+                        Spacer().frame(height: 100)
+                    }.animation(.easeInOut(duration: 0.30))
+                }
         }
         
     }
@@ -133,12 +144,12 @@ struct HomeView: View {
                                     .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
                                 Rectangle()
                                     .frame(width: (self.musicController.normalizedPlaybackPosition! * geo.size.width), height: 3)
-                                .foregroundColor(Color("purpleblue"))
+                                    .foregroundColor(Color("purpleblue"))
                             }
                             
                         }.edgesIgnoringSafeArea(.top)
                         HStack {
-                            self.musicController.currentAlbumImage
+                            Image(uiImage: self.musicController.currentAlbumImage)
                                 .resizable()
                                 .frame(width: 30, height: 30)
                             VStack(alignment: .leading) {
@@ -172,13 +183,11 @@ struct HomeView: View {
                 }
             }
             Spacer()
-            
             HStack {
                 Spacer()
                 if self.user.isAdmin {
                     HStack {
                         Button(action: {
-                            //self.isPlay ? self.musicController.startPlayback() : self.musicController.pausePlayback()
                             self.musicController.playMusic()
                             self.isPlay.toggle()
                         }) {
@@ -190,7 +199,11 @@ struct HomeView: View {
                             }
                         }
                         Spacer().frame(width: 40)
-                        Button(action: { self.showAddSongSheet = true }) {
+                        Button(action: { self.showAddSongSheet = true
+                            // add 2 hardcoded songs - remove later
+                            self.suggestSong(songID: "6rqhFgbbKwnb9MLmUQDhG6")
+                            self.suggestSong(songID: "32ftxJzxMPgUFCM6Km9WTS")
+                        }) {
                             ZStack {
                                 Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 10)
                                 Image(systemName: "plus.circle.fill")
@@ -208,7 +221,11 @@ struct HomeView: View {
                         }
                     }.padding(10).padding(.horizontal, 10).background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white).cornerRadius(100).shadow(radius: 10)
                 } else {
-                    Button(action: { self.showAddSongSheet = true }) {
+                    Button(action: { self.showAddSongSheet = true
+                        // add 2 hardcoded songs - remove later
+                        self.suggestSong(songID: "6rqhFgbbKwnb9MLmUQDhG6")
+                        self.suggestSong(songID: "32ftxJzxMPgUFCM6Km9WTS")
+                    }) {
                         ZStack {
                             Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 5)
                             Image(systemName: "plus.circle.fill")
@@ -224,6 +241,50 @@ struct HomeView: View {
             }.padding(.bottom)
         }
     }
+    
+    func suggestSong(songID: String) {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(user.username)"+"/suggest/"+"\(songID)") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                
+                do {
+                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
+                    DispatchQueue.main.async {
+                        print("Successfully post of suggest song")
+                        
+                    }
+                } catch {
+                    print("Error")
+                }
+            }
+        }
+        task.resume()
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -238,4 +299,22 @@ struct HomeView_Previews: PreviewProvider {
             HomeView(user: user, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .dark)
         }
     }
+}
+
+extension UIImage {
+    func getPixelColor(pos: CGPoint) -> UIColor {
+        
+        let pixelData = self.cgImage!.dataProvider!.data
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+        
+        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
+        
+        let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
+        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
+        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
+        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
+        
+        return UIColor(red: r, green: g, blue: b, alpha: a)
+    }
+    
 }

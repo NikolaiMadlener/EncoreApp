@@ -12,7 +12,7 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate {
     
     var window: UIWindow?
-    var model = Model()
+    //var model = Model()
     var accessToken = "accessToken"
     var musicController = MusicController()
     

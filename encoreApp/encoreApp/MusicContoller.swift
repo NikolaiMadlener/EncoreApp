@@ -17,7 +17,7 @@ class MusicController: NSObject, ObservableObject {
     private var currentPodcastSpeed: SPTAppRemotePodcastPlaybackSpeed?
     @Published var playerState: SPTAppRemotePlayerState?
     @Published var normalizedPlaybackPosition: CGFloat? = CGFloat()
-    var currentAlbumImage: Image = Image("album1")
+    var currentAlbumImage: UIImage = UIImage(imageLiteralResourceName: "album6")
     var trackName: String?
     var artistName: String?
     var playbackPosition: Int?
@@ -39,7 +39,7 @@ class MusicController: NSObject, ObservableObject {
         print("UPDATE:\(playerState)")
         self.playerState = playerState
         fetchAlbumArtForTrack(playerState.track) { (image) -> Void in
-            self.currentAlbumImage = Image(uiImage: image) //convert UIImage to Image
+            self.currentAlbumImage = image
         }
         trackName = playerState.track.name
         artistName = playerState.track.artist.name

@@ -14,9 +14,6 @@ struct UserListElement: Codable, Hashable {
     var is_admin: Bool
     var score: Int
     var spotify_synchronized: Bool
-//    var hashValue: Int {
-//         return id.hashValue
-//    }
     
     init(username: String, is_admin: Bool, score: Int, spotify_synchronized: Bool) {
         self.username = username
@@ -25,9 +22,3 @@ struct UserListElement: Codable, Hashable {
         self.spotify_synchronized = spotify_synchronized
     }
 }
-
-//extension UserListElement {
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(username)
-//    }
-//}
