@@ -1,0 +1,16 @@
+PODS:
+  - IKEventSource (3.0.1)
+
+DEPENDENCIES:
+  - IKEventSource
+
+SPEC REPOS:
+  trunk:
+    - IKEventSource
+
+SPEC CHECKSUMS:
+  IKEventSource: ababa323587c6b0c250dd54d4a48ab68fd845e8e
+
+PODFILE CHECKSUM: eeef2c2c365a0533575d81154760dbefb4d59573
+
+COCOAPODS: 1.8.3

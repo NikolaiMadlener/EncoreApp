@@ -1,25 +1,27 @@
 //
-//  JoinSessionView.swift
+//  JoinViaURLView.swift
 //  encoreApp
 //
-//  Created by Nikolai Madlener on 29.05.20.
+//  Created by Nikolai Madlener on 04.06.20.
 //  Copyright © 2020 NikolaiEtienne. All rights reserved.
 //
 
 import SwiftUI
 
-struct JoinSessionView: View {
-    @ObservedObject var user: User
-    var username: String
-    @Binding var currentlyInSession: Bool
-    @State var sessionID = ""
-    @State var showWrongIDAlert = false
+struct JoinViaURLView: View {
+    @ObservedObject var userVM: UserVM
+    
+    var sessionID: String
+    @State var username = ""
     @State var secret: String = ""
+    @State var showWrongIDAlert = false
+    @Binding var currentlyInSession: Bool
     
     var body: some View {
         VStack {
             Spacer()
-            TextField("Enter Session ID", text: self.$sessionID)
+            //Text(sessionID)
+            TextField("Enter your Name", text: self.$username)
                 .padding(10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
@@ -29,14 +31,12 @@ struct JoinSessionView: View {
             Button(action: { self.joinSession(username: self.username) }) {
                 Text("Join Session")
                     .padding(15)
-                    .background( sessionID == "" ? Color("buttonDisabledGray") : Color("purpleblue") ).foregroundColor(sessionID == "" ? Color("lightgray") : Color.white).cornerRadius(25)//.shadow(radius: 5)
-            }.disabled(sessionID == "")
-                .padding(5)
+                    .background( sessionID == "" ? Color("buttonDisabledGray") : Color("purpleblue") ).foregroundColor(sessionID == "" ? Color("lightgray") : Color.white).cornerRadius(25)
+            }.disabled(username == "")
                 .alert(isPresented: $showWrongIDAlert) {
-                    Alert(title: Text("ID doesn't exist"),
-                          message: Text("Try again"),
+                    Alert(title: Text("Session doesn't exist"),
+                          message: Text(""),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
-                    
             }
         }
     }
@@ -77,7 +77,7 @@ struct JoinSessionView: View {
                         if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                             // try to read out a string array
                             if let userInfo = json["user_info"] as? [String: Any] {
-                                self.sessionID = userInfo["session_id"] as! String
+                                //self.sessionID = userInfo["session_id"] as! String
                                 self.secret = userInfo["secret"] as! String
                             }
                         }
@@ -85,11 +85,11 @@ struct JoinSessionView: View {
                         print("Failed to load: \(error.localizedDescription)")
                     }
                     DispatchQueue.main.async {
-                        self.user.username = username
-                        self.user.isAdmin = false
-                        self.user.secret = self.secret
-                        self.user.sessionID = self.sessionID
-                        print(self.user.username)
+                        self.userVM.username = username
+                        self.userVM.isAdmin = false
+                        self.userVM.secret = self.secret
+                        self.userVM.sessionID = self.sessionID
+                        print(self.userVM.username)
                     }
                     self.showWrongIDAlert = false
                     self.currentlyInSession = true
@@ -100,12 +100,9 @@ struct JoinSessionView: View {
     }
 }
 
-struct JoinSessionView_Previews: PreviewProvider {
-    static var username = "Etienne"
+struct JoinViaURLView_Previews: PreviewProvider {
     @State static var currentlyInSession = false
-    static var user = User()
-    
     static var previews: some View {
-        JoinSessionView(user: self.user, username: self.username, currentlyInSession: self.$currentlyInSession)
+        JoinViaURLView(userVM: UserVM(), sessionID: "123", currentlyInSession: $currentlyInSession)
     }
 }

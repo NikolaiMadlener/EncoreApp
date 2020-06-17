@@ -13,9 +13,9 @@ struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var model: Model = .shared
+    @ObservedObject var userVM: UserVM
     
-    @ObservedObject var user: User
-    @State var presentMenuSheet = false
+    @State var showMenuSheet = false
     @Binding var currentlyInSession: Bool
     @State var current_title_offset: CGFloat = 0
     
@@ -155,13 +155,14 @@ struct HomeView: View {
         VStack {
             HStack {
                 Spacer()
-                Button(action: { self.presentMenuSheet = true }) {
+                Button(action: { self.showMenuSheet = true }) {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                }.padding()
-                    .sheet(isPresented: self.$presentMenuSheet) {
-                        MenuView(user: self.user, currentlyInSession: self.$currentlyInSession)
+                        .padding()
+                }
+                    .sheet(isPresented: self.$showMenuSheet) {
+                        MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()
@@ -171,9 +172,9 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     @State static var currentlyInSession = true
-    static var user = User()
+    static var userVM = UserVM()
     
     static var previews: some View {
-        HomeView(user: user, currentlyInSession: $currentlyInSession)
+        HomeView(userVM: userVM, currentlyInSession: $currentlyInSession)
     }
 }

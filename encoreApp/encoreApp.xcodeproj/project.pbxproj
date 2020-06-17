@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,14 +19,17 @@
 		23190678247DB92600DA550B /* Mockmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190677247DB92600DA550B /* Mockmodel.swift */; };
 		2319067C247DBDB600DA550B /* SongListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319067B247DBDB600DA550B /* SongListCell.swift */; };
 		231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231B16C42489A1700006E78B /* JoinViaURLView.swift */; };
+		233D2ACE2491990100994038 /* UserListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2ACD2491990100994038 /* UserListVM.swift */; };
+		233D2AD6249381C600994038 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233D2AD5249381C600994038 /* QRCodeView.swift */; };
+		233D2ADD2493E36C00994038 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 233D2ADC2493E36C00994038 /* CodeScanner */; };
 		234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9224839C9200C0F7F3 /* UserListElement.swift */; };
-		234B8D952483A4BF00C0F7F3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* User.swift */; };
+		234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* UserVM.swift */; };
 		234B8D9924884EBC00C0F7F3 /* Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9824884EBC00C0F7F3 /* Blur.swift */; };
 		235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4CE247FB79A007A720D /* AppContentView.swift */; };
 		235EB4D12480F6CC007A720D /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D02480F6CC007A720D /* MenuView.swift */; };
-		235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D2248105A2007A720D /* JoinSessionView.swift */; };
 		8F108A992480537F00D5C27B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F108A982480537F00D5C27B /* Model.swift */; };
 		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
+		9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,14 +47,18 @@
 		23190677247DB92600DA550B /* Mockmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mockmodel.swift; sourceTree = "<group>"; };
 		2319067B247DBDB600DA550B /* SongListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListCell.swift; sourceTree = "<group>"; };
 		231B16C42489A1700006E78B /* JoinViaURLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViaURLView.swift; sourceTree = "<group>"; };
+		233D2ACD2491990100994038 /* UserListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListVM.swift; sourceTree = "<group>"; };
+		233D2AD5249381C600994038 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		234B8D9224839C9200C0F7F3 /* UserListElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListElement.swift; sourceTree = "<group>"; };
-		234B8D942483A4BF00C0F7F3 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		234B8D942483A4BF00C0F7F3 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		234B8D9824884EBC00C0F7F3 /* Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
 		235EB4CE247FB79A007A720D /* AppContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentView.swift; sourceTree = "<group>"; };
 		235EB4D02480F6CC007A720D /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
-		235EB4D2248105A2007A720D /* JoinSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinSessionView.swift; sourceTree = "<group>"; };
-		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Model.swift; path = ../Model.swift; sourceTree = "<group>"; };
+		4A562C93984E36AA41F353FD /* Pods-encoreApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp.debug.xcconfig"; path = "Target Support Files/Pods-encoreApp/Pods-encoreApp.debug.xcconfig"; sourceTree = "<group>"; };
+		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
+		CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_encoreApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp.release.xcconfig"; path = "Target Support Files/Pods-encoreApp/Pods-encoreApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				233D2ADD2493E36C00994038 /* CodeScanner in Frameworks */,
+				9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +80,8 @@
 				234B8D9824884EBC00C0F7F3 /* Blur.swift */,
 				2319065E247DA25F00DA550B /* encoreApp */,
 				2319065D247DA25F00DA550B /* Products */,
+				B2F70876ABD56E2CD04EB69B /* Pods */,
+				EA0C8535CA145DB755EB7178 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,19 +98,10 @@
 			children = (
 				2319065F247DA25F00DA550B /* AppDelegate.swift */,
 				23190661247DA25F00DA550B /* SceneDelegate.swift */,
-				23190663247DA25F00DA550B /* ContentView.swift */,
-				231B16C42489A1700006E78B /* JoinViaURLView.swift */,
-				235EB4D2248105A2007A720D /* JoinSessionView.swift */,
-				23190673247DB53600DA550B /* HomeView.swift */,
-				235EB4D02480F6CC007A720D /* MenuView.swift */,
 				235EB4CE247FB79A007A720D /* AppContentView.swift */,
-				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
-				23190675247DB75800DA550B /* Song.swift */,
-				234B8D942483A4BF00C0F7F3 /* User.swift */,
-				23190677247DB92600DA550B /* Mockmodel.swift */,
-				234B8D9224839C9200C0F7F3 /* UserListElement.swift */,
-				8F108A982480537F00D5C27B /* Model.swift */,
-				2319067B247DBDB600DA550B /* SongListCell.swift */,
+				233D2AD42492749C00994038 /* Views */,
+				233D2AD1249273FA00994038 /* ViewModels */,
+				233D2AD32492743400994038 /* Model */,
 				8FE5348E24812EFB00D4D630 /* VoteState.swift */,
 				23190665247DA26400DA550B /* Assets.xcassets */,
 				2319066A247DA26400DA550B /* LaunchScreen.storyboard */,
@@ -117,6 +119,73 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		233D2ACF2492738A00994038 /* EntryViews */ = {
+			isa = PBXGroup;
+			children = (
+				23190663247DA25F00DA550B /* ContentView.swift */,
+				231B16C42489A1700006E78B /* JoinViaURLView.swift */,
+			);
+			path = EntryViews;
+			sourceTree = "<group>";
+		};
+		233D2AD0249273A500994038 /* SessionViews */ = {
+			isa = PBXGroup;
+			children = (
+				23190673247DB53600DA550B /* HomeView.swift */,
+				233D2AD5249381C600994038 /* QRCodeView.swift */,
+				235EB4D02480F6CC007A720D /* MenuView.swift */,
+				2319067B247DBDB600DA550B /* SongListCell.swift */,
+				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
+			);
+			path = SessionViews;
+			sourceTree = "<group>";
+		};
+		233D2AD1249273FA00994038 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				233D2ACD2491990100994038 /* UserListVM.swift */,
+				234B8D942483A4BF00C0F7F3 /* UserVM.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		233D2AD32492743400994038 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				23190675247DB75800DA550B /* Song.swift */,
+				234B8D9224839C9200C0F7F3 /* UserListElement.swift */,
+				8F108A982480537F00D5C27B /* Model.swift */,
+				23190677247DB92600DA550B /* Mockmodel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		233D2AD42492749C00994038 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				233D2ACF2492738A00994038 /* EntryViews */,
+				233D2AD0249273A500994038 /* SessionViews */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B2F70876ABD56E2CD04EB69B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4A562C93984E36AA41F353FD /* Pods-encoreApp.debug.xcconfig */,
+				DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		EA0C8535CA145DB755EB7178 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -124,15 +193,20 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 23190670247DA26400DA550B /* Build configuration list for PBXNativeTarget "encoreApp" */;
 			buildPhases = (
+				C0F9ECD48D0D2E0FC22CA526 /* [CP] Check Pods Manifest.lock */,
 				23190658247DA25F00DA550B /* Sources */,
 				23190659247DA25F00DA550B /* Frameworks */,
 				2319065A247DA25F00DA550B /* Resources */,
+				75E45AA7C1FA3BE9ABCDC371 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = encoreApp;
+			packageProductDependencies = (
+				233D2ADC2493E36C00994038 /* CodeScanner */,
+			);
 			productName = encoreApp;
 			productReference = 2319065C247DA25F00DA550B /* encoreApp.app */;
 			productType = "com.apple.product-type.application";
@@ -161,6 +235,9 @@
 				Base,
 			);
 			mainGroup = 23190653247DA25F00DA550B;
+			packageReferences = (
+				233D2ADB2493E36C00994038 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+			);
 			productRefGroup = 2319065D247DA25F00DA550B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -183,6 +260,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		75E45AA7C1FA3BE9ABCDC371 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-encoreApp/Pods-encoreApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-encoreApp/Pods-encoreApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-encoreApp/Pods-encoreApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C0F9ECD48D0D2E0FC22CA526 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-encoreApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		23190658247DA25F00DA550B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -193,16 +312,17 @@
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
 				234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */,
 				8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */,
-				235EB4D3248105A2007A720D /* JoinSessionView.swift in Sources */,
-				234B8D952483A4BF00C0F7F3 /* User.swift in Sources */,
+				234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */,
 				23190674247DB53600DA550B /* HomeView.swift in Sources */,
 				23117C5224895F6B0023B680 /* ActivityViewController.swift in Sources */,
+				233D2AD6249381C600994038 /* QRCodeView.swift in Sources */,
 				234B8D9924884EBC00C0F7F3 /* Blur.swift in Sources */,
 				235EB4D12480F6CC007A720D /* MenuView.swift in Sources */,
 				23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */,
 				23190664247DA25F00DA550B /* ContentView.swift in Sources */,
 				235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */,
 				231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */,
+				233D2ACE2491990100994038 /* UserListVM.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
 			);
@@ -338,6 +458,7 @@
 		};
 		23190671247DA26400DA550B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A562C93984E36AA41F353FD /* Pods-encoreApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -359,6 +480,7 @@
 		};
 		23190672247DA26400DA550B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -400,6 +522,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		233D2ADB2493E36C00994038 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		233D2ADC2493E36C00994038 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 233D2ADB2493E36C00994038 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 23190654247DA25F00DA550B /* Project object */;
 }
