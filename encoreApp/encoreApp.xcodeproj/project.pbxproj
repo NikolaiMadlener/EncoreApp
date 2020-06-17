@@ -20,6 +20,7 @@
 		2319067C247DBDB600DA550B /* SongListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319067B247DBDB600DA550B /* SongListCell.swift */; };
 		231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231B16C42489A1700006E78B /* JoinViaURLView.swift */; };
 		233BF6DA2499644300346933 /* SongListVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233BF6D92499644300346933 /* SongListVM.swift */; };
+		233BF6DC249AC18200346933 /* PlayerStateVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233BF6DB249AC18200346933 /* PlayerStateVM.swift */; };
 		2342F49D2497E6C600820F8D /* AddSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2342F49C2497E6C600820F8D /* AddSongView.swift */; };
 		234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9224839C9200C0F7F3 /* UserListElement.swift */; };
 		234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* UserVM.swift */; };
@@ -50,6 +51,7 @@
 		2319067B247DBDB600DA550B /* SongListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListCell.swift; sourceTree = "<group>"; };
 		231B16C42489A1700006E78B /* JoinViaURLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinViaURLView.swift; sourceTree = "<group>"; };
 		233BF6D92499644300346933 /* SongListVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListVM.swift; sourceTree = "<group>"; };
+		233BF6DB249AC18200346933 /* PlayerStateVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStateVM.swift; sourceTree = "<group>"; };
 		2342F49C2497E6C600820F8D /* AddSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongView.swift; sourceTree = "<group>"; };
 		234B8D9224839C9200C0F7F3 /* UserListElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListElement.swift; sourceTree = "<group>"; };
 		234B8D942483A4BF00C0F7F3 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			children = (
 				233BF6D92499644300346933 /* SongListVM.swift */,
 				234B8D942483A4BF00C0F7F3 /* UserVM.swift */,
+				233BF6DB249AC18200346933 /* PlayerStateVM.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
+				233BF6DC249AC18200346933 /* PlayerStateVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,7 +469,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
-				DEVELOPMENT_TEAM = L3RMDJH374;
+				DEVELOPMENT_TEAM = UB7P88VGXV;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -493,7 +497,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
-				DEVELOPMENT_TEAM = 4588S9UX2X;
+				DEVELOPMENT_TEAM = UB7P88VGXV;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

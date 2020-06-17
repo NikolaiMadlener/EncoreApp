@@ -15,6 +15,7 @@ struct HomeView: View {
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var user: UserVM
+    @ObservedObject var playerStateVM: PlayerStateVM
     
     @State var presentMenuSheet = false
     @State var showAddSongSheet = false
@@ -27,6 +28,7 @@ struct HomeView: View {
         self.user = user
         self._currentlyInSession = currentlyInSession
         songListVM = SongListVM(userVM: user)
+        playerStateVM = PlayerStateVM(userVM: user)
     }
     
     var body: some View {
@@ -83,24 +85,30 @@ struct HomeView: View {
                                             .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
                                             .blendMode(.multiply)
                                     }
-                                    Text("\(self.musicController.trackName ?? "No Song")")
+                                    Text("\(self.musicController.trackName /*self.self.playerStateVM.song.name */ ?? "No Song")")
                                         .font(.system(size: 25, weight: .bold))
-                                    Text("\(self.musicController.artistName ?? "No Artist")")
+                                    Text("\(self.musicController.artistName /*self.self.playerStateVM.song.artists[0]*/ ?? "No Artist")")
                                         .font(.system(size: 20, weight: .semibold))
                                 }
                                 Spacer()
                             }
-                            
-                            // later this will be the playbar
-                            ZStack(alignment: .leading) {
-                                Rectangle()
-                                    .frame(width: geom.size.width * 0.8, height: 3)
-                                    .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
-                                Rectangle()
-                                    .frame(width: (self.musicController.normalizedPlaybackPosition! * geom.size.width * 0.8), height: 3)
-                                    .foregroundColor(Color("purpleblue"))
-                            }.padding()
-                            
+                            VStack(spacing: 5) {
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .frame(width: geom.size.width * 0.8, height: 4)
+                                        .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+                                        .cornerRadius(5)
+                                    Rectangle()
+                                        .frame(width: (self.musicController.normalizedPlaybackPosition! * geom.size.width * 0.8), height: 4)
+                                        .foregroundColor(Color("purpleblue"))
+                                        .cornerRadius(5)
+                                }
+                                HStack {
+                                    Text(self.musicController.playerState?.playbackPosition.msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
+                                    Spacer()
+                                    Text("-" + (Int(self.musicController.playerState?.track.duration ?? 0) - (self.musicController.playerState?.playbackPosition ?? 0)).msToSeconds.minuteSecondMS.description).font(.system(size: 10))
+                                }.frame(width: geom.size.width * 0.8)
+                            }.padding(.bottom)
                             Spacer()
                         }
                     }
@@ -143,7 +151,7 @@ struct HomeView: View {
                                     .frame(width: geo.size.width, height: 3)
                                     .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
                                 Rectangle()
-                                    .frame(width: (self.musicController.normalizedPlaybackPosition! * geo.size.width), height: 3)
+                                    .frame(width: (self.musicController.normalizedPlaybackPosition! * geo.size.width), height: 4).cornerRadius(5)
                                     .foregroundColor(Color("purpleblue"))
                             }
                             
@@ -316,5 +324,25 @@ extension UIImage {
         
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
-    
+}
+
+extension TimeInterval {
+    var minuteSecondMS: String {
+        return String(format:"%d:%02d", minute, second)
+    }
+    var minute: Int {
+        return Int((self/60).truncatingRemainder(dividingBy: 60))
+    }
+    var second: Int {
+        return Int(truncatingRemainder(dividingBy: 60))
+    }
+    var millisecond: Int {
+        return Int((self*1000).truncatingRemainder(dividingBy: 1000))
+    }
+}
+
+extension Int {
+    var msToSeconds: Double {
+        return Double(self) / 1000
+    }
 }
