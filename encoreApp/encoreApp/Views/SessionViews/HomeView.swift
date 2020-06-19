@@ -41,7 +41,8 @@ struct HomeView: View {
             
             //Layer 3: Menu Layer
             menu_layer
-        }.onAppear{ self.musicController.viewDidLoad() } // triggers updates on every second
+        }//.onAppear{ self.musicController.viewDidLoad() } // triggers updates on every second
+        .onAppear{ self.playerStateVM.viewDidLoad() }
     }
     
     
@@ -85,9 +86,9 @@ struct HomeView: View {
                                             .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
                                             .blendMode(.multiply)
                                     }
-                                    Text("\(self.musicController.trackName /*self.self.playerStateVM.song.name */ ?? "No Song")")
+                                    Text("\(/*self.musicController.trackName*/ self.self.playerStateVM.song.name ?? "No Song")")
                                         .font(.system(size: 25, weight: .bold))
-                                    Text("\(self.musicController.artistName /*self.self.playerStateVM.song.artists[0]*/ ?? "No Artist")")
+                                    Text("\(/*self.musicController.artistName*/ self.self.playerStateVM.song.artists[0] ?? "No Artist")")
                                         .font(.system(size: 20, weight: .semibold))
                                 }
                                 Spacer()
@@ -99,12 +100,12 @@ struct HomeView: View {
                                         .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
                                         .cornerRadius(5)
                                     Rectangle()
-                                        .frame(width: (self.musicController.normalizedPlaybackPosition! * geom.size.width * 0.8), height: 4)
+                                        .frame(width: (/*self.musicController*/self.playerStateVM.normalizedPlaybackPosition * geom.size.width * 0.8), height: 4)
                                         .foregroundColor(Color("purpleblue"))
                                         .cornerRadius(5)
                                 }
                                 HStack {
-                                    Text(self.musicController.playerState?.playbackPosition.msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
+                                    Text(/*self.musicController.playerState?.playbackPosition*/Int(self.playerStateVM.progress).msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
                                     Spacer()
                                     Text("-" + (Int(self.musicController.playerState?.track.duration ?? 0) - (self.musicController.playerState?.playbackPosition ?? 0)).msToSeconds.minuteSecondMS.description).font(.system(size: 10))
                                 }.frame(width: geom.size.width * 0.8)
