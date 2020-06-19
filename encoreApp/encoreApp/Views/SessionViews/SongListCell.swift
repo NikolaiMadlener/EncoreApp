@@ -10,16 +10,16 @@ import SwiftUI
 
 struct SongListCell: View {
     
-    @ObservedObject var song: Song
-    @ObservedObject var model: Model = .shared
+    @ObservedObject var userVM: UserVM
+    var song: Song
     @State var voteState: VoteState = VoteState.NEUTRAL
     var rank: Int
     
-
+    
     var body: some View {
         HStack {
             rankView.frame(width: 50)
-            albumView
+            //albumView
             songView
             Spacer()
             voteView
@@ -32,12 +32,12 @@ struct SongListCell: View {
             .padding(.horizontal, 10)
     }
     
-    private var albumView: some View {
-        song.album_image
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 55, height: 55)
-    }
+    //    private var albumView: some View {
+    //        song.album_image
+    //            .resizable()
+    //            .aspectRatio(contentMode: .fit)
+    //            .frame(width: 55, height: 55)
+    //    }
     
     private var songView: some View {
         VStack(alignment: .leading) {
@@ -61,11 +61,13 @@ struct SongListCell: View {
         Button(action: {
             switch self.voteState {
             case .NEUTRAL:
-                self.model.upvote(song: self.song, username: "Myself")
+                self.upvote()
+                //self.model.upvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.UPVOTE
             case .UPVOTE: break
             case .DOWNVOTE:
-                self.model.upvote(song: self.song, username: "Myself")
+                self.upvote()
+                //self.model.upvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.NEUTRAL
             }
         }) {
@@ -80,10 +82,12 @@ struct SongListCell: View {
         Button(action: {
             switch self.voteState {
             case .NEUTRAL:
-                self.model.downvote(song: self.song, username: "Myself")
+                self.downvote()
+                //self.model.downvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.DOWNVOTE
             case .UPVOTE:
-                self.model.downvote(song: self.song, username: "Myself")
+                self.downvote()
+                //self.model.downvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.NEUTRAL
             case .DOWNVOTE: break
             }
@@ -94,10 +98,101 @@ struct SongListCell: View {
                 .padding(.top, 5)
         }
     }
+    
+    func upvote() {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                
+                do {
+                    let decodedData = try JSONDecoder().decode([Song].self, from: data)
+                    DispatchQueue.main.async {
+
+                    }
+                } catch {
+                    print("Error")
+                    //self.showSessionExpiredAlert = true
+                    //self.currentlyInSession = false
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    func downvote() {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                
+                do {
+                    let decodedData = try JSONDecoder().decode([[Song]].self, from: data)
+                    DispatchQueue.main.async {
+
+                    }
+                } catch {
+                    print("Error")
+                    //self.showSessionExpiredAlert = true
+                    //self.currentlyInSession = false
+                }
+            }
+        }
+        task.resume()
+        
+    }
 }
 
 struct SongListCell_Previews: PreviewProvider {
     static var previews: some View {
-        SongListCell(song: Mockmodel.getSongs()[0], rank: 2)
+        SongListCell(userVM: UserVM(), song: Mockmodel.getSongs()[0], rank: 2)
     }
 }
+
