@@ -14,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     var window: UIWindow?
     //var model = Model()
     var accessToken = "accessToken"
-    var musicController = MusicController()
+    //var musicController = MusicController()
     
     var playURI = ""
     
@@ -124,7 +124,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     func connect() {
         //self.appRemote.authorizeAndPlayURI(self.playURI)
         
-        musicController.appRemoteConnecting()
+        //musicController.appRemoteConnecting()
         self.appRemote.connect()
     }
     
@@ -132,15 +132,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     
     func appRemoteDidEstablishConnection(_ appRemote: SPTAppRemote) {
         // Connection was successful, you can begin issuing commands
-        self.appRemote.playerAPI?.delegate = self
-        self.appRemote.playerAPI?.subscribe(toPlayerState: { (result, error) in
-            if let error = error {
-                debugPrint(error.localizedDescription)
-            }
-        })
+//        self.appRemote.playerAPI?.delegate = self
+//        self.appRemote.playerAPI?.subscribe(toPlayerState: { (result, error) in
+//            if let error = error {
+//                debugPrint(error.localizedDescription)
+//            }
+//        })
         print("AppREMOTECOnnected")
-        self.appRemote = appRemote
-        musicController.appRemoteConnected()
+//        self.appRemote = appRemote
+//        musicController.appRemoteConnected()
     }
     
     func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {

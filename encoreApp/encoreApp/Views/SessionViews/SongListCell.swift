@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct SongListCell: View {
     
@@ -14,12 +15,13 @@ struct SongListCell: View {
     var song: Song
     @State var voteState: VoteState = VoteState.NEUTRAL
     var rank: Int
+    @State var currentImage: Image = Image("albumPlaceholder")
     
     
     var body: some View {
         HStack {
             rankView.frame(width: 50)
-            //albumView
+            albumView
             songView
             Spacer()
             voteView
@@ -32,12 +34,24 @@ struct SongListCell: View {
             .padding(.horizontal, 10)
     }
     
-    //    private var albumView: some View {
-    //        song.album_image
-    //            .resizable()
-    //            .aspectRatio(contentMode: .fit)
-    //            .frame(width: 55, height: 55)
-    //    }
+        private var albumView: some View {
+            URLImage(URL(string: self.song.cover_url)!, placeholder: { _ in
+                // Replace placeholder image with text
+                self.currentImage.opacity(0.0)
+            },
+                     
+            content: {
+               
+               $0.image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 55, height: 55)
+                .cornerRadius(5)
+                 
+                }).frame(width: 55, height: 55)
+               
+                
+    }
     
     private var songView: some View {
         VStack(alignment: .leading) {

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct HomeView: View {
     
@@ -21,7 +22,7 @@ struct HomeView: View {
     @State var showAddSongSheet = false
     @Binding var currentlyInSession: Bool
     @State var current_title_offset: CGFloat = 0
-    @State var isPlay = false
+    @State var isPlay = true
     @State var songs: [Song] = []
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
@@ -42,17 +43,21 @@ struct HomeView: View {
             //Layer 3: Menu Layer
             menu_layer
         }//.onAppear{ self.musicController.viewDidLoad() } // triggers updates on every second
-        .onAppear{ self.playerStateVM.viewDidLoad() }
+            .onAppear{ self.playerStateVM.viewDidLoad() }
     }
     
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
         var albumWidth = self.musicController.currentAlbumImage.size.width
-        var uiColorTopLeft = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.2))
+        func uiColorTopLeft(image: UIImage) -> UIColor {
+            return image.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.2))
+        }
         var uiColorBottomRight = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
         var uiColorBottomLeft = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
         var uiColorTopRight = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
+        
+        
         return
             GeometryReader { geom in
                 ScrollView {
@@ -70,22 +75,38 @@ struct HomeView: View {
                             HStack {
                                 Spacer()
                                 VStack {
-                                    if self.colorScheme == .dark {
-                                        Image(uiImage: self.musicController.currentAlbumImage)
-                                            .resizable()
-                                            .frame(width: 180, height: 180)
-                                            .cornerRadius(10)
-                                    } else {
-                                        Image(uiImage: self.musicController.currentAlbumImage)
-                                            .resizable()
-                                            .frame(width: 180, height: 180)
-                                            .cornerRadius(10)
-                                            .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
-                                            .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
-                                            .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
-                                            .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
-                                            .blendMode(.multiply)
-                                    }
+                                    //                                    if self.colorScheme == .dark {
+                                    //                                        Image(uiImage: self.musicController.currentAlbumImage)
+                                    //                                            .resizable()
+                                    //                                            .frame(width: 180, height: 180)
+                                    //                                            .cornerRadius(10)
+                                    //                                    } else {
+                                    //                                        Image(uiImage: self.musicController.currentAlbumImage)
+                                    //                                            .resizable()
+                                    //                                            .frame(width: 180, height: 180)
+                                    //                                            .cornerRadius(10)
+                                    //                                            .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
+                                    //                                            .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
+                                    //                                            .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
+                                    //                                            .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
+                                    //                                            .blendMode(.multiply)
+                                    //                                    }
+                                    URLImage(URL(string: self.playerStateVM.song.cover_url)!,
+                                             placeholder: Image("albumPlaceholder"),
+                                             content: {
+                                                
+                                                $0.image
+                                                    .resizable()
+                                                    .frame(width: 180, height: 180)
+                                                    .cornerRadius(10)
+//                                                    .shadow(color: uiColorTopLeft(image: $0.image).opacity(0.1), radius: 8, x: -10, y: -10)
+//                                                    .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
+//                                                    .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
+//                                                    .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
+                                                
+                                    })
+                                    
+                                    
                                     Text("\(/*self.musicController.trackName*/ self.self.playerStateVM.song.name ?? "No Song")")
                                         .font(.system(size: 25, weight: .bold))
                                     Text("\(/*self.musicController.artistName*/ self.self.playerStateVM.song.artists[0] ?? "No Artist")")
@@ -127,7 +148,7 @@ struct HomeView: View {
                             }
                         }
                         Spacer().frame(height: 100)
-                    }.animation(.easeInOut(duration: 0.30))
+                    }.animation(.easeInOut(duration: 0.2))
                 }
         }
         
@@ -197,8 +218,10 @@ struct HomeView: View {
                 if self.userVM.isAdmin {
                     HStack {
                         Button(action: {
-                            self.musicController.playMusic()
-                            self.isPlay.toggle()
+                            //self.musicController.playMusic()
+                            self.isPlay ? self.playerPause() : self.playerPlay()
+                            
+                            
                         }) {
                             ZStack {
                                 Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
@@ -294,6 +317,94 @@ struct HomeView: View {
         }
         task.resume()
     }
+    
+    func playerPlay() {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                self.isPlay = true
+//                do {
+//                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
+//                    DispatchQueue.main.async {
+//                        print("Successfully post of player play")
+//                        
+//                    }
+//                } catch {
+//                    print("Error")
+//                }
+            }
+        }
+        task.resume()
+    }
+    
+    func playerPause() {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                self.isPlay = false
+//                do {
+//                    let decodedData = try JSONDecoder().decode(String.self, from: data)
+//                    DispatchQueue.main.async {
+//                        print("Successfully post of player pause")
+//
+//                    }
+//                } catch {
+//                    print("Error")
+//                }
+            }
+        }
+        task.resume()
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -309,7 +420,6 @@ struct HomeView_Previews: PreviewProvider {
         }
     }
 }
-
 extension UIImage {
     func getPixelColor(pos: CGPoint) -> UIColor {
         
@@ -326,6 +436,23 @@ extension UIImage {
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
 }
+
+//extension Image {
+//    func getPixelColor(pos: CGPoint) -> UIColor {
+//
+//        let pixelData = self.cgImage!.dataProvider!.data
+//        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+//
+//        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
+//
+//        let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
+//        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
+//        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
+//        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
+//
+//        return UIColor(red: r, green: g, blue: b, alpha: a)
+//    }
+//}
 
 extension TimeInterval {
     var minuteSecondMS: String {

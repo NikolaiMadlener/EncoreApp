@@ -9,6 +9,7 @@
 import Foundation
 import IKEventSource
 
+
 class PlayerStateVM: ObservableObject {
     @Published var song: Song
     @Published var progress: Int64
@@ -18,9 +19,26 @@ class PlayerStateVM: ObservableObject {
     var eventSource: EventSource
     var timer = Timer()
     
+    
+    var appRemote: SPTAppRemote? {
+        get {
+            return (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.appRemote
+        }
+    }
+    var defaultCallback: SPTAppRemoteCallback {
+        get {
+            return { [weak self] _, error in
+                if let error = error {
+                    //display error
+                }
+//                self?.getPlayerState()
+            }
+        }
+    }
+    
     init(userVM: UserVM) {
         
-        var emptySong = Song(id: "0", name: "", artists: [""], duration_ms: 1, cover_url: "", album_name: "", preview_url: "", suggested_by: "", score: 0, time_added: "", upvoters: [], downvoters: [])
+        var emptySong = Song(id: "0", name: "", artists: [""], duration_ms: 1, cover_url: "https://musicnotesbox.com/media/catalog/product/7/3/73993_image.png", album_name: "", preview_url: "", suggested_by: "", score: 0, time_added: "", upvoters: [], downvoters: [])
         song = emptySong
         progress = 0
         self.userVM = userVM
@@ -44,10 +62,27 @@ class PlayerStateVM: ObservableObject {
                         DispatchQueue.main.async {
                             print("Update Player State")
                             print(decodedData)
+                            print("currentsong: " + "\(decodedData.current_song)")
                             
-                            self?.song = decodedData.current_song ?? emptySong
-                            self?.progress = decodedData.progress
-                            self?.calculatePlayBarPosition()
+                            if let sng = decodedData.current_song {
+                                self?.progress = decodedData.progress
+                                self?.calculatePlayBarPosition()
+                                self?.song = sng
+                                
+                                if userVM.isAdmin {
+                                    self?.appRemote?.authorizeAndPlayURI("spotify:track:" + "\(String(describing: sng.id))")
+                                    
+                                    if decodedData.is_playing == false {
+                                        self?.appRemote?.playerAPI?.pause(self?.defaultCallback)
+                                    } else {
+                                        self?.appRemote?.playerAPI?.resume(self?.defaultCallback)
+                                    }
+                                }
+                                
+                            } else {
+                                self?.progress = 0
+                            }
+                            
                             print(self?.normalizedPlaybackPosition)
                             
                         }
@@ -67,7 +102,6 @@ class PlayerStateVM: ObservableObject {
         print(self.normalizedPlaybackPosition)
     }
     
-    //get
     func getPlayerState() {
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/state") else {
             print("Invalid URL")
@@ -101,9 +135,23 @@ class PlayerStateVM: ObservableObject {
                 do {
                     let decodedData = try JSONDecoder().decode(PlayerStateChangePayload.self, from: data)
                     DispatchQueue.main.async {
+                        if let sng = decodedData.current_song {
+                            self.progress = decodedData.progress
+                            self.calculatePlayBarPosition()
+                            
+                        } else {
+                            self.progress = 0
+                        }
                         
-                        self.progress = decodedData.progress
-                        self.calculatePlayBarPosition()
+                        if self.userVM.isAdmin {
+                            
+                            if decodedData.is_playing == false {
+                                self.appRemote?.playerAPI?.pause(self.defaultCallback)
+                            } else {
+                                self.appRemote?.playerAPI?.resume(self.defaultCallback)
+                            }
+                        }
+                        
                     }
                 } catch {
                     print("Error")
@@ -134,9 +182,7 @@ struct PlayerStateChangePayload: Codable, Hashable {
     var timestamp: String
 
     init(current_song: Song?, is_playing: Bool, progress: Int64, timestamp: String) {
-        
-            self.current_song = current_song
-        
+        self.current_song = current_song
         self.is_playing = is_playing
         self.progress = progress
         self.timestamp = timestamp
