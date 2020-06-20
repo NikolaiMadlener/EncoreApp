@@ -1,16 +1,20 @@
 PODS:
   - IKEventSource (3.0.1)
+  - URLImage (0.9.15)
 
 DEPENDENCIES:
   - IKEventSource
+  - URLImage
 
 SPEC REPOS:
   trunk:
     - IKEventSource
+    - URLImage
 
 SPEC CHECKSUMS:
   IKEventSource: ababa323587c6b0c250dd54d4a48ab68fd845e8e
+  URLImage: 1adef9b81f071fc2fc13a1a87ff882c0a694d48b
 
-PODFILE CHECKSUM: eeef2c2c365a0533575d81154760dbefb4d59573
+PODFILE CHECKSUM: 7aa432fe0995b6b6331794c50e66a3eebde4c146
 
 COCOAPODS: 1.8.3
