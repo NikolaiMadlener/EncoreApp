@@ -9,8 +9,20 @@
 import SwiftUI
 
 struct AddSongView: View {
+    
+    @State private var searchText : String = ""
+    
     var body: some View {
-        Text("Spotify Add Song Sheet")
+        VStack {
+            SearchBar(text: $searchText, placeholder: "Search songs")
+            List {
+                ForEach(Mockmodel.getSongs().filter {
+                    self.searchText.isEmpty ? true : $0.name.lowercased().contains(self.searchText.lowercased())
+                }, id: \.self) { song in
+                    Text(song.name)
+                }
+            }
+        }
     }
 }
 
