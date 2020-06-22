@@ -243,7 +243,7 @@ struct HomeView: View {
                                     .foregroundColor(Color("purpleblue"))
                             }
                         }.sheet(isPresented: self.$showAddSongSheet) {
-                            AddSongView()
+                            AddSongView(userVM: self.userVM)
                         }
                         Spacer().frame(width: 40)
                         Button(action: { self.musicController.skipNext() }) {
@@ -266,7 +266,7 @@ struct HomeView: View {
                             
                         }
                     }.sheet(isPresented: self.$showAddSongSheet) {
-                        AddSongView()
+                        AddSongView(userVM: self.userVM)
                     }
                 }
                 Spacer()

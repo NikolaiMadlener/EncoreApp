@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CodeScanner
+import SafariServices
 
 struct ContentView: View {
     @ObservedObject var userVM: UserVM
@@ -23,6 +24,9 @@ struct ContentView: View {
     @State var scannedCode: String?
     
     @State var invalidUsername = false
+    
+    @State var auth_url: String = ""
+    @State var sessionCreated: Bool? = false
     
     var body: some View {
         NavigationView {
@@ -64,14 +68,21 @@ struct ContentView: View {
                         
                         Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
-                        Button(action: { self.createSession(username: self.username) }) {
-                            Text("Create Session")
-                                .font(.headline)
-                                .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
-                        }.disabled(username.count < 1)
-                            .padding(5)
+                        VStack {
+                            NavigationLink(destination: AuthView(auth_url: self.$auth_url, currentlyInSession: self.$currentlyInSession).navigationBarBackButtonHidden(true), tag: true, selection: $sessionCreated) {
+                                EmptyView()
+                            }
+                            Button(action: {
+                                self.createSession(username: self.username)
+                                self.sessionCreated = true
+                            }) {
+                                Text("Create Session")
+                                    .font(.headline)
+                                    .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
+                            }.disabled(username.count < 1)
+                                .padding(5)
+                        }
                         Spacer()
-                        
                     }.animation(.default)
                 }.sheet(isPresented: self.$showScannerSheet) {
                     self.scannerSheet
@@ -241,7 +252,7 @@ struct ContentView: View {
                             self.sessionID = userInfo["session_id"] as! String
                             self.secret = userInfo["secret"] as! String
                         }
-                        self.currentlyInSession = true
+                        self.auth_url = json["auth_url"] as! String
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
