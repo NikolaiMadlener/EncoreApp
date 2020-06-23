@@ -12,7 +12,7 @@ import URLImage
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    //@ObservedObject var musicController: MusicController = .shared
+    @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
@@ -41,7 +41,7 @@ struct HomeView: View {
             
             //Layer 3: Menu Layer
             menu_layer
-        }.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
+        }//.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
     }
     
     
@@ -179,8 +179,8 @@ struct HomeView: View {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                }.padding()
-                    .sheet(isPresented: self.$showMenuSheet) {
+                        .padding()
+                }.sheet(isPresented: self.$showMenuSheet) {
                         MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
