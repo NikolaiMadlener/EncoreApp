@@ -1,20 +1,26 @@
 PODS:
   - IKEventSource (3.0.1)
+  - Kingfisher (5.14.0):
+    - Kingfisher/Core (= 5.14.0)
+  - Kingfisher/Core (5.14.0)
   - URLImage (0.9.15)
 
 DEPENDENCIES:
   - IKEventSource
+  - Kingfisher
   - URLImage
 
 SPEC REPOS:
   trunk:
     - IKEventSource
+    - Kingfisher
     - URLImage
 
 SPEC CHECKSUMS:
   IKEventSource: ababa323587c6b0c250dd54d4a48ab68fd845e8e
+  Kingfisher: 7b64389a43139c903ec434788344c288217c792d
   URLImage: 1adef9b81f071fc2fc13a1a87ff882c0a694d48b
 
-PODFILE CHECKSUM: 7aa432fe0995b6b6331794c50e66a3eebde4c146
+PODFILE CHECKSUM: 54c35074f771024cf17616d64c78f9a860eb5f58
 
 COCOAPODS: 1.8.3

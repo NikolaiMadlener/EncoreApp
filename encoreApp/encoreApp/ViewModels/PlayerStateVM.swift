@@ -8,12 +8,13 @@
 
 import Foundation
 import IKEventSource
-
+import Kingfisher
 
 class PlayerStateVM: ObservableObject {
     @Published var song: Song
     @Published var progress: Int64
     @Published var normalizedPlaybackPosition: CGFloat = 0
+    @Published var albumCover: UIImage = UIImage(imageLiteralResourceName: "albumPlaceholder")
     var serverURL: URL
     var userVM: UserVM
     var eventSource: EventSource
@@ -78,6 +79,10 @@ class PlayerStateVM: ObservableObject {
                                         self?.appRemote?.playerAPI?.resume(self?.defaultCallback)
                                     }
                                 }
+                                
+                                KingfisherManager.shared.retrieveImage(with: URL(string: sng.cover_url)!, options: nil, progressBlock: nil, completionHandler: { image, error, cacheType, imageURL in
+                                    self?.albumCover = image ?? UIImage(imageLiteralResourceName: "albumPlaceholder")
+                                })
                                 
                             } else {
                                 self?.progress = 0

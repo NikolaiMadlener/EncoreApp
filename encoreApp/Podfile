@@ -8,5 +8,6 @@ target 'encoreApp' do
   # Pods for encoreApp
 pod 'IKEventSource'
 pod 'URLImage'
+pod 'Kingfisher' 
 
 end
