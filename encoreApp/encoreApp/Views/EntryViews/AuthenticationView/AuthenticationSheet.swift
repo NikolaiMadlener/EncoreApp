@@ -11,16 +11,16 @@ import UIKit
 import SwiftUI
 import SafariServices
 
-struct AuthSheet: UIViewControllerRepresentable {
+struct AuthenticationSheet: UIViewControllerRepresentable {
 
     let url: URL
     @Binding var hasShownAuthView: Bool
     
-    func makeUIViewController(context: UIViewControllerRepresentableContext<AuthSheet>) -> SFSafariViewController {
+    func makeUIViewController(context: UIViewControllerRepresentableContext<AuthenticationSheet>) -> SFSafariViewController {
         return SFSafariViewController(url: url)
     }
 
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<AuthSheet>) {
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<AuthenticationSheet>) {
         //open homeview, after AuthSheet has been dismissed
         self.hasShownAuthView = true
     }

@@ -61,15 +61,14 @@ struct ContentView: View {
                             self.invalidUsername = false
                             }}) {
                                 Text("Join Session")
-                                    .padding(15)
-                                    .background( username.count < 1 ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
+                                    .modifier(RoundButtonModifier(isDisabled: username.count < 1, backgroundColor: Color("darkgray"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
                             .padding(5)
                         
                         Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
                         VStack {
-                            NavigationLink(destination: AuthView(auth_url: self.$auth_url, currentlyInSession: self.$currentlyInSession).navigationBarBackButtonHidden(true), tag: true, selection: $sessionCreated) {
+                            NavigationLink(destination: AuthenticationView(auth_url: self.$auth_url, currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
                                 EmptyView()
                             }
                             Button(action: {
