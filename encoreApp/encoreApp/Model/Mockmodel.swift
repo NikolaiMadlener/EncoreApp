@@ -23,5 +23,21 @@ class Mockmodel {
 
         return songList
     }
+    
+    static func getSongPayload() -> SpotifySearchPayload.Tracks.Item {
+        SpotifySearchPayload.Tracks.Item(
+                    album: SpotifySearchPayload.Tracks.Item.Album(
+                        id: "6akEvsycLGftJxYudPjmqK",
+                        images: [SpotifySearchPayload.Tracks.Item.Album.ImageSpotify(
+                            height: 300,
+                            url: "https://i.scdn.co/image/ab67616d00001e021ae2bdc1378da1b440e1f610",
+                            width: 300)],
+                        name: "Place In The Sun"),
+                    artists: [SpotifySearchPayload.Tracks.Item.Artists(
+                        id: "08td7MxkoHQkXnWAYD8d6Q",
+                        name: "Tania Bowra")],
+                    id: "5cBLGuA6AFlZISzkRiE7IT",
+                    name: "Sympathy")
+    }
 }
 

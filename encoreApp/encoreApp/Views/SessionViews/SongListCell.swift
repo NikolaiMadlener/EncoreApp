@@ -10,7 +10,6 @@ import SwiftUI
 import URLImage
 
 struct SongListCell: View {
-    
     @ObservedObject var networkModel: NetworkModel = .shared
     @State var voteState: VoteState = VoteState.NEUTRAL
     @State var currentImage: Image = Image("albumPlaceholder")
@@ -33,23 +32,17 @@ struct SongListCell: View {
             .padding(.horizontal, 10)
     }
     
-        private var albumView: some View {
-            URLImage(URL(string: self.song.cover_url)!, placeholder: { _ in
+    private var albumView: some View {
+        URLImage(URL(string: self.song.cover_url)!, placeholder: { _ in
                 // Replace placeholder image with text
                 self.currentImage.opacity(0.0)
-            },
-                     
-            content: {
-               
+        }, content: {
                $0.image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 55, height: 55)
                 .cornerRadius(5)
-                 
-                }).frame(width: 55, height: 55)
-               
-                
+            }).frame(width: 55, height: 55)
     }
     
     private var songView: some View {
