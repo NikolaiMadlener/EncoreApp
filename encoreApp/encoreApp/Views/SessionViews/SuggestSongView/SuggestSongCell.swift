@@ -10,13 +10,16 @@ import SwiftUI
 import URLImage
 
 struct SuggestSongCell: View {
-    var song: SpotifySearchPayload.Tracks.Item
+    @ObservedObject var networkModel: NetworkModel = .shared
     @State var currentImage: Image = Image("albumPlaceholder")
+    var song: SpotifySearchPayload.Tracks.Item
     
     var body: some View {
         HStack {
             albumView
             songView
+            Spacer()
+            addButton
         }
     }
     
@@ -37,6 +40,16 @@ struct SuggestSongCell: View {
         VStack(alignment: .leading) {
             Text(self.song.name).bold()
             Text(self.song.artists[0].name)
+        }
+    }
+    
+    private var addButton: some View {
+        Button(action: {
+            self.networkModel.suggestSong(songID: self.song.id)
+        }) {
+            Image(systemName: "plus.square.fill")
+                .font(.system(size: 35, weight: .light))
+                .foregroundColor(Color("purpleblue"))
         }
     }
 }

@@ -226,4 +226,47 @@ public class NetworkModel: ObservableObject {
         }
         task.resume()
     }
+    
+    func suggestSong(songID: String) {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/suggest/"+"\(songID)") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                
+                do {
+                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
+                    DispatchQueue.main.async {
+                        print("Successfully post of suggest song: \(decodedData.name)")
+                        
+                    }
+                } catch {
+                    print("Error")
+                }
+            }
+        }
+        task.resume()
+    }
 }

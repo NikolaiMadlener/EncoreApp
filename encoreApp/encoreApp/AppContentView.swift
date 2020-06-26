@@ -18,7 +18,7 @@ struct AppContentView: View {
     var body: some View {
         return Group {
                 if currentlyInSession {
-                    HomeView(currentlyInSession: $currentlyInSession)
+                    HomeView(currentlyInSession: $currentlyInSession, userVM: networkModel.userVM)
                 }
                 else {
                     ContentView(currentlyInSession: $currentlyInSession)
