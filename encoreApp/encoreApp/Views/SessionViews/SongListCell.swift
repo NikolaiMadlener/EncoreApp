@@ -11,12 +11,11 @@ import URLImage
 
 struct SongListCell: View {
     
-    @ObservedObject var userVM: UserVM
-    var song: Song
+    @ObservedObject var networkModel: NetworkModel = .shared
     @State var voteState: VoteState = VoteState.NEUTRAL
-    var rank: Int
     @State var currentImage: Image = Image("albumPlaceholder")
-    
+    var song: Song
+    var rank: Int
     
     var body: some View {
         HStack {
@@ -114,7 +113,7 @@ struct SongListCell: View {
     }
     
     func upvote() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(networkModel.userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
             print("Invalid URL")
             return
             
@@ -122,8 +121,8 @@ struct SongListCell: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -159,15 +158,15 @@ struct SongListCell: View {
     }
     
     func downvote() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(networkModel.userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
             print("Invalid URL")
             return
         }
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -206,7 +205,7 @@ struct SongListCell: View {
 
 struct SongListCell_Previews: PreviewProvider {
     static var previews: some View {
-        SongListCell(userVM: UserVM(), song: Mockmodel.getSongs()[0], rank: 2)
+        SongListCell(song: Mockmodel.getSongs()[0], rank: 2)
     }
 }
 

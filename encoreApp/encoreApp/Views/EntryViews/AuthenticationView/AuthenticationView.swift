@@ -9,10 +9,20 @@
 import SwiftUI
 
 struct AuthenticationView: View {
-    @State var showAuthView = false
-    @State var hasShownAuthView = false
-    @Binding var auth_url: String
+    @ObservedObject var networkModel: NetworkModel = .shared
+    @ObservedObject var viewModel = AuthenticationViewModel()
     @Binding var currentlyInSession: Bool
+//    var hasShownAuthView = false
+//    var showAuthView = false {   //Call getAuthToken() when AuthenticationSheet has been closed
+//        didSet {
+//            print("GetAuthToken:sav\(showAuthView), hsav\(hasShownAuthView)")
+//            if !self.showAuthView && self.hasShownAuthView {
+//                print("GetAuthToken")
+//                networkModel.getAuthToken()
+//            }
+//            print("GetAuthTokenDone")
+//        }
+//    }
     
     var body: some View {
         ZStack {
@@ -29,7 +39,8 @@ struct AuthenticationView: View {
                 Text("Sign in to Spotify to play the sessions music")
                     .font(.footnote)
                 Button(action: {
-                    self.showAuthView.toggle()
+                    self.viewModel.showAuthView = true
+                    self.viewModel.hasShownAuthView = true
                 }) {
                     Text("Connect with Spotify")
                         .font(.headline)
@@ -40,13 +51,12 @@ struct AuthenticationView: View {
                     self.currentlyInSession = true
                 }) {
                     Text("Create Session")
-                        .modifier(RoundButtonModifier(isDisabled: self.showAuthView || !self.hasShownAuthView, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-                }.disabled(self.showAuthView || !self.hasShownAuthView)
+                        .modifier(RoundButtonModifier(isDisabled: networkModel.clientToken == "", backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                }.disabled(networkModel.clientToken == "")
                 Spacer()
-                
             }
-            .sheet(isPresented: self.$showAuthView) {
-                AuthenticationSheet(url:URL(string: self.auth_url)!, hasShownAuthView: self.$hasShownAuthView)
+            .sheet(isPresented: self.$viewModel.showAuthView) {
+                AuthenticationSheet(url:URL(string: self.networkModel.auth_url)!)   //Error when username.count < 3
             }
         }
     }
@@ -56,6 +66,6 @@ struct AuthView_Previews: PreviewProvider {
     @State static var currentlyInSession = false
     @State static var auth_url = "url"
     static var previews: some View {
-        AuthenticationView(auth_url: $auth_url, currentlyInSession: $currentlyInSession)
+        AuthenticationView(currentlyInSession: $currentlyInSession)
     }
 }

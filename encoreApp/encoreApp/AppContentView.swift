@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct AppContentView: View {
-    @ObservedObject var userVM = UserVM()
+    @ObservedObject var networkModel: NetworkModel = .shared
     @State var currentlyInSession = false
     @State var showJoinSheet: Bool = false
     var joinedViaURL: Bool
@@ -18,12 +18,12 @@ struct AppContentView: View {
     var body: some View {
         return Group {
                 if currentlyInSession {
-                    HomeView(userVM: userVM, currentlyInSession: $currentlyInSession)
+                    HomeView(currentlyInSession: $currentlyInSession)
                 }
                 else {
-                    ContentView(userVM: self.userVM, currentlyInSession: $currentlyInSession)
+                    ContentView(currentlyInSession: $currentlyInSession)
                         .sheet(isPresented: self.$showJoinSheet) {
-                            JoinViaURLView(userVM: self.userVM, sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
+                            JoinViaURLView(sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
                     }
                 }
         }.onAppear{ self.showJoinSheet = self.joinedViaURL }

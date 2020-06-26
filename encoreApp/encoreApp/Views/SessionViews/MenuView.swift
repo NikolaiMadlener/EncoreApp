@@ -10,8 +10,7 @@ import SwiftUI
 
 struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
-    
-    @ObservedObject var userVM: UserVM
+    @ObservedObject var networkModel: NetworkModel = .shared
     @ObservedObject var userListVM: UserListVM
     
     @Binding var showMenuSheet: Bool
@@ -20,9 +19,8 @@ struct MenuView: View {
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
     
-    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
-        self.userVM = userVM
-        self.userListVM = UserListVM(userVM: userVM)
+    init(currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
+        self.userListVM = UserListVM(userVM: UserVM())
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
     }
@@ -38,7 +36,7 @@ struct MenuView: View {
                             .padding()
                     }
                     
-                    QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
+                    QRCodeView(url: "encoreApp://\(self.networkModel.userVM.sessionID)").padding(10)
                     
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
@@ -72,7 +70,7 @@ struct MenuView: View {
                                             if member.is_admin {
                                                 Text("Host")
                                             }
-                                            else if member.username == self.userVM.username {
+                                            else if member.username == self.networkModel.userVM.username {
                                                 Text("You")
                                             }
                                         }
@@ -88,8 +86,8 @@ struct MenuView: View {
                 }
                 VStack {
                     Spacer()
-                    Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
-                        Text( self.userVM.isAdmin ? "Delete Session" : "Leave Session")
+                    Button(action: { self.networkModel.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.networkModel.userVM.username)) }) {
+                        Text(self.networkModel.userVM.isAdmin ? "Delete Session" : "Leave Session")
                             .padding(15)
                             .background(Color.red)
                             .foregroundColor(Color.white)
@@ -99,7 +97,7 @@ struct MenuView: View {
                         Alert(title: Text("Delete Session"),
                               message: Text("By Deleting the current Session all Members will be kicked."),
                               primaryButton: .destructive(Text("Delete"), action: {
-                                self.deleteSession(username: self.userVM.username)
+                                self.deleteSession(username: self.networkModel.userVM.username)
                               }),
                               secondaryButton: .cancel(Text("Cancel"), action: {
                                 self.showAlert = false
@@ -113,7 +111,7 @@ struct MenuView: View {
                 }
                 
             }.sheet(isPresented: self.$showShareSheet) {
-                ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
+                ActivityViewController(activityItems: ["encoreApp://\(self.networkModel.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }
         }
     }
@@ -177,12 +175,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.userVM.secret)
-        print("sessionID: " + self.userVM.sessionID)
+        print("secret: " + networkModel.userVM.secret)
+        print("sessionID: " + networkModel.userVM.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -215,12 +213,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.userVM.secret)
-        print("sessionID: " + self.userVM.sessionID)
+        print("secret: " + networkModel.userVM.secret)
+        print("sessionID: " + networkModel.userVM.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -252,6 +250,6 @@ struct MenuView_Previews: PreviewProvider {
     @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
+        MenuView(currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
     }
 }

@@ -9,6 +9,8 @@
 import Foundation
 
 public class UserVM: ObservableObject {
+    static let shared = UserVM()
+    
     @Published var username: String
     @Published var isAdmin: Bool
     @Published var sessionID: String

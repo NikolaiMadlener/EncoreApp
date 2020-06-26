@@ -11,7 +11,8 @@ import CodeScanner
 import SafariServices
 
 struct ContentView: View {
-    @ObservedObject var userVM: UserVM
+    @ObservedObject var networkModel: NetworkModel = .shared
+    //@ObservedObject var userVM: UserVM
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
     @State var sessionID: String = ""
@@ -68,7 +69,7 @@ struct ContentView: View {
                         Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
                         VStack {
-                            NavigationLink(destination: AuthenticationView(auth_url: self.$auth_url, currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
+                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
                                 EmptyView()
                             }
                             Button(action: {
@@ -198,11 +199,11 @@ struct ContentView: View {
                         self.showWrongIDAlert = true
                     }
                     DispatchQueue.main.async {
-                        self.userVM.username = username
-                        self.userVM.isAdmin = false
-                        self.userVM.secret = self.secret
-                        self.userVM.sessionID = self.sessionID
-                        print(self.userVM.username)
+                        self.networkModel.userVM.username = username
+                        self.networkModel.userVM.isAdmin = false
+                        self.networkModel.userVM.secret = self.secret
+                        self.networkModel.userVM.sessionID = self.sessionID
+                        print(self.networkModel.userVM.username)
                     }
                 }
             }
@@ -251,7 +252,7 @@ struct ContentView: View {
                             self.sessionID = userInfo["session_id"] as! String
                             self.secret = userInfo["secret"] as! String
                         }
-                        self.auth_url = json["auth_url"] as! String
+                        self.networkModel.auth_url = json["auth_url"] as! String
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
@@ -260,11 +261,11 @@ struct ContentView: View {
                 
             }
             DispatchQueue.main.async {
-                self.userVM.username = username
-                self.userVM.isAdmin = true
-                self.userVM.secret = self.secret
-                self.userVM.sessionID = self.sessionID
-                print(self.userVM.username)
+                self.networkModel.userVM.username = username
+                self.networkModel.userVM.isAdmin = true
+                self.networkModel.userVM.secret = self.secret
+                self.networkModel.userVM.sessionID = self.sessionID
+                print(self.networkModel.userVM.username)
             }
         }
         task.resume()
@@ -277,6 +278,6 @@ struct ContentView_Previews: PreviewProvider {
     static var userVM = UserVM()
     
     static var previews: some View {
-        ContentView(userVM: userVM, currentlyInSession: $signInSuccess)
+        ContentView(currentlyInSession: $signInSuccess)
     }
 }

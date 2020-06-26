@@ -14,7 +14,6 @@ import SafariServices
 struct AuthenticationSheet: UIViewControllerRepresentable {
 
     let url: URL
-    @Binding var hasShownAuthView: Bool
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<AuthenticationSheet>) -> SFSafariViewController {
         return SFSafariViewController(url: url)
@@ -22,6 +21,6 @@ struct AuthenticationSheet: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<AuthenticationSheet>) {
         //open homeview, after AuthSheet has been dismissed
-        self.hasShownAuthView = true
+        print("UPDATE")
     }
 }

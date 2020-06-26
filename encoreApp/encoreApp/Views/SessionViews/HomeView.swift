@@ -12,10 +12,9 @@ import URLImage
 struct HomeView: View {
     
     @Environment(\.colorScheme) var colorScheme
-    
+    @ObservedObject var networkModel: NetworkModel = .shared
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
-    @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
     
     @State var showMenuSheet = false
@@ -25,11 +24,10 @@ struct HomeView: View {
     @State var isPlay = true
     @State var songs: [Song] = []
     
-    init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
-        self.userVM = userVM
+    init(currentlyInSession: Binding<Bool>) {
         self._currentlyInSession = currentlyInSession
-        songListVM = SongListVM(userVM: userVM)
-        playerStateVM = PlayerStateVM(userVM: userVM)
+        self.songListVM = SongListVM(userVM: UserVM())
+        self.playerStateVM = PlayerStateVM(userVM: UserVM())
     }
     
     var body: some View {
@@ -43,7 +41,12 @@ struct HomeView: View {
             //Layer 3: Menu Layer
             menu_layer
         }//.onAppear{ self.musicController.viewDidLoad() } // triggers updates on every second
-            .onAppear{ self.playerStateVM.viewDidLoad() }
+            .onAppear {
+                //self.songListVM = SongListVM(userVM: networkModel.userVM)
+                //self.playerStateVM = PlayerStateVM(userVM: networkModel.userVM)       //Temporary!!
+                self.playerStateVM.viewDidLoad()
+                
+        }
     }
     
     
@@ -141,7 +144,7 @@ struct HomeView: View {
                         }
                         ForEach(self.songListVM.songs, id: \.self) { song in
                             VStack {
-                                SongListCell(userVM: self.userVM, song: song, rank: (self.songs.firstIndex(of: song) ?? -1) + 1)
+                                SongListCell(song: song, rank: (self.songs.firstIndex(of: song) ?? -1) + 1)
                                 Divider()
                                     .padding(.horizontal)
                                     .padding(.top, -5)
@@ -209,13 +212,13 @@ struct HomeView: View {
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 }.padding()
                     .sheet(isPresented: self.$showMenuSheet) {
-                        MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                        MenuView(currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()
             HStack {
                 Spacer()
-                if self.userVM.isAdmin {
+                if self.networkModel.userVM.isAdmin {
                     HStack {
                         Button(action: {
                             //self.musicController.playMusic()
@@ -243,7 +246,7 @@ struct HomeView: View {
                                     .foregroundColor(Color("purpleblue"))
                             }
                         }.sheet(isPresented: self.$showAddSongSheet) {
-                            AddSongView(userVM: self.userVM)
+                            SuggestSongView()
                         }
                         Spacer().frame(width: 40)
                         Button(action: { self.musicController.skipNext() }) {
@@ -266,7 +269,7 @@ struct HomeView: View {
                             
                         }
                     }.sheet(isPresented: self.$showAddSongSheet) {
-                        AddSongView(userVM: self.userVM)
+                        SuggestSongView()
                     }
                 }
                 Spacer()
@@ -275,7 +278,7 @@ struct HomeView: View {
     }
     
     func suggestSong(songID: String) {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/suggest/"+"\(songID)") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(networkModel.userVM.username)"+"/suggest/"+"\(songID)") else {
             print("Invalid URL")
             return
             
@@ -283,8 +286,8 @@ struct HomeView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -319,7 +322,7 @@ struct HomeView: View {
     }
     
     func playerPlay() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(networkModel.userVM.username)"+"/player/play") else {
             print("Invalid URL")
             return
             
@@ -327,8 +330,8 @@ struct HomeView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -363,7 +366,7 @@ struct HomeView: View {
     }
     
     func playerPause() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(networkModel.userVM.username)"+"/player/pause") else {
             print("Invalid URL")
             return
             
@@ -371,8 +374,8 @@ struct HomeView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -414,9 +417,9 @@ struct HomeView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .light)
+            HomeView(currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .light)
             
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .dark)
+            HomeView(currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .dark)
         }
     }
 }
