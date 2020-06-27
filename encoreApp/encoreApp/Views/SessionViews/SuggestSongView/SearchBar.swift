@@ -18,7 +18,6 @@ struct SearchBar: UIViewRepresentable {
     
     class Coordinator: NSObject, UISearchBarDelegate {
         
-        @ObservedObject var musicController: MusicController = .shared
         @ObservedObject var networkModel: NetworkModel = .shared
         @Binding var text: String
         @Binding var songs: [SpotifySearchPayload.Tracks.Item]
@@ -30,7 +29,7 @@ struct SearchBar: UIViewRepresentable {
         
         func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
             text = searchText
-            networkModel.searchSong2(query: self.text)
+            networkModel.searchSong(query: self.text)
         }
     }
     

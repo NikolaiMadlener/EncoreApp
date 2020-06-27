@@ -67,7 +67,6 @@ public class NetworkModel: ObservableObject {
     }
     
     func getClientToken() {
-        print("AuthStart")
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/clientToken") else {
             print("Invalid URL")
             return
@@ -114,66 +113,7 @@ public class NetworkModel: ObservableObject {
         print("AuthEnd")
     }
     
-    func searchSong(query: String) -> [String] {
-        print("SearchStart")
-        var songs: [String] = []
-        guard var components = URLComponents(string: "https://api.spotify.com/v1/search") else {
-            print("Invalid URL")
-            return []
-            
-        }
-        
-        components.queryItems = [
-            URLQueryItem(name: "q", value: query),
-            URLQueryItem(name: "type", value: "track")
-        ]
-        var request = URLRequest(url: components.url!)
-        
-        print("ClientToken:\(clientToken)")
-        request.httpMethod = "GET"
-        request.addValue("Bearer "+clientToken, forHTTPHeaderField: "Authorization")
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string songs:\n \(dataString)")
-                
-                do {
-                    var readableJSON = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! JSONStandard
-                    print(readableJSON)
-                    if let tracks = readableJSON["tracks"] as? JSONStandard {
-                        if let items = tracks["items"] {
-                            for index in 0..<items.count {
-                                let item = items[index].value as! JSONStandard
-                                let name = item["name"] as! String
-                                songs.append(name)
-                            }
-                        }
-                    }
-                } catch {
-                    print("Error")
-                }
-            }
-        }
-        task.resume()
-        print("SearchEnd")
-        print("Got Songs")
-        return songs
-    }
-    
-    func searchSong2(query: String) {
+    func searchSong(query: String) {
         print("SearchStart")
         var songs: [String] = []
         guard var components = URLComponents(string: "https://api.spotify.com/v1/search") else {

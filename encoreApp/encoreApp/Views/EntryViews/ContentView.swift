@@ -74,7 +74,6 @@ struct ContentView: View {
                             }
                             Button(action: {
                                 self.createSession(username: self.username)
-                                self.sessionCreated = true
                             }) {
                                 Text("Create Session")
                                     .font(.headline)
@@ -132,6 +131,12 @@ struct ContentView: View {
             }
         }
     }
+    
+//    func createSessionWithAccess() {
+//        let dispatchGroup = DispatchGroup()
+//        dispatchGroup.enter()
+//
+//    }
     
     func checkUsernameInvalid(username: String) -> Bool {
         let range = NSRange(location: 0, length: username.utf16.count)
@@ -203,8 +208,11 @@ struct ContentView: View {
                         self.networkModel.userVM.isAdmin = false
                         self.networkModel.userVM.secret = self.secret
                         self.networkModel.userVM.sessionID = self.sessionID
+                        self.currentlyInSession = true
+                        self.networkModel.getClientToken()
                         print(self.networkModel.userVM.username)
                     }
+                    self.currentlyInSession = true
                 }
             }
         }
@@ -265,6 +273,8 @@ struct ContentView: View {
                 self.networkModel.userVM.isAdmin = true
                 self.networkModel.userVM.secret = self.secret
                 self.networkModel.userVM.sessionID = self.sessionID
+                self.currentlyInSession = true
+                self.networkModel.getClientToken()
                 print(self.networkModel.userVM.username)
             }
         }
