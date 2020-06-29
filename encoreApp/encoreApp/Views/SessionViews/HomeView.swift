@@ -41,26 +41,18 @@ struct HomeView: View {
             
             //Layer 3: Menu Layer
             menu_layer
-        }//.onAppear{ self.musicController.viewDidLoad() } // triggers updates on every second
-            .onAppear {
-                //self.songListVM = SongListVM(userVM: networkModel.userVM)
-                //self.playerStateVM = PlayerStateVM(userVM: networkModel.userVM)       //Temporary!!
-                self.playerStateVM.viewDidLoad()
-                
-        }
+        }//.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
+
     }
     
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        var albumWidth = self.musicController.currentAlbumImage.size.width
-        func uiColorTopLeft(image: UIImage) -> UIColor {
-            return image.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.2))
-        }
-        var uiColorBottomRight = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
-        var uiColorBottomLeft = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
-        var uiColorTopRight = self.musicController.currentAlbumImage.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
-        
+        var albumWidth = self.playerStateVM.albumCover.size.width
+        var uiColorTopLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2, y: albumWidth * 0.2))
+        var uiColorBottomRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
+        var uiColorBottomLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
+        var uiColorTopRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
         
         return
             GeometryReader { geom in
@@ -79,38 +71,16 @@ struct HomeView: View {
                             HStack {
                                 Spacer()
                                 VStack {
-                                    //                                    if self.colorScheme == .dark {
-                                    //                                        Image(uiImage: self.musicController.currentAlbumImage)
-                                    //                                            .resizable()
-                                    //                                            .frame(width: 180, height: 180)
-                                    //                                            .cornerRadius(10)
-                                    //                                    } else {
-                                    //                                        Image(uiImage: self.musicController.currentAlbumImage)
-                                    //                                            .resizable()
-                                    //                                            .frame(width: 180, height: 180)
-                                    //                                            .cornerRadius(10)
-                                    //                                            .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
-                                    //                                            .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
-                                    //                                            .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
-                                    //                                            .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
-                                    //                                            .blendMode(.multiply)
-                                    //                                    }
-                                    URLImage(URL(string: self.playerStateVM.song.cover_url)!,
-                                             placeholder: Image("albumPlaceholder"),
-                                             content: {
-                                                
-                                                $0.image
-                                                    .resizable()
-                                                    .frame(width: 180, height: 180)
-                                                    .cornerRadius(10)
-//                                                    .shadow(color: uiColorTopLeft(image: $0.image).opacity(0.1), radius: 8, x: -10, y: -10)
-//                                                    .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
-//                                                    .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
-//                                                    .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
-                                                
-                                    })
-                                    
-                                    
+                                    Image(uiImage: self.playerStateVM.albumCover)
+                                        .resizable()
+                                        .frame(width: 180, height: 180)
+                                        .cornerRadius(10)
+                                        .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
+                                        .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
+                                        .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
+                                        .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
+                                        .blendMode(.multiply)
+
                                     Text("\(/*self.musicController.trackName*/ self.self.playerStateVM.song.name ?? "No Song")")
                                         .font(.system(size: 25, weight: .bold))
                                     Text("\(/*self.musicController.artistName*/ self.self.playerStateVM.song.artists[0] ?? "No Artist")")
@@ -171,25 +141,24 @@ struct HomeView: View {
                                 .foregroundColor(Color.clear)
                                 //.background(Blur(colorScheme: self.colorScheme))
                                 .background(self.colorScheme == .dark ? Color(.black) : Color(.white))
-                            // later this will be the playbar
                             ZStack(alignment: .leading) {
                                 Rectangle()
                                     .frame(width: geo.size.width, height: 3)
                                     .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
                                 Rectangle()
-                                    .frame(width: (self.musicController.normalizedPlaybackPosition! * geo.size.width), height: 4).cornerRadius(5)
+                                    .frame(width: (self.playerStateVM.normalizedPlaybackPosition * geo.size.width), height: 4).cornerRadius(5)
                                     .foregroundColor(Color("purpleblue"))
                             }
                             
                         }.edgesIgnoringSafeArea(.top)
                         HStack {
-                            Image(uiImage: self.musicController.currentAlbumImage)
+                            Image(uiImage: self.playerStateVM.albumCover)
                                 .resizable()
                                 .frame(width: 30, height: 30)
                             VStack(alignment: .leading) {
-                                Text("\(self.musicController.trackName ?? "No Song")")
+                                Text("\(self.playerStateVM.song.name)")
                                     .font(.system(size: 15, weight: .bold))
-                                Text("\(self.musicController.artistName ?? "No Artist")")
+                                Text("\(self.playerStateVM.song.artists[0])")
                                     .font(.system(size: 10, weight: .semibold))
                             }
                             Spacer()
@@ -211,8 +180,8 @@ struct HomeView: View {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                }.padding()
-                    .sheet(isPresented: self.$showMenuSheet) {
+                        .padding()
+                }.sheet(isPresented: self.$showMenuSheet) {
                         MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
@@ -300,15 +269,15 @@ struct HomeView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 self.isPlay = true
-//                do {
-//                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
-//                    DispatchQueue.main.async {
-//                        print("Successfully post of player play")
-//                        
-//                    }
-//                } catch {
-//                    print("Error")
-//                }
+                //                do {
+                //                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
+                //                    DispatchQueue.main.async {
+                //                        print("Successfully post of player play")
+                //
+                //                    }
+                //                } catch {
+                //                    print("Error")
+                //                }
             }
         }
         task.resume()
@@ -344,15 +313,15 @@ struct HomeView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 self.isPlay = false
-//                do {
-//                    let decodedData = try JSONDecoder().decode(String.self, from: data)
-//                    DispatchQueue.main.async {
-//                        print("Successfully post of player pause")
-//
-//                    }
-//                } catch {
-//                    print("Error")
-//                }
+                //                do {
+                //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
+                //                    DispatchQueue.main.async {
+                //                        print("Successfully post of player pause")
+                //
+                //                    }
+                //                } catch {
+                //                    print("Error")
+                //                }
             }
         }
         task.resume()
@@ -371,6 +340,7 @@ struct HomeView_Previews: PreviewProvider {
         }
     }
 }
+
 extension UIImage {
     func getPixelColor(pos: CGPoint) -> UIColor {
         
@@ -387,23 +357,6 @@ extension UIImage {
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
 }
-
-//extension Image {
-//    func getPixelColor(pos: CGPoint) -> UIColor {
-//
-//        let pixelData = self.cgImage!.dataProvider!.data
-//        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
-//
-//        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
-//
-//        let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
-//        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
-//        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
-//        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
-//
-//        return UIColor(red: r, green: g, blue: b, alpha: a)
-//    }
-//}
 
 extension TimeInterval {
     var minuteSecondMS: String {

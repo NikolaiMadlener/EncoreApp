@@ -23,6 +23,14 @@ struct SongListCell: View {
             songView
             Spacer()
             voteView
+        }.onAppear {
+            if self.song.upvoters.contains(self.userVM.username) {
+                self.voteState = .UPVOTE
+            } else if self.song.downvoters.contains(self.userVM.username) {
+                self.voteState = .DOWNVOTE
+            } else {
+                self.voteState = .NEUTRAL
+            }
         }
     }
     
@@ -106,7 +114,8 @@ struct SongListCell: View {
     }
     
     func upvote() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
+        self.voteState = .UPVOTE
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
             print("Invalid URL")
             return
             
@@ -138,7 +147,7 @@ struct SongListCell: View {
                 do {
                     let decodedData = try JSONDecoder().decode([Song].self, from: data)
                     DispatchQueue.main.async {
-
+                        
                     }
                 } catch {
                     print("Error")
@@ -151,7 +160,8 @@ struct SongListCell: View {
     }
     
     func downvote() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
+        self.voteState = .DOWNVOTE
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
             print("Invalid URL")
             return
         }
@@ -182,7 +192,7 @@ struct SongListCell: View {
                 do {
                     let decodedData = try JSONDecoder().decode([[Song]].self, from: data)
                     DispatchQueue.main.async {
-
+                        
                     }
                 } catch {
                     print("Error")
