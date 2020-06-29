@@ -147,6 +147,10 @@ class MusicController: NSObject, ObservableObject {
         self.subscribedToCapabilities = false
         //enableInterface(false)
     }
+    
+    func getAccessToken() -> String {
+        return appRemote?.connectionParameters.accessToken ?? "No Acces Token"
+    }
 }
 
 // MARK: SKStoreProductViewControllerDelegate

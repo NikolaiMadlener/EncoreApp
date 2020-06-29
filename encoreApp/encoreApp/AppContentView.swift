@@ -21,7 +21,7 @@ struct AppContentView: View {
                     HomeView(userVM: userVM, currentlyInSession: $currentlyInSession)
                 }
                 else {
-                    ContentView(userVM: self.userVM, currentlyInSession: $currentlyInSession)
+                    ContentView(userVM: userVM, currentlyInSession: $currentlyInSession)
                         .sheet(isPresented: self.$showJoinSheet) {
                             JoinViaURLView(userVM: self.userVM, sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
                     }
