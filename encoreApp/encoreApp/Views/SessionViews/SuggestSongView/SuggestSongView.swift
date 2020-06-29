@@ -18,9 +18,7 @@ struct SuggestSongView: View {
         VStack {
             SearchBar(text: $searchText, songs: $networkModel.items, placeholder: "Search songs")
             List {
-                ForEach(networkModel.items.filter {
-                    self.searchText.isEmpty ? true : $0.name.lowercased().contains(self.searchText.lowercased())
-                }, id: \.self) { song in
+                ForEach(networkModel.items, id: \.self) { song in
                     SuggestSongCell(song: song)
                 }
             }
