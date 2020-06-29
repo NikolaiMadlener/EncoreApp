@@ -20,7 +20,6 @@ struct SpotifySearchPayload: Codable {
                 let id: String
                 let images: [ImageSpotify]
                 let name: String
-                
             }
             struct Artists: Codable, Hashable {
                 let id: String

@@ -51,12 +51,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
         
         // Create the SwiftUI view that provides the window contents.
         let contentView = AppContentView(joinedViaURL: joinedViaURL, sessionID: sessionID)
-        var networkModel = NetworkModel()
         
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView.environmentObject(networkModel))
+            window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
             connect()

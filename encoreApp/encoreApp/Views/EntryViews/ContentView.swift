@@ -11,8 +11,7 @@ import CodeScanner
 import SafariServices
 
 struct ContentView: View {
-    @ObservedObject var networkModel: NetworkModel = .shared
-    //@ObservedObject var userVM: UserVM
+    @ObservedObject var userVM: UserVM
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
     @State var sessionID: String = ""
@@ -69,9 +68,9 @@ struct ContentView: View {
                         Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
                         VStack {
-                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
-                                EmptyView()
-                            }
+//                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
+//                                EmptyView()
+//                            }
                             Button(action: {
                                 self.createSession(username: self.username)
                             }) {
@@ -192,13 +191,14 @@ struct ContentView: View {
                         self.showWrongIDAlert = true
                     }
                     DispatchQueue.main.async {
-                        self.networkModel.userVM.username = username
-                        self.networkModel.userVM.isAdmin = false
-                        self.networkModel.userVM.secret = self.secret
-                        self.networkModel.userVM.sessionID = self.sessionID
+                        self.userVM.username = username
+                        self.userVM.isAdmin = false
+                        self.userVM.secret = self.secret
+                        self.userVM.sessionID = self.sessionID
                         self.currentlyInSession = true
-                        self.networkModel.getClientToken()
-                        print(self.networkModel.userVM.username)
+                        self.getClientToken()
+                        print("CLIENTTOKENN\(self.userVM.clientToken)")
+                        print(self.userVM.username)
                     }
                     self.currentlyInSession = true
                 }
@@ -248,7 +248,7 @@ struct ContentView: View {
                             self.sessionID = userInfo["session_id"] as! String
                             self.secret = userInfo["secret"] as! String
                         }
-                        self.networkModel.auth_url = json["auth_url"] as! String
+                        self.auth_url = json["auth_url"] as! String
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
@@ -257,16 +257,56 @@ struct ContentView: View {
                 
             }
             DispatchQueue.main.async {
-                self.networkModel.userVM.username = username
-                self.networkModel.userVM.isAdmin = true
-                self.networkModel.userVM.secret = self.secret
-                self.networkModel.userVM.sessionID = self.sessionID
+                self.userVM.username = username
+                self.userVM.isAdmin = true
+                self.userVM.secret = self.secret
+                self.userVM.sessionID = self.sessionID
                 self.currentlyInSession = true
-                self.networkModel.getClientToken()
-                print(self.networkModel.userVM.username)
+                self.getClientToken()
+                print(self.userVM.username)
             }
         }
         task.resume()
+    }
+    
+    func getClientToken() {
+        var clientToken = ""
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/clientToken") else {
+            print("Invalid URL")
+            return
+            
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string clientToken:\n \(dataString)")
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        clientToken = json["access_token"] as! String
+                        self.userVM.clientToken = clientToken
+                        print("CLIENTTOKENBefor\(clientToken)")
+                    }
+                } catch {
+                    print("Error")
+                }
+            }
+        }
+        print("CLIENTTOKENMiddle\(clientToken)")
+        task.resume()
+        print("CLIENTTOKENAfter\(clientToken)")
+        return
     }
 }
 
@@ -276,6 +316,6 @@ struct ContentView_Previews: PreviewProvider {
     static var userVM = UserVM()
     
     static var previews: some View {
-        ContentView(currentlyInSession: $signInSuccess)
+        ContentView(userVM: userVM, currentlyInSession: $signInSuccess)
     }
 }

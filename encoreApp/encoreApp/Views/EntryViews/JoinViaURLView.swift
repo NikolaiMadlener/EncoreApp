@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct JoinViaURLView: View {
-    @ObservedObject var networkModel: NetworkModel = .shared
+    @ObservedObject var userVM: UserVM
     
     var sessionID: String
     @State var username = ""
@@ -85,11 +85,11 @@ struct JoinViaURLView: View {
                         print("Failed to load: \(error.localizedDescription)")
                     }
                     DispatchQueue.main.async {
-                        self.networkModel.userVM.username = username
-                        self.networkModel.userVM.isAdmin = false
-                        self.networkModel.userVM.secret = self.secret
-                        self.networkModel.userVM.sessionID = self.sessionID
-                        print(self.networkModel.userVM.username)
+                        self.userVM.username = username
+                        self.userVM.isAdmin = false
+                        self.userVM.secret = self.secret
+                        self.userVM.sessionID = self.sessionID
+                        print(self.userVM.username)
                     }
                     self.showWrongIDAlert = false
                     self.currentlyInSession = true
@@ -102,7 +102,8 @@ struct JoinViaURLView: View {
 
 struct JoinViaURLView_Previews: PreviewProvider {
     @State static var currentlyInSession = false
+    static var userVM = UserVM()
     static var previews: some View {
-        JoinViaURLView(sessionID: "123", currentlyInSession: $currentlyInSession)
+        JoinViaURLView(userVM: userVM, sessionID: "123", currentlyInSession: $currentlyInSession)
     }
 }

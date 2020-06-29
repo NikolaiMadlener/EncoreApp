@@ -10,7 +10,7 @@ import SwiftUI
 import URLImage
 
 struct SuggestSongCell: View {
-    @ObservedObject var networkModel: NetworkModel = .shared
+    @ObservedObject var searchResultListVM: SearchResultListVM
     @State var currentImage: Image = Image("albumPlaceholder")
     var song: SpotifySearchPayload.Tracks.Item
     
@@ -45,7 +45,7 @@ struct SuggestSongCell: View {
     
     private var addButton: some View {
         Button(action: {
-            self.networkModel.suggestSong(songID: self.song.id)
+            self.searchResultListVM.suggestSong(songID: self.song.id)
         }) {
             Image(systemName: "plus.square.fill")
                 .font(.system(size: 35, weight: .light))
@@ -56,8 +56,9 @@ struct SuggestSongCell: View {
 
 
 struct SuggestSongCell_Previews: PreviewProvider {
+    static var searchResultListVM = SearchResultListVM(userVM: UserVM())
     static var song = Mockmodel.getSongPayload()
     static var previews: some View {
-        SuggestSongCell(song: song)
+        SuggestSongCell(searchResultListVM: searchResultListVM, song: song)
     }
 }

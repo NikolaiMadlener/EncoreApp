@@ -10,12 +10,12 @@ import SwiftUI
 import URLImage
 
 struct HomeView: View {
-    
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var networkModel: NetworkModel = .shared
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
+    @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
+    @ObservedObject var searchResultListVM: SearchResultListVM
     
     @State var showMenuSheet = false
     @State var showAddSongSheet = false
@@ -23,10 +23,12 @@ struct HomeView: View {
     @State var current_title_offset: CGFloat = 0
     @State var isPlay = true
     
-    init(currentlyInSession: Binding<Bool>, userVM: UserVM) {
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
+        self.userVM = userVM
         self._currentlyInSession = currentlyInSession
         self.songListVM = SongListVM(userVM: userVM)
         self.playerStateVM = PlayerStateVM(userVM: userVM)
+        self.searchResultListVM = SearchResultListVM(userVM: userVM)
     }
     
     var body: some View {
@@ -143,7 +145,7 @@ struct HomeView: View {
                         }
                         ForEach(self.songListVM.songs, id: \.self) { song in
                             VStack {
-                                SongListCell(song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
+                                SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
                                 Divider()
                                     .padding(.horizontal)
                                     .padding(.top, -5)
@@ -211,13 +213,13 @@ struct HomeView: View {
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 }.padding()
                     .sheet(isPresented: self.$showMenuSheet) {
-                        MenuView(currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                        MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()
             HStack {
                 Spacer()
-                if self.networkModel.userVM.isAdmin {
+                if self.userVM.isAdmin {
                     HStack {
                         Button(action: {
                             //self.musicController.playMusic()
@@ -241,7 +243,7 @@ struct HomeView: View {
                                     .foregroundColor(Color("purpleblue"))
                             }
                         }.sheet(isPresented: self.$showAddSongSheet) {
-                            SuggestSongView()
+                            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM)
                         }
                         Spacer().frame(width: 40)
                         Button(action: { self.musicController.skipNext() }) {
@@ -260,7 +262,7 @@ struct HomeView: View {
                             
                         }
                     }.sheet(isPresented: self.$showAddSongSheet) {
-                        SuggestSongView()
+                        SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM)
                     }
                 }
                 Spacer()
@@ -269,7 +271,7 @@ struct HomeView: View {
     }
     
     func playerPlay() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(networkModel.userVM.username)"+"/player/play") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
             print("Invalid URL")
             return
             
@@ -277,8 +279,8 @@ struct HomeView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -313,7 +315,7 @@ struct HomeView: View {
     }
     
     func playerPause() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(networkModel.userVM.username)"+"/player/pause") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
             print("Invalid URL")
             return
             
@@ -321,8 +323,8 @@ struct HomeView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.networkModel.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.networkModel.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -364,9 +366,8 @@ struct HomeView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            HomeView(currentlyInSession: $currentlyInSession, userVM: userVM) .environment(\.colorScheme, .light)
-            
-            HomeView(currentlyInSession: $currentlyInSession, userVM: userVM) .environment(\.colorScheme, .dark)
+            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .light)
+            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .dark)
         }
     }
 }

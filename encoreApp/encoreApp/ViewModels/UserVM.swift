@@ -15,12 +15,14 @@ public class UserVM: ObservableObject {
     @Published var isAdmin: Bool
     @Published var sessionID: String
     @Published var secret: String
+    @Published var clientToken: String
     
-    init(username: String, isAdmin: Bool, sessionID: String, secret: String) {
+    init(username: String, isAdmin: Bool, sessionID: String, secret: String, clientToken: String) {
         self.username = username
         self.isAdmin = isAdmin
         self.sessionID = sessionID
         self.secret = secret
+        self.clientToken = clientToken
     }
     
     init() {
@@ -28,5 +30,6 @@ public class UserVM: ObservableObject {
         self.isAdmin = false
         self.sessionID = ""
         self.secret = ""
+        self.clientToken = ""
     }
 }
