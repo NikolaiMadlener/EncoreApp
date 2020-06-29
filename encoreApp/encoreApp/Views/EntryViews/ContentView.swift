@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CodeScanner
+import SafariServices
 
 struct ContentView: View {
     @ObservedObject var userVM: UserVM
@@ -23,6 +24,9 @@ struct ContentView: View {
     @State var scannedCode: String?
     
     @State var invalidUsername = false
+    
+    @State var auth_url: String = ""
+    @State var sessionCreated: Bool? = false
     
     var body: some View {
         NavigationView {
@@ -57,21 +61,26 @@ struct ContentView: View {
                             self.invalidUsername = false
                             }}) {
                                 Text("Join Session")
-                                    .padding(15)
-                                    .background( username.count < 1 ? Color("buttonDisabledGray") : Color("darkgray") ).foregroundColor(username == "" ? Color("lightgray") : Color.white).cornerRadius(25)
+                                    .modifier(RoundButtonModifier(isDisabled: username.count < 1, backgroundColor: Color("darkgray"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
                             .padding(5)
                         
                         Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
-                        Button(action: { self.createSession(username: self.username) }) {
-                            Text("Create Session")
-                                .font(.headline)
-                                .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
-                        }.disabled(username.count < 1)
-                            .padding(5)
+                        VStack {
+//                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
+//                                EmptyView()
+//                            }
+                            Button(action: {
+                                self.createSession(username: self.username)
+                            }) {
+                                Text("Create Session")
+                                    .font(.headline)
+                                    .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
+                            }.disabled(username.count < 1)
+                                .padding(5)
+                        }
                         Spacer()
-                        
                     }.animation(.default)
                 }.sheet(isPresented: self.$showScannerSheet) {
                     self.scannerSheet
@@ -148,15 +157,10 @@ struct ContentView: View {
             return
             
         }
-        var request = URLRequest(url: url)
         
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             // Check for Error
@@ -164,7 +168,6 @@ struct ContentView: View {
                 print("Error took place \(error)")
                 return
             }
-            
             
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
@@ -192,8 +195,12 @@ struct ContentView: View {
                         self.userVM.isAdmin = false
                         self.userVM.secret = self.secret
                         self.userVM.sessionID = self.sessionID
+                        self.currentlyInSession = true
+                        self.getClientToken()
+                        print("CLIENTTOKENN\(self.userVM.clientToken)")
                         print(self.userVM.username)
                     }
+                    self.currentlyInSession = true
                 }
             }
         }
@@ -241,7 +248,7 @@ struct ContentView: View {
                             self.sessionID = userInfo["session_id"] as! String
                             self.secret = userInfo["secret"] as! String
                         }
-                        self.currentlyInSession = true
+                        self.auth_url = json["auth_url"] as! String
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
@@ -254,10 +261,52 @@ struct ContentView: View {
                 self.userVM.isAdmin = true
                 self.userVM.secret = self.secret
                 self.userVM.sessionID = self.sessionID
+                self.currentlyInSession = true
+                self.getClientToken()
                 print(self.userVM.username)
             }
         }
         task.resume()
+    }
+    
+    func getClientToken() {
+        var clientToken = ""
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/clientToken") else {
+            print("Invalid URL")
+            return
+            
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string clientToken:\n \(dataString)")
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        clientToken = json["access_token"] as! String
+                        self.userVM.clientToken = clientToken
+                        print("CLIENTTOKENBefor\(clientToken)")
+                    }
+                } catch {
+                    print("Error")
+                }
+            }
+        }
+        print("CLIENTTOKENMiddle\(clientToken)")
+        task.resume()
+        print("CLIENTTOKENAfter\(clientToken)")
+        return
     }
 }
 

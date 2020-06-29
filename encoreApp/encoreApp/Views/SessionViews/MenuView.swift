@@ -10,7 +10,6 @@ import SwiftUI
 
 struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
-    
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
     
@@ -22,7 +21,7 @@ struct MenuView: View {
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
-        self.userListVM = UserListVM(userVM: userVM)
+        self.userListVM = UserListVM(userVM: UserVM())
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
     }
@@ -89,7 +88,7 @@ struct MenuView: View {
                 VStack {
                     Spacer()
                     Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
-                        Text( self.userVM.isAdmin ? "Delete Session" : "Leave Session")
+                        Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
                             .padding(15)
                             .background(Color.red)
                             .foregroundColor(Color.white)
@@ -177,12 +176,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.userVM.secret)
-        print("sessionID: " + self.userVM.sessionID)
+        print("secret: " + userVM.secret)
+        print("sessionID: " + userVM.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -215,12 +214,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.userVM.secret)
-        print("sessionID: " + self.userVM.sessionID)
+        print("secret: " + userVM.secret)
+        print("sessionID: " + userVM.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body

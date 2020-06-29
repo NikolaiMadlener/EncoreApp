@@ -102,7 +102,8 @@ struct JoinViaURLView: View {
 
 struct JoinViaURLView_Previews: PreviewProvider {
     @State static var currentlyInSession = false
+    static var userVM = UserVM()
     static var previews: some View {
-        JoinViaURLView(userVM: UserVM(), sessionID: "123", currentlyInSession: $currentlyInSession)
+        JoinViaURLView(userVM: userVM, sessionID: "123", currentlyInSession: $currentlyInSession)
     }
 }

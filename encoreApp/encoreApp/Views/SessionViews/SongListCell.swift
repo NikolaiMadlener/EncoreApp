@@ -10,13 +10,11 @@ import SwiftUI
 import URLImage
 
 struct SongListCell: View {
-    
     @ObservedObject var userVM: UserVM
-    var song: Song
     @State var voteState: VoteState = VoteState.NEUTRAL
-    var rank: Int
     @State var currentImage: Image = Image("albumPlaceholder")
-    
+    var song: Song
+    var rank: Int
     
     var body: some View {
         HStack {
@@ -34,23 +32,17 @@ struct SongListCell: View {
             .padding(.horizontal, 10)
     }
     
-        private var albumView: some View {
-            URLImage(URL(string: self.song.cover_url)!, placeholder: { _ in
+    private var albumView: some View {
+        URLImage(URL(string: self.song.cover_url)!, placeholder: { _ in
                 // Replace placeholder image with text
                 self.currentImage.opacity(0.0)
-            },
-                     
-            content: {
-               
+        }, content: {
                $0.image
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 55, height: 55)
                 .cornerRadius(5)
-                 
-                }).frame(width: 55, height: 55)
-               
-                
+            }).frame(width: 55, height: 55)
     }
     
     private var songView: some View {
@@ -114,7 +106,7 @@ struct SongListCell: View {
     }
     
     func upvote() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
             print("Invalid URL")
             return
             
@@ -122,8 +114,8 @@ struct SongListCell: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -159,15 +151,15 @@ struct SongListCell: View {
     }
     
     func downvote() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
             print("Invalid URL")
             return
         }
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
