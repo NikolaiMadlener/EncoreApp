@@ -167,52 +167,7 @@ struct HomeView: View {
             Spacer()
             HStack {
                 Spacer()
-                if self.userVM.isAdmin {
-                    HStack {
-                        Button(action: {
-                            //self.musicController.playMusic()
-                            self.isPlay ? self.playerPause() : self.playerPlay()
-                            
-                            
-                        }) {
-                            ZStack {
-                                Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                                Image(systemName: self.isPlay ? "pause.circle.fill" : "play.circle.fill")
-                                    .font(.system(size: 35, weight: .light))
-                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                            }
-                        }
-                        Spacer().frame(width: 40)
-                        Button(action: { self.showAddSongSheet = true }) {
-                            ZStack {
-                                Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 10)
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 60, weight: .light))
-                                    .foregroundColor(Color("purpleblue"))
-                            }
-                        }.sheet(isPresented: self.$showAddSongSheet) {
-                            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM)
-                        }
-                        Spacer().frame(width: 40)
-                        Button(action: { self.musicController.skipNext() }) {
-                            Image(systemName: "forward.end.fill")
-                                .font(.system(size: 35, weight: .light))
-                                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        }
-                    }.padding(10).padding(.horizontal, 10).background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white).cornerRadius(100).shadow(radius: 10)
-                } else {
-                    Button(action: { self.showAddSongSheet = true }) {
-                        ZStack {
-                            Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 5)
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 60, weight: .light))
-                                .foregroundColor(Color("purpleblue"))
-                            
-                        }
-                    }.sheet(isPresented: self.$showAddSongSheet) {
-                        SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM)
-                    }
-                }
+                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
                 Spacer()
             }.padding(.bottom)
         }
