@@ -43,6 +43,7 @@
 		8F2EF43C24A34B74000EC1B7 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */; };
 		8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE231249E679C006674E8 /* SearchBar.swift */; };
 		8F8FE234249FBB0B006674E8 /* AuthenticationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationSheet.swift */; };
+		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
 		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
 		9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */; };
 /* End PBXBuildFile section */
@@ -87,6 +88,7 @@
 		8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8F8FE231249E679C006674E8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		8F8FE233249FBB0B006674E8 /* AuthenticationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationSheet.swift; sourceTree = "<group>"; };
+		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
 		CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_encoreApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp.release.xcconfig"; path = "Target Support Files/Pods-encoreApp/Pods-encoreApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -169,8 +171,8 @@
 		233D2AD0249273A500994038 /* SessionViews */ = {
 			isa = PBXGroup;
 			children = (
+				8FB1058824AB5589007C15A1 /* HomeView */,
 				8F27498224A60C440084FC99 /* SuggestSongView */,
-				23190673247DB53600DA550B /* HomeView.swift */,
 				235EB4D02480F6CC007A720D /* MenuView.swift */,
 				2319067B247DBDB600DA550B /* SongListCell.swift */,
 				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
@@ -239,6 +241,15 @@
 				8F27498524A610000084FC99 /* SpotifySearchPayload.swift */,
 			);
 			path = SuggestSongView;
+			sourceTree = "<group>";
+		};
+		8FB1058824AB5589007C15A1 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				23190673247DB53600DA550B /* HomeView.swift */,
+				8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */,
+			);
+			path = HomeView;
 			sourceTree = "<group>";
 		};
 		B2F70876ABD56E2CD04EB69B /* Pods */ = {
@@ -379,6 +390,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */,
 				2319067C247DBDB600DA550B /* SongListCell.swift in Sources */,
 				231CDA24249D3A8800632B8C /* MusicController.swift in Sources */,
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,

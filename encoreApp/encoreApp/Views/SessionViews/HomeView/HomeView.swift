@@ -48,12 +48,6 @@ struct HomeView: View {
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        var albumWidth = self.playerStateVM.albumCover.size.width
-        var uiColorTopLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2, y: albumWidth * 0.2))
-        var uiColorBottomRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
-        var uiColorBottomLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
-        var uiColorTopRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
-        
         return
             GeometryReader { geom in
                 ScrollView {
@@ -70,22 +64,7 @@ struct HomeView: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                VStack {
-                                    Image(uiImage: self.playerStateVM.albumCover)
-                                        .resizable()
-                                        .frame(width: 180, height: 180)
-                                        .cornerRadius(10)
-                                        .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
-                                        .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
-                                        .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
-                                        .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
-                                        .blendMode(.multiply)
-
-                                    Text("\(/*self.musicController.trackName*/ self.self.playerStateVM.song.name ?? "No Song")")
-                                        .font(.system(size: 25, weight: .bold))
-                                    Text("\(/*self.musicController.artistName*/ self.self.playerStateVM.song.artists[0] ?? "No Artist")")
-                                        .font(.system(size: 20, weight: .semibold))
-                                }
+                                CurrentSongView(playerStateVM: self.playerStateVM)
                                 Spacer()
                             }
                             VStack(spacing: 5) {
