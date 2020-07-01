@@ -11,7 +11,7 @@ import URLImage
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var musicController: MusicController = .shared
+    //@ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
@@ -41,18 +41,18 @@ struct HomeView: View {
             
             //Layer 3: Menu Layer
             menu_layer
-        }//.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
+        }.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
 
     }
     
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        var albumWidth = self.playerStateVM.albumCover.size.width
-        var uiColorTopLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2, y: albumWidth * 0.2))
-        var uiColorBottomRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
-        var uiColorBottomLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
-        var uiColorTopRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
+        let albumWidth = self.playerStateVM.albumCover.size.width
+        let uiColorTopLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2, y: albumWidth * 0.2))
+        let uiColorBottomRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
+        let uiColorBottomLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
+        let uiColorTopRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
         
         return
             GeometryReader { geom in
@@ -88,23 +88,23 @@ struct HomeView: View {
                                 }
                                 Spacer()
                             }
-                            VStack(spacing: 5) {
-                                ZStack(alignment: .leading) {
-                                    Rectangle()
-                                        .frame(width: geom.size.width * 0.8, height: 4)
-                                        .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
-                                        .cornerRadius(5)
-                                    Rectangle()
-                                        .frame(width: (/*self.musicController*/self.playerStateVM.normalizedPlaybackPosition * geom.size.width * 0.8), height: 4)
-                                        .foregroundColor(Color("purpleblue"))
-                                        .cornerRadius(5)
-                                }
-                                HStack {
-                                    Text(/*self.musicController.playerState?.playbackPosition*/Int(self.playerStateVM.progress).msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
-                                    Spacer()
-                                    Text("-" + (Int(self.musicController.playerState?.track.duration ?? 0) - (self.musicController.playerState?.playbackPosition ?? 0)).msToSeconds.minuteSecondMS.description).font(.system(size: 10))
-                                }.frame(width: geom.size.width * 0.8)
-                            }.padding(.bottom)
+//                            VStack(spacing: 5) {
+//                                ZStack(alignment: .leading) {
+//                                    Rectangle()
+//                                        .frame(width: geom.size.width * 0.8, height: 4)
+//                                        .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+//                                        .cornerRadius(5)
+//                                    Rectangle()
+//                                        .frame(width: (/*self.musicController*/self.playerStateVM.normalizedPlaybackPosition * geom.size.width * 0.8), height: 4)
+//                                        .foregroundColor(Color("purpleblue"))
+//                                        .cornerRadius(5)
+//                                }
+//                                HStack {
+//                                    Text(/*self.musicController.playerState?.playbackPosition*/Int(self.playerStateVM.progress).msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
+//                                    Spacer()
+//                                    Text("-" + (Int(self.musicController.playerState?.track.duration ?? 0) - (self.musicController.playerState?.playbackPosition ?? 0)).msToSeconds.minuteSecondMS.description).font(.system(size: 10))
+//                                }.frame(width: geom.size.width * 0.8)
+//                            }.padding(.bottom)
                             Spacer()
                         }
                     }
@@ -215,7 +215,7 @@ struct HomeView: View {
                             SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM)
                         }
                         Spacer().frame(width: 40)
-                        Button(action: { self.musicController.skipNext() }) {
+                        Button(action: { self.playerSkipNext() }) {
                             Image(systemName: "forward.end.fill")
                                 .font(.system(size: 35, weight: .light))
                                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
@@ -269,6 +269,7 @@ struct HomeView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 self.isPlay = true
+                
                 //                do {
                 //                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
                 //                    DispatchQueue.main.async {
@@ -313,6 +314,50 @@ struct HomeView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 self.isPlay = false
+                //                do {
+                //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
+                //                    DispatchQueue.main.async {
+                //                        print("Successfully post of player pause")
+                //
+                //                    }
+                //                } catch {
+                //                    print("Error")
+                //                }
+            }
+        }
+        task.resume()
+    }
+    
+    func playerSkipNext() {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/skip") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                self.isPlay = true
                 //                do {
                 //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
                 //                    DispatchQueue.main.async {

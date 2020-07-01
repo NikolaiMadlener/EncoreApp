@@ -295,7 +295,9 @@ struct ContentView: View {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         clientToken = json["access_token"] as! String
-                        self.userVM.clientToken = clientToken
+                        DispatchQueue.main.async {
+                            self.userVM.clientToken = clientToken
+                        }
                         print("CLIENTTOKENBefor\(clientToken)")
                     }
                 } catch {

@@ -38,7 +38,7 @@ class PlayerStateVM: ObservableObject {
     }
     
     init(userVM: UserVM) {
-        
+        print("INIT PlayerStateVM")
         var emptySong = Song(id: "0", name: "", artists: [""], duration_ms: 1, cover_url: "https://musicnotesbox.com/media/catalog/product/7/3/73993_image.png", album_name: "", preview_url: "", suggested_by: "", score: 0, time_added: "", upvoters: [], downvoters: [])
         song = emptySong
         progress = 0
@@ -70,15 +70,15 @@ class PlayerStateVM: ObservableObject {
                                 self?.calculatePlayBarPosition()
                                 self?.song = sng
                                 
-                                if userVM.isAdmin {
-                                    self?.appRemote?.authorizeAndPlayURI("spotify:track:" + "\(String(describing: sng.id))")
-                                    
-                                    if decodedData.is_playing == false {
-                                        self?.appRemote?.playerAPI?.pause(self?.defaultCallback)
-                                    } else {
-                                        self?.appRemote?.playerAPI?.resume(self?.defaultCallback)
-                                    }
-                                }
+//                                if userVM.isAdmin {
+//                                    self?.appRemote?.authorizeAndPlayURI("spotify:track:" + "\(String(describing: sng.id))")
+//
+//                                    if decodedData.is_playing == false {
+//                                        self?.appRemote?.playerAPI?.pause(self?.defaultCallback)
+//                                    } else {
+//                                        self?.appRemote?.playerAPI?.resume(self?.defaultCallback)
+//                                    }
+//                                }
                                 
                                 KingfisherManager.shared.retrieveImage(with: URL(string: sng.cover_url)!, options: nil, progressBlock: nil, completionHandler: { image, error, cacheType, imageURL in
                                     self?.albumCover = image ?? UIImage(imageLiteralResourceName: "albumPlaceholder")
@@ -148,14 +148,14 @@ class PlayerStateVM: ObservableObject {
                             self.progress = 0
                         }
                         
-                        if self.userVM.isAdmin {
-                            
-                            if decodedData.is_playing == false {
-                                self.appRemote?.playerAPI?.pause(self.defaultCallback)
-                            } else {
-                                self.appRemote?.playerAPI?.resume(self.defaultCallback)
-                            }
-                        }
+//                        if self.userVM.isAdmin {
+//                            
+//                            if decodedData.is_playing == false {
+//                                self.appRemote?.playerAPI?.pause(self.defaultCallback)
+//                            } else {
+//                                self.appRemote?.playerAPI?.resume(self.defaultCallback)
+//                            }
+//                        }
                         
                     }
                 } catch {
