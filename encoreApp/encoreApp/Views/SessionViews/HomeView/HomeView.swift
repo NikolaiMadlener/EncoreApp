@@ -48,12 +48,6 @@ struct HomeView: View {
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        let albumWidth = self.playerStateVM.albumCover.size.width
-        let uiColorTopLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2, y: albumWidth * 0.2))
-        let uiColorBottomRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
-        let uiColorBottomLeft = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
-        let uiColorTopRight = self.playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
-        
         return
             GeometryReader { geom in
                 ScrollView {
@@ -70,22 +64,7 @@ struct HomeView: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                VStack {
-                                    Image(uiImage: self.playerStateVM.albumCover)
-                                        .resizable()
-                                        .frame(width: 180, height: 180)
-                                        .cornerRadius(10)
-                                        .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
-                                        .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
-                                        .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
-                                        .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
-                                        .blendMode(.multiply)
-
-                                    Text("\(/*self.musicController.trackName*/ self.self.playerStateVM.song.name ?? "No Song")")
-                                        .font(.system(size: 25, weight: .bold))
-                                    Text("\(/*self.musicController.artistName*/ self.self.playerStateVM.song.artists[0] ?? "No Artist")")
-                                        .font(.system(size: 20, weight: .semibold))
-                                }
+                                CurrentSongView(playerStateVM: self.playerStateVM)
                                 Spacer()
                             }
 //                            VStack(spacing: 5) {
@@ -188,144 +167,10 @@ struct HomeView: View {
             Spacer()
             HStack {
                 Spacer()
-                if self.userVM.isAdmin {
-                    HStack {
-                        Button(action: {
-                            //self.musicController.playMusic()
-                            self.isPlay ? self.playerPause() : self.playerPlay()
-                            
-                            
-                        }) {
-                            ZStack {
-                                Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                                Image(systemName: self.isPlay ? "pause.circle.fill" : "play.circle.fill")
-                                    .font(.system(size: 35, weight: .light))
-                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                            }
-                        }
-                        Spacer().frame(width: 40)
-                        Button(action: { self.showAddSongSheet = true }) {
-                            ZStack {
-                                Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 10)
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 60, weight: .light))
-                                    .foregroundColor(Color("purpleblue"))
-                            }
-                        }.sheet(isPresented: self.$showAddSongSheet) {
-                            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM)
-                        }
-                        Spacer().frame(width: 40)
-                        Button(action: { self.playerSkipNext() }) {
-                            Image(systemName: "forward.end.fill")
-                                .font(.system(size: 35, weight: .light))
-                                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        }
-                    }.padding(10).padding(.horizontal, 10).background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white).cornerRadius(100).shadow(radius: 10)
-                } else {
-                    Button(action: { self.showAddSongSheet = true }) {
-                        ZStack {
-                            Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 5)
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 60, weight: .light))
-                                .foregroundColor(Color("purpleblue"))
-                            
-                        }
-                    }.sheet(isPresented: self.$showAddSongSheet) {
-                        SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM)
-                    }
-                }
+                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
                 Spacer()
             }.padding(.bottom)
         }
-    }
-    
-    func playerPlay() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
-            print("Invalid URL")
-            return
-            
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string:\n \(dataString)")
-                self.isPlay = true
-                
-                //                do {
-                //                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
-                //                    DispatchQueue.main.async {
-                //                        print("Successfully post of player play")
-                //
-                //                    }
-                //                } catch {
-                //                    print("Error")
-                //                }
-            }
-        }
-        task.resume()
-    }
-    
-    func playerPause() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
-            print("Invalid URL")
-            return
-            
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string:\n \(dataString)")
-                self.isPlay = false
-                //                do {
-                //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
-                //                    DispatchQueue.main.async {
-                //                        print("Successfully post of player pause")
-                //
-                //                    }
-                //                } catch {
-                //                    print("Error")
-                //                }
-            }
-        }
-        task.resume()
     }
     
     func playerSkipNext() {
