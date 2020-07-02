@@ -37,7 +37,7 @@ class UserListVM: ObservableObject {
                             print()
                         }
                     } catch {
-                        print("Error")
+                        print("Error SSE user list change")
                         
                     }
                 }

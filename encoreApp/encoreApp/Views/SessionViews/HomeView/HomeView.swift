@@ -23,6 +23,7 @@ struct HomeView: View {
     @State var current_title_offset: CGFloat = 0
     @State var isPlay = true
     
+    
     init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
         self.userVM = userVM
         self._currentlyInSession = currentlyInSession
@@ -41,8 +42,8 @@ struct HomeView: View {
             
             //Layer 3: Menu Layer
             menu_layer
-        }.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
-
+        }//.onAppear{ self.playerStateVM.viewDidLoad() }
+         // triggers updates on every second
     }
     
     
@@ -172,50 +173,6 @@ struct HomeView: View {
             }.padding(.bottom)
         }
     }
-    
-    func playerSkipNext() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/skip") else {
-            print("Invalid URL")
-            return
-            
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string:\n \(dataString)")
-                self.isPlay = true
-                //                do {
-                //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
-                //                    DispatchQueue.main.async {
-                //                        print("Successfully post of player pause")
-                //
-                //                    }
-                //                } catch {
-                //                    print("Error")
-                //                }
-            }
-        }
-        task.resume()
-    }
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -268,3 +225,4 @@ extension Int {
         return Double(self) / 1000
     }
 }
+

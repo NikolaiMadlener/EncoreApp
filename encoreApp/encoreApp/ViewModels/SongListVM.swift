@@ -38,7 +38,7 @@ class SongListVM: ObservableObject {
                             print()
                         }
                     } catch {
-                        print("Error")
+                        print("Error SSE playlist change")
                         
                     }
                 }
