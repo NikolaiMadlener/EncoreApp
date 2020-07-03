@@ -86,9 +86,11 @@ struct ContentView: View {
                             }.disabled(username.count < 1)
                                 .padding(5)
                                 .sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                                    
                                     self.getAuthToken()
                                 }) {
-                                    AuthenticationSheet(url: URL(string: self.userVM.auth_url)!, showAuthSheet: self.$showAuthSheet)
+//                                    AuthenticationSheet(url: URL(string: self.userVM.auth_url)!, showAuthSheet: self.$showAuthSheet)
+                                    AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet)
                             }
                             //                            Button(action: {
                             //                                                self.showAuthSheet = true

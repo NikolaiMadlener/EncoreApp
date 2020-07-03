@@ -63,6 +63,7 @@ struct HomeView: View {
                     }
                     if (self.current_title_offset > -260) {
                         VStack {
+                            Spacer().frame(height: 30)
                             HStack {
                                 Spacer()
                                 CurrentSongView(playerStateVM: self.playerStateVM)

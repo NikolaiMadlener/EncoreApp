@@ -42,7 +42,7 @@
 		8F2EF43A24A2ADEE000EC1B7 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */; };
 		8F2EF43C24A34B74000EC1B7 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */; };
 		8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE231249E679C006674E8 /* SearchBar.swift */; };
-		8F8FE234249FBB0B006674E8 /* AuthenticationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationSheet.swift */; };
+		8F8FE234249FBB0B006674E8 /* AuthenticationWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */; };
 		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
 		8FB1058C24AB56DF007C15A1 /* AddSongsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */; };
 		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
@@ -88,7 +88,7 @@
 		8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8F8FE231249E679C006674E8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
-		8F8FE233249FBB0B006674E8 /* AuthenticationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationSheet.swift; sourceTree = "<group>"; };
+		8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWebView.swift; sourceTree = "<group>"; };
 		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongsBarView.swift; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				8F0CAC2D24A10EA700531BB0 /* AuthenticationView.swift */,
-				8F8FE233249FBB0B006674E8 /* AuthenticationSheet.swift */,
+				8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */,
 				8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */,
 			);
 			path = AuthenticationView;
@@ -399,7 +399,7 @@
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,
 				8F27498624A610000084FC99 /* SpotifySearchPayload.swift in Sources */,
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
-				8F8FE234249FBB0B006674E8 /* AuthenticationSheet.swift in Sources */,
+				8F8FE234249FBB0B006674E8 /* AuthenticationWebView.swift in Sources */,
 				231CDA31249E0BB700632B8C /* AsyncImage.swift in Sources */,
 				234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */,
 				231CDA26249D3B9A00632B8C /* SongListVM.swift in Sources */,
