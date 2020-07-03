@@ -49,6 +49,12 @@ class PlayerStateVM: ObservableObject {
         
         eventSource.connect()
         
+        eventSource.onComplete { [weak self] statusCode, reconnect, error in
+            DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+                self?.eventSource.connect()
+            }
+        }
+        
         eventSource.addEventListener("sse:player_state_change") { [weak self] id, event, dataString in
             print("eventListener Data:" + "\(dataString)")
             // Convert HTTP Response Data to a String
@@ -159,7 +165,7 @@ class PlayerStateVM: ObservableObject {
                         
                     }
                 } catch {
-                    print("Error")
+                    print("Error Player State VM")
                 }
             }
         }

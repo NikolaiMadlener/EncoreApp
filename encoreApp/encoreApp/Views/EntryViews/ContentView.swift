@@ -321,7 +321,7 @@ struct ContentView: View {
                         }
                     }
                 } catch {
-                    print("Error")
+                    print("Error Get Client Token")
                 }
             }
         }
@@ -363,7 +363,7 @@ struct ContentView: View {
                         }
                     }
                 } catch {
-                    print("Error")
+                    print("Error get Auth Token")
                 }
             }
         }
@@ -394,10 +394,11 @@ struct ContentView: View {
                 print("Response data string device:\n \(dataString)")
                 do {
                     let deviceList = try JSONDecoder().decode([String: [Device]].self, from: data)
+                    print(deviceList["devices"])
                     self.deviceID = deviceList["devices"]?.first?.id ?? ""
                     self.connectWithSpotify()
                 } catch {
-                    print("Error")
+                    print("Error get Device ID")
                 }
             }
             
