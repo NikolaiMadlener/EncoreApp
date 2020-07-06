@@ -22,6 +22,7 @@ struct HomeView: View {
     @Binding var currentlyInSession: Bool
     @State var current_title_offset: CGFloat = 0
     @State var isPlay = true
+    @State var value: Float = 0.8
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
         self.userVM = userVM
@@ -48,61 +49,43 @@ struct HomeView: View {
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        return
-            GeometryReader { geom in
-                ScrollView {
-                    GeometryReader { geo -> AnyView? in
-                        let thisOffset = geo.frame(in: .global).minY
-                        if thisOffset > -190 {
-                            self.current_title_offset = thisOffset
-                        } else {
-                            self.current_title_offset = -260
-                        }
-                        return nil
-                    }
-                    if (self.current_title_offset > -260) {
-                        VStack {
-                            HStack {
-                                Spacer()
-                                CurrentSongView(playerStateVM: self.playerStateVM)
-                                Spacer()
-                            }
-                            VStack(spacing: 5) {
-                                ZStack(alignment: .leading) {
-                                    Rectangle()
-                                        .frame(width: geom.size.width * 0.8, height: 4)
-                                        .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
-                                        .cornerRadius(5)
-                                    Rectangle()
-                                        .frame(width: (/*self.musicController*/self.playerStateVM.normalizedPlaybackPosition * geom.size.width * 0.8), height: 4)
-                                        .foregroundColor(Color("purpleblue"))
-                                        .cornerRadius(5)
-                                }
-                                HStack {
-                                    Text(/*self.musicController.playerState?.playbackPosition*/Int(self.playerStateVM.progress).msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
-                                    Spacer()
-                                    Text("-" + (Int(self.musicController.playerState?.track.duration ?? 0) - (self.musicController.playerState?.playbackPosition ?? 0)).msToSeconds.minuteSecondMS.description).font(.system(size: 10))
-                                }.frame(width: geom.size.width * 0.8)
-                            }.padding(.bottom)
-                            Spacer()
-                        }
-                    }
-                    
-                    VStack {
-                        if (self.current_title_offset <= -260) {
-                            Spacer().frame(height: 300)
-                        }
-                        ForEach(self.songListVM.songs, id: \.self) { song in
-                            VStack {
-                                SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
-                                Divider()
-                                    .padding(.horizontal)
-                                    .padding(.top, -5)
-                            }
-                        }
-                        Spacer().frame(height: 100)
-                    }.animation(.easeInOut(duration: 0.2))
+        
+        ScrollView {
+            GeometryReader { geo -> AnyView? in
+                let thisOffset = geo.frame(in: .global).minY
+                if thisOffset > -190 {
+                    self.current_title_offset = thisOffset
+                } else {
+                    self.current_title_offset = -260
                 }
+                return nil
+            }
+            if (self.current_title_offset > -260) {
+                VStack {
+                    HStack {
+                        Spacer()
+                        CurrentSongView(playerStateVM: self.playerStateVM)
+                        Spacer()
+                    }
+                    ProgressBarView(playerStateVM: self.playerStateVM)
+                    Spacer()
+                }
+            }
+            
+            VStack {
+                if (self.current_title_offset <= -260) {
+                    Spacer().frame(height: 300)
+                }
+                ForEach(self.songListVM.songs, id: \.self) { song in
+                    VStack {
+                        SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
+                        Divider()
+                            .padding(.horizontal)
+                            .padding(.top, -5)
+                    }
+                }
+                Spacer().frame(height: 100)
+            }.animation(.easeInOut(duration: 0.2))
         }
         
     }

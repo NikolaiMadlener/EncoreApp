@@ -45,6 +45,7 @@
 		8F8FE234249FBB0B006674E8 /* AuthenticationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationSheet.swift */; };
 		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
 		8FB1058C24AB56DF007C15A1 /* AddSongsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */; };
+		8FDEBF7C24AD2D240090B5F2 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */; };
 		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
 		9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,7 @@
 		8F8FE233249FBB0B006674E8 /* AuthenticationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationSheet.swift; sourceTree = "<group>"; };
 		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongsBarView.swift; sourceTree = "<group>"; };
+		8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
 		CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_encoreApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp.release.xcconfig"; path = "Target Support Files/Pods-encoreApp/Pods-encoreApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -251,6 +253,7 @@
 				23190673247DB53600DA550B /* HomeView.swift */,
 				8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */,
 				8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */,
+				8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				233D2ACE2491990100994038 /* UserListVM.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
+				8FDEBF7C24AD2D240090B5F2 /* ProgressBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

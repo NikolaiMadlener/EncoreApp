@@ -50,12 +50,11 @@ class PlayerStateVM: ObservableObject {
         eventSource.connect()
         
         eventSource.addEventListener("sse:player_state_change") { [weak self] id, event, dataString in
-            print("eventListener Data:" + "\(dataString)")
             // Convert HTTP Response Data to a String
             if let dataString = dataString {
                 print("\\")
                 dataString.replacingOccurrences(of: "\\", with: "")
-                print("eventListener Data:" + "\(dataString)")
+                print("eventListener Data Playerstate:" + "\(dataString)")
                 let data: Data? = dataString.data(using: .utf8)
                 if let data = data {
                     do {
@@ -69,6 +68,7 @@ class PlayerStateVM: ObservableObject {
                                 self?.progress = decodedData.progress
                                 self?.calculatePlayBarPosition()
                                 self?.song = sng
+                                //print("Namee: \(self!.song.name)")
                                 
                                 if userVM.isAdmin {
                                     self?.appRemote?.authorizeAndPlayURI("spotify:track:" + "\(String(describing: sng.id))")
@@ -104,7 +104,10 @@ class PlayerStateVM: ObservableObject {
         var numerator = CGFloat(self.progress ?? 1)
         var denominator = CGFloat(Int(self.song.duration_ms ?? 1))
         self.normalizedPlaybackPosition = numerator / denominator
-        print(self.normalizedPlaybackPosition)
+        print("SongName\(self.song.name)")
+        print("Progress\(numerator)")
+        print("Durations\(self.song.duration_ms)")
+        print("Valuee\(self.normalizedPlaybackPosition)")
     }
     
     func getPlayerState() {
@@ -156,7 +159,6 @@ class PlayerStateVM: ObservableObject {
                                 self.appRemote?.playerAPI?.resume(self.defaultCallback)
                             }
                         }
-                        
                     }
                 } catch {
                     print("Error")
@@ -176,7 +178,7 @@ class PlayerStateVM: ObservableObject {
     }
     
     @objc func updatePlayerState(){
-        getPlayerState()
+        //getPlayerState()
     }
 }
 
