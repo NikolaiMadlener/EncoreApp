@@ -32,6 +32,8 @@ struct ContentView: View {
     
     @State var deviceID = ""
     
+    @State var showActivityIndicator = false
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -77,30 +79,39 @@ struct ContentView: View {
                             //                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
                             //                                EmptyView()
                             //                            }
-                            Button(action: {
-                                self.createSession(username: self.username)
-                            }) {
-                                Text("Create Session")
-                                    .font(.headline)
-                                    .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
-                            }.disabled(username.count < 1)
-                                .padding(5)
-                                .sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                            ZStack {
+                                if !showActivityIndicator {
+                                    Button(action: {
+                                        self.createSession(username: self.username)
+                                    }) {
+                                        Text("Create Session")
+                                            .font(.headline)
+                                            .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
+                                    }.disabled(username.count < 1)
+                                        .padding(5)
+                                        
+                                    //                            Button(action: {
+                                    //                                                self.showAuthSheet = true
+                                    //
+                                    //                                            }) {
+                                    //                                                Text("Connect with Spotify")
+                                    //                                                    .font(.headline)
+                                    //                                                    .padding(10)
+                                    //                                            }
                                     
+                                } else {
+                                    ActivityIndicator()
+                                        .frame(width: 30, height: 30).foregroundColor(Color("purpleblue"))
+                                }
+                            }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
                                     self.getAuthToken()
+                                    self.showActivityIndicator = false
                                 }) {
-//                                    AuthenticationSheet(url: URL(string: self.userVM.auth_url)!, showAuthSheet: self.$showAuthSheet)
-                                    AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet)
+                                    //                                    AuthenticationSheet(url: URL(string: self.userVM.auth_url)!, showAuthSheet: self.$showAuthSheet)
+                                    AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
                             }
-                            //                            Button(action: {
-                            //                                                self.showAuthSheet = true
-                            //
-                            //                                            }) {
-                            //                                                Text("Connect with Spotify")
-                            //                                                    .font(.headline)
-                            //                                                    .padding(10)
-                            //                                            }
                         }
+                        
                         Spacer()
                     }.animation(.default)
                 }
@@ -234,6 +245,8 @@ struct ContentView: View {
             invalidUsername = false
         }
         
+        self.showActivityIndicator = true
+        
         guard let url = URL(string: "https://api.encore-fm.com/admin/"+"\(username)"+"/createSession") else {
             print("Invalid URL")
             return
@@ -360,6 +373,7 @@ struct ContentView: View {
                                 self.currentlyInSession = false
                             } else {
                                 self.currentlyInSession = true
+                                self.showActivityIndicator = false
                             }
                             self.getDeviceID()
                         }
@@ -396,6 +410,7 @@ struct ContentView: View {
                 print("Response data string device:\n \(dataString)")
                 do {
                     let deviceList = try JSONDecoder().decode([String: [Device]].self, from: data)
+                    print("DEVICES")
                     print(deviceList["devices"])
                     self.deviceID = deviceList["devices"]?.first?.id ?? ""
                     self.connectWithSpotify()

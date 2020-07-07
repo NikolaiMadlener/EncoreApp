@@ -14,6 +14,7 @@ import WebKit
 struct AuthenticationWebView: UIViewRepresentable {
     @ObservedObject var webVM: WebVM
     @Binding var showAuthSheet: Bool
+    @Binding var showActivityIndicator: Bool
 
     let webView = WKWebView()
 
@@ -30,6 +31,7 @@ struct AuthenticationWebView: UIViewRepresentable {
         
         if webVM.link == "encore-fm.com" {
             self.showAuthSheet = false
+            self.showActivityIndicator = false
         }
         
         return
