@@ -11,6 +11,8 @@ import SwiftUI
 struct SuggestSongView: View {
     @ObservedObject var searchResultListVM: SearchResultListVM
     @ObservedObject var userVM: UserVM
+    @ObservedObject var songListVM: SongListVM
+    @ObservedObject var playerStateVM: PlayerStateVM
     @State private var searchText : String = ""
     //@State var songs: [Song] = []
     typealias JSONStandard = [String : AnyObject]
@@ -20,7 +22,7 @@ struct SuggestSongView: View {
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search songs")
             List {
                 ForEach(searchResultListVM.items, id: \.self) { song in
-                    SuggestSongCell(searchResultListVM: self.searchResultListVM, song: song)
+                    SuggestSongCell(searchResultListVM: self.searchResultListVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, song: song)
                 }
             }
         }
@@ -31,6 +33,6 @@ struct AddSongView_Previews: PreviewProvider {
     static var userVM = UserVM()
     static var searchResultListVM = SearchResultListVM(userVM: userVM)
     static var previews: some View {
-        SuggestSongView(searchResultListVM: searchResultListVM, userVM: userVM)
+        SuggestSongView(searchResultListVM: searchResultListVM, userVM: userVM, songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: userVM))
     }
 }

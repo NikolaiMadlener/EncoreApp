@@ -150,7 +150,7 @@ struct HomeView: View {
             Spacer()
             HStack {
                 Spacer()
-                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
+                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
                 Spacer()
             }.padding(.bottom)
         }

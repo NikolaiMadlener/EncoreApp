@@ -13,8 +13,10 @@ import Kingfisher
 class PlayerStateVM: ObservableObject {
     @Published var song: Song
     @Published var progress: Int64
+    @Published var isPlaying: Bool
     @Published var normalizedPlaybackPosition: CGFloat = 0
     @Published var albumCover: UIImage = UIImage(imageLiteralResourceName: "albumPlaceholder")
+    @Published var songTimestamp_ms: CGFloat = 0
     var serverURL: URL
     var userVM: UserVM
     var eventSource: EventSource
@@ -42,6 +44,7 @@ class PlayerStateVM: ObservableObject {
         var emptySong = Song(id: "0", name: "", artists: [""], duration_ms: 1, cover_url: "https://musicnotesbox.com/media/catalog/product/7/3/73993_image.png", album_name: "", preview_url: "", suggested_by: "", score: 0, time_added: "", upvoters: [], downvoters: [])
         song = emptySong
         progress = 0
+        isPlaying = false
         self.userVM = userVM
         
         serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)"+"/\(userVM.sessionID)")!
@@ -68,7 +71,8 @@ class PlayerStateVM: ObservableObject {
                                 self?.progress = decodedData.progress
                                 self?.calculatePlayBarPosition()
                                 self?.song = sng
-                                //print("Namee: \(self!.song.name)")
+                                self?.isPlaying = decodedData.is_playing
+                                self?.syncProgressBar()
                                 
                                 if userVM.isAdmin {
                                     self?.appRemote?.authorizeAndPlayURI("spotify:track:" + "\(String(describing: sng.id))")
@@ -108,6 +112,11 @@ class PlayerStateVM: ObservableObject {
         print("Progress\(numerator)")
         print("Durations\(self.song.duration_ms)")
         print("Valuee\(self.normalizedPlaybackPosition)")
+    }
+    
+    func syncProgressBar() {
+        print("STATEe: \(isPlaying)")
+        songTimestamp_ms = CGFloat(progress)
     }
     
     func getPlayerState() {
