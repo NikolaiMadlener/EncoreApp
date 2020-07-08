@@ -67,7 +67,7 @@ struct HomeView: View {
                         CurrentSongView(playerStateVM: self.playerStateVM)
                         Spacer()
                     }
-                    ProgressBarView(playerStateVM: self.playerStateVM)
+                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
                     Spacer()
                 }
             }
@@ -95,39 +95,7 @@ struct HomeView: View {
     private var songTitleBar_layer: some View {
         GeometryReader { geo in
             if (self.current_title_offset <= -260) {
-                VStack(alignment: .leading) {
-                    ZStack(alignment: .top) {
-                        VStack(spacing: 0) {
-                            Rectangle()
-                                .frame(width: geo.size.width, height: geo.size.height * 0.13)
-                                .foregroundColor(Color.clear)
-                                //.background(Blur(colorScheme: self.colorScheme))
-                                .background(self.colorScheme == .dark ? Color(.black) : Color(.white))
-                            ZStack(alignment: .leading) {
-                                Rectangle()
-                                    .frame(width: geo.size.width, height: 3)
-                                    .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
-                                Rectangle()
-                                    .frame(width: (self.playerStateVM.normalizedPlaybackPosition * geo.size.width), height: 4).cornerRadius(5)
-                                    .foregroundColor(Color("purpleblue"))
-                            }
-                            
-                        }.edgesIgnoringSafeArea(.top)
-                        HStack {
-                            Image(uiImage: self.playerStateVM.albumCover)
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                            VStack(alignment: .leading) {
-                                Text("\(self.playerStateVM.song.name)")
-                                    .font(.system(size: 15, weight: .bold))
-                                Text("\(self.playerStateVM.song.artists[0])")
-                                    .font(.system(size: 10, weight: .semibold))
-                            }
-                            Spacer()
-                        }.padding()
-                    }
-                    Spacer()
-                }
+                CurrentSongCompactView(playerStateVM: self.playerStateVM)
                 Spacer()
             }
         }

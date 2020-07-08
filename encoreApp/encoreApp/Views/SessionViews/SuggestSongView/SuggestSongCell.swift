@@ -52,7 +52,7 @@ struct SuggestSongCell: View {
             if songListVM.songs.map({ $0.id }).contains(song.id) || playerStateVM.song.id == song.id {
                 Image(systemName: "checkmark.square")
                     .font(.system(size: 35, weight: .light))
-                    .foregroundColor(Color.green)
+                    .foregroundColor(Color("purpleblue"))
             } else {
                 Image(systemName: "plus.square.fill")
                     .font(.system(size: 35, weight: .light))
