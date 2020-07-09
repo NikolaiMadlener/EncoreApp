@@ -7,10 +7,12 @@
 //
 
 import SwiftUI
+import URLImage
 
 struct CurrentSongCompactView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var playerStateVM: PlayerStateVM
+    @State var currentImage: Image = Image("albumPlaceholder")
     
     var body: some View {
         ZStack() {
@@ -24,9 +26,7 @@ struct CurrentSongCompactView: View {
                 }
             }
             HStack() {
-                Image(uiImage: self.playerStateVM.albumCover)
-                    .resizable()
-                    .frame(width: 50, height: 50)
+                albumView
                 VStack(alignment: .leading) {
                     Text("\(self.playerStateVM.song.name)")
                         .font(.system(size: 16, weight: .bold))
@@ -37,6 +37,19 @@ struct CurrentSongCompactView: View {
             }.padding(.horizontal)
                 .padding(.top, 20)
         }.edgesIgnoringSafeArea(.top)
+    }
+    
+    private var albumView: some View {
+        URLImage(URL(string: playerStateVM.song.cover_url)!, placeholder: { _ in
+                // Replace placeholder image with text
+                self.currentImage.opacity(0.0)
+        }, content: {
+               $0.image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 50, height: 50)
+                .cornerRadius(5)
+            })
     }
 }
 
