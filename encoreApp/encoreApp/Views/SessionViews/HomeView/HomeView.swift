@@ -11,7 +11,7 @@ import URLImage
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var musicController: MusicController = .shared
+    //@ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
@@ -23,6 +23,7 @@ struct HomeView: View {
     @State var current_title_offset: CGFloat = 0
     @State var isPlay = true
     
+    
     init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
         self.userVM = userVM
         self._currentlyInSession = currentlyInSession
@@ -33,16 +34,32 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
+            
             //Layer 1: Song Queue Layer
             songQueue_layer
             
+            // for hiding Song Queue Layer above Song Title Layer
+            if (self.current_title_offset <= -260) {
+                VStack {
+                    Rectangle()
+                        .frame(height: 50)
+                        .foregroundColor(self.colorScheme == .dark ? Color(.black) : Color(.white))
+                    Spacer()
+                }.edgesIgnoringSafeArea(.top)
+            }
+            
             //Layer 2: Song Title Layer
-            songTitleBar_layer
+            if (self.current_title_offset <= -260) {
+                VStack {
+                    SongTitleBarView(playerStateVM: self.playerStateVM)
+                    Spacer()
+                }
+            }
             
             //Layer 3: Menu Layer
             menu_layer
-        }//.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
-
+        }//.onAppear{ self.playerStateVM.viewDidLoad() }
+        // triggers updates on every second
     }
     
     
@@ -62,37 +79,39 @@ struct HomeView: View {
                     }
                     if (self.current_title_offset > -260) {
                         VStack {
+                            Spacer().frame(height: 30)
                             HStack {
                                 Spacer()
                                 CurrentSongView(playerStateVM: self.playerStateVM)
                                 Spacer()
                             }
-                            VStack(spacing: 5) {
-                                ZStack(alignment: .leading) {
-                                    Rectangle()
-                                        .frame(width: geom.size.width * 0.8, height: 4)
-                                        .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
-                                        .cornerRadius(5)
-                                    Rectangle()
-                                        .frame(width: (/*self.musicController*/self.playerStateVM.normalizedPlaybackPosition * geom.size.width * 0.8), height: 4)
-                                        .foregroundColor(Color("purpleblue"))
-                                        .cornerRadius(5)
-                                }
-                                HStack {
-                                    Text(/*self.musicController.playerState?.playbackPosition*/Int(self.playerStateVM.progress).msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
-                                    Spacer()
-                                    Text("-" + (Int(self.musicController.playerState?.track.duration ?? 0) - (self.musicController.playerState?.playbackPosition ?? 0)).msToSeconds.minuteSecondMS.description).font(.system(size: 10))
-                                }.frame(width: geom.size.width * 0.8)
-                            }.padding(.bottom)
+                            //                            VStack(spacing: 5) {
+                            //                                ZStack(alignment: .leading) {
+                            //                                    Rectangle()
+                            //                                        .frame(width: geom.size.width * 0.8, height: 4)
+                            //                                        .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+                            //                                        .cornerRadius(5)
+                            //                                    Rectangle()
+                            //                                        .frame(width: (/*self.musicController*/self.playerStateVM.normalizedPlaybackPosition * geom.size.width * 0.8), height: 4)
+                            //                                        .foregroundColor(Color("purpleblue"))
+                            //                                        .cornerRadius(5)
+                            //                                }
+                            //                                HStack {
+                            //                                    Text(/*self.musicController.playerState?.playbackPosition*/Int(self.playerStateVM.progress).msToSeconds.minuteSecondMS.description ?? "--:--").font(.system(size: 10))
+                            //                                    Spacer()
+                            //                                    Text("-" + (Int(self.musicController.playerState?.track.duration ?? 0) - (self.musicController.playerState?.playbackPosition ?? 0)).msToSeconds.minuteSecondMS.description).font(.system(size: 10))
+                            //                                }.frame(width: geom.size.width * 0.8)
+                            //                            }.padding(.bottom)
                             Spacer()
                         }
                     }
                     
                     VStack {
                         if (self.current_title_offset <= -260) {
-                            Spacer().frame(height: 300)
+                            Spacer().frame(height: 280)
                         }
                         ForEach(self.songListVM.songs, id: \.self) { song in
+                            
                             VStack {
                                 SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
                                 Divider()
@@ -104,9 +123,7 @@ struct HomeView: View {
                     }.animation(.easeInOut(duration: 0.2))
                 }
         }
-        
     }
-    
     
     //MARK: Layer 2: Song Title Bar Layer
     private var songTitleBar_layer: some View {
@@ -159,9 +176,9 @@ struct HomeView: View {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .padding()
+                        .padding(20)
                 }.sheet(isPresented: self.$showMenuSheet) {
-                        MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()
@@ -224,3 +241,4 @@ extension Int {
         return Double(self) / 1000
     }
 }
+

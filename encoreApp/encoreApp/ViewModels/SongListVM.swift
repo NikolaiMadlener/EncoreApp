@@ -14,14 +14,22 @@ class SongListVM: ObservableObject {
     var serverURL: URL
     var userVM: UserVM
     var eventSource: EventSource
+    var lastEventId: String?
     
     init(userVM: UserVM) {
+        print("INIT SONGLISTVM")
         self.userVM = userVM
         
         serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)"+"/\(userVM.sessionID)")!
         eventSource = EventSource(url: serverURL)
         
         eventSource.connect()
+        
+        eventSource.onComplete { [weak self] statusCode, reconnect, error in
+            DispatchQueue.main.asyncAfter(deadline: .now()) { [weak self] in
+                self?.eventSource.connect()
+            }
+        }
         
         eventSource.addEventListener("sse:playlist_change") { [weak self] id, event, dataString in
             print("eventListener Data:" + "(dataString)")
@@ -38,11 +46,17 @@ class SongListVM: ObservableObject {
                             print()
                         }
                     } catch {
-                        print("Error")
+                        print("Error SSE playlist change")
                         
                     }
                 }
             }
         }
+    }
+    
+    func reconnect() {
+        print("reconnect")
+        //eventSource.connect(lastEventId: lastEventId)
+        //lastEventId = eventSource.lastEventId
     }
 }

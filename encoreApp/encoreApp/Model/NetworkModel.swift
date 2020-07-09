@@ -78,7 +78,7 @@ class SearchResultListVM: ObservableObject {
                     let decodedData = try JSONDecoder().decode(Song.self, from: data)
                     print("Successfully post of suggest song: \(decodedData.name)")
                 } catch {
-                    print("Error")
+                    print("Error suggest Song")
                 }
             }
         }

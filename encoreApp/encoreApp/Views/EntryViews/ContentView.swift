@@ -23,10 +23,16 @@ struct ContentView: View {
     @State var showScannerSheet = false
     @State var scannedCode: String?
     
+    @State var showAuthSheet = false
+    
     @State var invalidUsername = false
     
     @State var auth_url: String = ""
     @State var sessionCreated: Bool? = false
+    
+    @State var deviceID = ""
+    
+    @State var showActivityIndicator = false
     
     var body: some View {
         NavigationView {
@@ -64,27 +70,52 @@ struct ContentView: View {
                                     .modifier(RoundButtonModifier(isDisabled: username.count < 1, backgroundColor: Color("darkgray"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
                             .padding(5)
-                        
+                            .sheet(isPresented: self.$showScannerSheet) {
+                                self.scannerSheet
+                        }
                         Spacer().frame(height: 40)
                         Text("Or create a new one and invite your Friends").font(.footnote)
                         VStack {
-//                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
-//                                EmptyView()
-//                            }
-                            Button(action: {
-                                self.createSession(username: self.username)
-                            }) {
-                                Text("Create Session")
-                                    .font(.headline)
-                                    .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
-                            }.disabled(username.count < 1)
-                                .padding(5)
+                            //                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
+                            //                                EmptyView()
+                            //                            }
+                            ZStack {
+                                if !showActivityIndicator {
+                                    Button(action: {
+                                        self.createSession(username: self.username)
+                                    }) {
+                                        Text("Create Session")
+                                            .font(.headline)
+                                            .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
+                                    }.disabled(username.count < 1)
+                                        .padding(5)
+                                        
+                                    //                            Button(action: {
+                                    //                                                self.showAuthSheet = true
+                                    //
+                                    //                                            }) {
+                                    //                                                Text("Connect with Spotify")
+                                    //                                                    .font(.headline)
+                                    //                                                    .padding(10)
+                                    //                                            }
+                                    
+                                } else {
+                                    ActivityIndicator()
+                                        .frame(width: 30, height: 30).foregroundColor(Color("purpleblue"))
+                                }
+                            }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                                    self.getAuthToken()
+                                    self.showActivityIndicator = false
+                                }) {
+                                    //                                    AuthenticationSheet(url: URL(string: self.userVM.auth_url)!, showAuthSheet: self.$showAuthSheet)
+                                    AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
+                            }
                         }
+                        
                         Spacer()
                     }.animation(.default)
-                }.sheet(isPresented: self.$showScannerSheet) {
-                    self.scannerSheet
-                }.alert(isPresented: $showServerErrorAlert) {
+                }
+                .alert(isPresented: $showServerErrorAlert) {
                     Alert(title: Text("Server Error"),
                           message: Text(""),
                           dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
@@ -97,6 +128,7 @@ struct ContentView: View {
             }
         }
     }
+    
     
     var scannerSheet : some View {
         ZStack {
@@ -197,8 +229,6 @@ struct ContentView: View {
                         self.userVM.sessionID = self.sessionID
                         self.currentlyInSession = true
                         self.getClientToken()
-                        print("CLIENTTOKENN\(self.userVM.clientToken)")
-                        print(self.userVM.username)
                     }
                     self.currentlyInSession = true
                 }
@@ -215,6 +245,8 @@ struct ContentView: View {
             invalidUsername = false
         }
         
+        self.showActivityIndicator = true
+        
         guard let url = URL(string: "https://api.encore-fm.com/admin/"+"\(username)"+"/createSession") else {
             print("Invalid URL")
             return
@@ -228,6 +260,7 @@ struct ContentView: View {
         // Set HTTP Request Body
         //request.httpBody = postString.data(using: String.Encoding.utf8);
         // Perform HTTP Request
+        var auth_url = ""
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             // Check for Error
@@ -247,7 +280,9 @@ struct ContentView: View {
                         if let userInfo = json["user_info"] as? [String: Any] {
                             self.sessionID = userInfo["session_id"] as! String
                             self.secret = userInfo["secret"] as! String
+                            
                         }
+                        
                         self.auth_url = json["auth_url"] as! String
                     }
                 } catch let error as NSError {
@@ -261,9 +296,9 @@ struct ContentView: View {
                 self.userVM.isAdmin = true
                 self.userVM.secret = self.secret
                 self.userVM.sessionID = self.sessionID
-                self.currentlyInSession = true
+                self.userVM.auth_url = self.auth_url
+                
                 self.getClientToken()
-                print(self.userVM.username)
             }
         }
         task.resume()
@@ -295,18 +330,135 @@ struct ContentView: View {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         clientToken = json["access_token"] as! String
-                        self.userVM.clientToken = clientToken
-                        print("CLIENTTOKENBefor\(clientToken)")
+                        DispatchQueue.main.async {
+                            self.userVM.clientToken = clientToken
+                            self.showAuthSheet = true
+                        }
                     }
                 } catch {
-                    print("Error")
+                    print("Error Get Client Token")
                 }
             }
         }
-        print("CLIENTTOKENMiddle\(clientToken)")
         task.resume()
-        print("CLIENTTOKENAfter\(clientToken)")
-        return
+    }
+    
+    func getAuthToken() {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/authToken") else {
+            print("Invalid URL")
+            return
+            
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string authToken:\n \(dataString)")
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        DispatchQueue.main.async {
+                            self.userVM.authToken = json["access_token"] as? String ?? ""
+                            if self.userVM.authToken == "" {
+                                self.currentlyInSession = false
+                            } else {
+                                self.currentlyInSession = true
+                                self.showActivityIndicator = false
+                            }
+                            self.getDeviceID()
+                        }
+                    }
+                } catch {
+                    print("Error get Auth Token")
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    func getDeviceID() {
+        guard let url = URL(string: "https://api.spotify.com/v1/me/player/devices") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("Bearer " + userVM.authToken, forHTTPHeaderField: "Authorization")
+        
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string device:\n \(dataString)")
+                do {
+                    let deviceList = try JSONDecoder().decode([String: [Device]].self, from: data)
+                    print("DEVICES")
+                    print(deviceList["devices"])
+                    self.deviceID = deviceList["devices"]?.first?.id ?? ""
+                    self.connectWithSpotify()
+                } catch {
+                    print("Error get Device ID")
+                }
+            }
+            
+        }
+        task.resume()
+    }
+    
+    func connectWithSpotify() {
+        guard let url = URL(string: "https://api.spotify.com/v1/me/player") else {
+            print("Invalid URL")
+            return
+            
+        }
+        var request = URLRequest(url: url)
+        let json: [String: Any] = ["device_ids": [deviceID],
+                                   "play": true]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        
+        request.httpMethod = "PUT"
+        request.addValue("Bearer " + userVM.authToken, forHTTPHeaderField: "Authorization")
+        request.addValue(userVM.sessionID, forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                
+            }
+        }
+        task.resume()
     }
 }
 
@@ -319,3 +471,38 @@ struct ContentView_Previews: PreviewProvider {
         ContentView(userVM: userVM, currentlyInSession: $signInSuccess)
     }
 }
+
+struct Device: Codable, Hashable {
+    
+    var id: String
+    var is_active: Bool
+    var is_private_session: Bool
+    var is_restricted: Bool
+    var name: String
+    var type: String
+    var volume_percent: Int
+    
+    init(id: String,
+         is_active: Bool,
+         is_private_session: Bool,
+         is_restricted: Bool,
+         name: String,
+         type: String,
+         volume_percent: Int
+    ) {
+        self.id = id
+        self.is_active = is_active
+        self.is_private_session = is_private_session
+        self.is_restricted = is_restricted
+        self.name = name
+        self.type = type
+        self.volume_percent = volume_percent
+        
+    }
+}
+
+struct DeviceList: Codable, Hashable {
+    var devices: [Device]
+}
+
+
