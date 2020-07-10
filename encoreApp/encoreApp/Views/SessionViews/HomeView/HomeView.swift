@@ -105,16 +105,6 @@ struct HomeView: View {
         }
     }
     
-    //MARK: Layer 2: Song Title Bar Layer
-    private var songTitleBar_layer: some View {
-        GeometryReader { geo in
-            if (self.current_title_offset <= -260) {
-                CurrentSongCompactView(playerStateVM: self.playerStateVM)
-                Spacer()
-            }
-        }
-    }
-    
     //MARK: Layer 3: Menu Layer
     private var menu_layer: some View {
         VStack {

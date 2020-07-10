@@ -6,6 +6,7 @@
 //  Copyright © 2020 NikolaiEtienne. All rights reserved.
 //
 
+//Obsolete: We are using SongTitleBarView instead
 import SwiftUI
 import URLImage
 

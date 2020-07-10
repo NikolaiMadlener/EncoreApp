@@ -33,7 +33,7 @@ struct ProgressBarView: View {
                         self.playerStateVM.songTimestamp_ms += self.updateFrequency_ms
                     }
                 }
-        }
+        }.padding(.bottom)
     }
 }
 
