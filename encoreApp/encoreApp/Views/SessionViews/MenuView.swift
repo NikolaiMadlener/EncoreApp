@@ -21,7 +21,7 @@ struct MenuView: View {
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
-        self.userListVM = UserListVM(userVM: UserVM())
+        self.userListVM = UserListVM(userVM: userVM)
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
     }
@@ -69,7 +69,7 @@ struct MenuView: View {
                                             }
                                             Spacer()
                                             if member.is_admin {
-                                                Text("Host")
+                                                Image(systemName: "music.house")
                                             }
                                             else if member.username == self.userVM.username {
                                                 Text("You")

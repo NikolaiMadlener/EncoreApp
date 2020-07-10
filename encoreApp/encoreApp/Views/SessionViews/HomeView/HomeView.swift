@@ -11,7 +11,7 @@ import URLImage
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var musicController: MusicController = .shared
+    //@ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
@@ -24,6 +24,7 @@ struct HomeView: View {
     @State var isPlay = true
     @State var value: Float = 0.8
     
+    
     init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
         self.userVM = userVM
         self._currentlyInSession = currentlyInSession
@@ -34,22 +35,37 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
+            
             //Layer 1: Song Queue Layer
             songQueue_layer
             
+            // for hiding Song Queue Layer above Song Title Layer
+            if (self.current_title_offset <= -260) {
+                VStack {
+                    Rectangle()
+                        .frame(height: 50)
+                        .foregroundColor(self.colorScheme == .dark ? Color(.black) : Color(.white))
+                    Spacer()
+                }.edgesIgnoringSafeArea(.top)
+            }
+            
             //Layer 2: Song Title Layer
-            songTitleBar_layer
+            if (self.current_title_offset <= -260) {
+                VStack {
+                    SongTitleBarView(playerStateVM: self.playerStateVM)
+                    Spacer()
+                }
+            }
             
             //Layer 3: Menu Layer
             menu_layer
-        }//.onAppear{ self.playerStateVM.viewDidLoad() } // triggers updates on every second
-
+        }//.onAppear{ self.playerStateVM.viewDidLoad() }
+        // triggers updates on every second
     }
     
     
     //MARK: Layer 1: Song Queue Layer
     private var songQueue_layer: some View {
-        
         ScrollView {
             GeometryReader { geo -> AnyView? in
                 let thisOffset = geo.frame(in: .global).minY
@@ -74,7 +90,7 @@ struct HomeView: View {
             
             VStack {
                 if (self.current_title_offset <= -260) {
-                    Spacer().frame(height: 300)
+                    Spacer().frame(height: 280)
                 }
                 ForEach(self.songListVM.songs, id: \.self) { song in
                     VStack {
@@ -87,9 +103,7 @@ struct HomeView: View {
                 Spacer().frame(height: 100)
             }.animation(.easeInOut(duration: 0.2))
         }
-        
     }
-    
     
     //MARK: Layer 2: Song Title Bar Layer
     private var songTitleBar_layer: some View {
@@ -110,9 +124,9 @@ struct HomeView: View {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .padding()
+                        .padding(20)
                 }.sheet(isPresented: self.$showMenuSheet) {
-                        MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()
@@ -175,3 +189,4 @@ extension Int {
         return Double(self) / 1000
     }
 }
+

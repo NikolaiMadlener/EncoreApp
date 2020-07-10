@@ -150,7 +150,7 @@ struct SongListCell: View {
                         
                     }
                 } catch {
-                    print("Error")
+                    print("Error Upvote")
                     //self.showSessionExpiredAlert = true
                     //self.currentlyInSession = false
                 }
@@ -195,7 +195,7 @@ struct SongListCell: View {
                         
                     }
                 } catch {
-                    print("Error")
+                    print("Error Downvote")
                     //self.showSessionExpiredAlert = true
                     //self.currentlyInSession = false
                 }
