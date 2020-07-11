@@ -13,8 +13,10 @@ import Kingfisher
 class PlayerStateVM: ObservableObject {
     @Published var song: Song
     @Published var progress: Int64
+    @Published var isPlaying: Bool
     @Published var normalizedPlaybackPosition: CGFloat = 0
     @Published var albumCover: UIImage = UIImage(imageLiteralResourceName: "albumPlaceholder")
+    @Published var songTimestamp_ms: CGFloat = 0
     var serverURL: URL
     var userVM: UserVM
     var eventSource: EventSource
@@ -42,6 +44,7 @@ class PlayerStateVM: ObservableObject {
         var emptySong = Song(id: "0", name: "", artists: [""], duration_ms: 1, cover_url: "https://musicnotesbox.com/media/catalog/product/7/3/73993_image.png", album_name: "", preview_url: "", suggested_by: "", score: 0, time_added: "", upvoters: [], downvoters: [])
         song = emptySong
         progress = 0
+        isPlaying = false
         self.userVM = userVM
         
         serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)"+"/\(userVM.sessionID)")!
@@ -56,12 +59,11 @@ class PlayerStateVM: ObservableObject {
         }
         
         eventSource.addEventListener("sse:player_state_change") { [weak self] id, event, dataString in
-            print("eventListener Data:" + "\(dataString)")
             // Convert HTTP Response Data to a String
             if let dataString = dataString {
                 print("\\")
                 dataString.replacingOccurrences(of: "\\", with: "")
-                print("eventListener Data:" + "\(dataString)")
+                print("eventListener Data Playerstate:" + "\(dataString)")
                 let data: Data? = dataString.data(using: .utf8)
                 if let data = data {
                     do {
@@ -75,6 +77,8 @@ class PlayerStateVM: ObservableObject {
                                 self?.progress = decodedData.progress
                                 self?.calculatePlayBarPosition()
                                 self?.song = sng
+                                self?.isPlaying = decodedData.is_playing
+                                self?.syncProgressBar()
                                 
 //                                if userVM.isAdmin {
 //                                    self?.appRemote?.authorizeAndPlayURI("spotify:track:" + "\(String(describing: sng.id))")
@@ -110,7 +114,15 @@ class PlayerStateVM: ObservableObject {
         var numerator = CGFloat(self.progress ?? 1)
         var denominator = CGFloat(Int(self.song.duration_ms ?? 1))
         self.normalizedPlaybackPosition = numerator / denominator
-        print(self.normalizedPlaybackPosition)
+        print("SongName\(self.song.name)")
+        print("Progress\(numerator)")
+        print("Durations\(self.song.duration_ms)")
+        print("Valuee\(self.normalizedPlaybackPosition)")
+    }
+    
+    func syncProgressBar() {
+        print("STATEe: \(isPlaying)")
+        songTimestamp_ms = CGFloat(progress)
     }
     
     func getPlayerState() {
@@ -153,7 +165,7 @@ class PlayerStateVM: ObservableObject {
                         } else {
                             self.progress = 0
                         }
-                        
+   
 //                        if self.userVM.isAdmin {
 //                            
 //                            if decodedData.is_playing == false {
@@ -162,7 +174,6 @@ class PlayerStateVM: ObservableObject {
 //                                self.appRemote?.playerAPI?.resume(self.defaultCallback)
 //                            }
 //                        }
-                        
                     }
                 } catch {
                     print("Error Player State VM")
@@ -182,7 +193,7 @@ class PlayerStateVM: ObservableObject {
     }
     
     @objc func updatePlayerState(){
-        getPlayerState()
+        //getPlayerState()
     }
 }
 

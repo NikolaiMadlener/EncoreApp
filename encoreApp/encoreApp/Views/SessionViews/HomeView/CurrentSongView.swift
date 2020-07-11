@@ -37,9 +37,9 @@ struct CurrentSongView: View {
                 .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
                 .blendMode(.multiply)
             Text("\(self.playerStateVM.song.name)")
-                .font(.system(size: 25, weight: .bold))
+                .font(.system(size: 22, weight: .bold))
             Text("\(self.playerStateVM.song.artists[0])")
-                .font(.system(size: 20, weight: .semibold))
+                .font(.system(size: 18, weight: .semibold))
         }
     }
 }
