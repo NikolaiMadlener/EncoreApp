@@ -18,7 +18,7 @@ struct SongTitleBarView: View {
             Rectangle()
                 .frame(height: 50)
                 .cornerRadius(10)
-                .foregroundColor(Color.white)
+                .foregroundColor(self.colorScheme == .dark ? Color(.darkGray) : Color(.white))
                 .shadow(radius: 10)
             VStack {
                 HStack {
@@ -36,9 +36,7 @@ struct SongTitleBarView: View {
                     }
                     Spacer()
                 }
-                // playbar here
             }.padding(.horizontal, 10)
-            
         }.padding(5)
     }
 }
