@@ -89,17 +89,16 @@ struct ContentView: View {
                                             Text("Create Session")
                                         } else {
                                             ActivityIndicator()
-                                                
                                                 .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
                                         }
                                     }
                                     .font(.headline)
                                     .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
-                                    .padding(10)
+                                    .padding(15)
                                     .frame(minWidth: 0, maxWidth: .infinity)
                                         
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
+                                        RoundedRectangle(cornerRadius: 25)
                                             .stroke(username.count < 1 ? Color.gray : Color("purpleblue"), lineWidth: 1)
                                     ).padding(.horizontal, 25)
                                     
