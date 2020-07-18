@@ -42,7 +42,7 @@ struct MenuView: View {
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
                         ZStack {
-                            RoundedRectangle(cornerRadius: 50).frame(width: geo.size.width*0.9, height: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                            RoundedRectangle(cornerRadius: 50).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                             HStack {
                                 Text("Share Session-Link")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
@@ -54,7 +54,7 @@ struct MenuView: View {
                                     .font(.system(size: 20))
                                     .padding(.trailing, 30)
                             }
-                        }.padding(10)
+                        }.padding(.horizontal, 25)
                     }
                     VStack() {
                         List {
@@ -89,10 +89,7 @@ struct MenuView: View {
                     Spacer()
                     Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
                         Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
-                            .padding(15)
-                            .background(Color.red)
-                            .foregroundColor(Color.white)
-                            .cornerRadius(25)
+                            .modifier(RoundButtonModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
                         
                     }.alert(isPresented: self.$showAlert) {
                         Alert(title: Text("Delete Session"),
@@ -108,7 +105,7 @@ struct MenuView: View {
                         //                      message: Text("The Session was closed by the Host."),
                         //                      dismissButton: .default(Text("OK"))
                         //                )
-                    }.padding()
+                    }.padding(.vertical)
                 }
                 
             }.sheet(isPresented: self.$showShareSheet) {

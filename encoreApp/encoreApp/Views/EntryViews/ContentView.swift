@@ -40,7 +40,7 @@ struct ContentView: View {
                 Image("entryBackground")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .edgesIgnoringSafeArea(.all).offset(x: 0, y: 50)
+                    .edgesIgnoringSafeArea(.all).offset(x: 0, y: 75)
                 VStack {
                     Spacer().frame(height: 50)
                     Text("encore.")
@@ -55,7 +55,7 @@ struct ContentView: View {
                     ).padding(.horizontal, 25)
                     if invalidUsername {
                         Text("Name should at least be three characters long and free of special characters and spaces.")
-                            .font(.system(size: 12))
+                            .font(.system(size: 10))
                             .foregroundColor(.red)
                             .padding([.horizontal, .bottom])
                     }
@@ -67,48 +67,66 @@ struct ContentView: View {
                             self.invalidUsername = false
                             }}) {
                                 Text("Join Session")
-                                    .modifier(RoundButtonModifier(isDisabled: username.count < 1, backgroundColor: Color("darkgray"), foregroundColor: Color.white))
+                                    .modifier(RoundButtonModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
-                            .padding(5)
+                            
                             .sheet(isPresented: self.$showScannerSheet) {
                                 self.scannerSheet
                         }
-                        Spacer().frame(height: 40)
+                        Spacer().frame(height: 25)
                         Text("Or create a new one and invite your Friends").font(.footnote)
                         VStack {
                             //                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
                             //                                EmptyView()
                             //                            }
                             ZStack {
-                                if !showActivityIndicator {
-                                    Button(action: {
-                                        self.createSession(username: self.username)
-                                    }) {
-                                        Text("Create Session")
-                                            .font(.headline)
-                                            .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
-                                    }.disabled(username.count < 1)
-                                        .padding(5)
-                                        
-                                    //                            Button(action: {
-                                    //                                                self.showAuthSheet = true
-                                    //
-                                    //                                            }) {
-                                    //                                                Text("Connect with Spotify")
-                                    //                                                    .font(.headline)
-                                    //                                                    .padding(10)
-                                    //                                            }
-                                    
-                                } else {
-                                    ActivityIndicator()
-                                        .frame(width: 30, height: 30).foregroundColor(Color("purpleblue"))
-                                }
-                            }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
-                                    self.getAuthToken()
-                                    self.showActivityIndicator = false
+                                //if !showActivityIndicator {
+                                Button(action: {
+                                    self.createSession(username: self.username)
                                 }) {
-                                    //                                    AuthenticationSheet(url: URL(string: self.userVM.auth_url)!, showAuthSheet: self.$showAuthSheet)
-                                    AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
+                                    ZStack {
+                                        if !showActivityIndicator {
+                                            Text("Create Session")
+                                        } else {
+                                            ActivityIndicator()
+                                                
+                                                .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
+                                        }
+                                    }
+                                    .font(.headline)
+                                    .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
+                                    .padding(10)
+                                    .frame(minWidth: 0, maxWidth: .infinity)
+                                        
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(username.count < 1 ? Color.gray : Color("purpleblue"), lineWidth: 1)
+                                    ).padding(.horizontal, 25)
+                                    
+                                }.disabled(username.count < 1)
+                                    .padding(5)
+                                
+                                //                            Button(action: {
+                                //                                                self.showAuthSheet = true
+                                //
+                                //                                            }) {
+                                //                                                Text("Connect with Spotify")
+                                //                                                    .font(.headline)
+                                //                                                    .padding(10)
+                                //                                            }
+                                
+                                //                                } else {
+                                //                                    ActivityIndicator()
+                                //
+                                //                                        .frame(width: 30, height: 30).foregroundColor(Color("purpleblue"))
+                                //
+                                //                                }
+                            }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                                self.getAuthToken()
+                                self.showActivityIndicator = false
+                            }) {
+                                //                                    AuthenticationSheet(url: URL(string: self.userVM.auth_url)!, showAuthSheet: self.$showAuthSheet)
+                                AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
                             }
                         }
                         

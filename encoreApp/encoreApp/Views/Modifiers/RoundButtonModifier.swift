@@ -16,8 +16,10 @@ struct RoundButtonModifier: ViewModifier {
         content
             .font(.headline)
             .padding(15)
+            .frame(minWidth: 0, maxWidth: .infinity)
             .background(isDisabled ? Color("buttonDisabledGray") : backgroundColor)
             .foregroundColor(isDisabled ? Color("lightgray") : foregroundColor)
             .cornerRadius(25)
+            .padding(.horizontal, 25)
     }
 }
