@@ -174,8 +174,13 @@ struct ContentView: View {
                         .font(.largeTitle)
                         .padding()
                 }
-                Text("Scan the Session's QR code to join")
                 Spacer()
+                Text("Scan the Session's QR code to join")
+                    .font(.system(size: 12))
+                    .padding(5)
+                    .background(Color.gray)
+                    .cornerRadius(25)
+                    .padding()
             }
         }
     }
