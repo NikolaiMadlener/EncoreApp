@@ -46,19 +46,20 @@ struct ContentView: View {
                     Text("encore.")
                         .font(.largeTitle)
                         .bold()
-                    Spacer().frame(height: 100)
+                    Spacer().frame(height: 80)
                     TextField("Enter your Name", text: self.$username)
-                        .padding(10)
+                        .padding(15)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.gray, lineWidth: 1)
-                    ).padding(.horizontal, 25)
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color("purpleblue"), lineWidth: 2)
+                        ).padding(.horizontal, 25)
                     if invalidUsername {
                         Text("Name should at least be three characters long and free of special characters and spaces.")
                             .font(.system(size: 10))
                             .foregroundColor(.red)
                             .padding([.horizontal, .bottom])
                     }
+                    Spacer().frame(height: 20)
                     Group {
                         Button(action: { if self.checkUsernameInvalid(username: self.username) {
                             self.invalidUsername = true
@@ -73,8 +74,9 @@ struct ContentView: View {
                             .sheet(isPresented: self.$showScannerSheet) {
                                 self.scannerSheet
                         }
-                        Spacer().frame(height: 25)
-                        Text("Or create a new one and invite your Friends").font(.footnote)
+                        //Spacer().frame(height: 10)
+                        LabeledDivider(label: "OR")
+                        //Text("Or create a new one and invite your Friends").font(.footnote)
                         VStack {
                             //                            NavigationLink(destination: AuthenticationView(currentlyInSession: self.$currentlyInSession), tag: true, selection: $sessionCreated) {
                             //                                EmptyView()
@@ -93,17 +95,15 @@ struct ContentView: View {
                                         }
                                     }
                                     .font(.headline)
-                                    .foregroundColor(username.count < 1 ? Color("lightgray") : Color("purpleblue"))
+                                    .foregroundColor(username.count < 1 ? Color.gray : Color("purpleblue"))
                                     .padding(15)
                                     .frame(minWidth: 0, maxWidth: .infinity)
-                                        
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 25)
-                                            .stroke(username.count < 1 ? Color.gray : Color("purpleblue"), lineWidth: 1)
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .stroke(username.count < 1 ? Color.gray : Color("purpleblue"), lineWidth: 2)
                                     ).padding(.horizontal, 25)
                                     
                                 }.disabled(username.count < 1)
-                                    .padding(5)
                                 
                                 //                            Button(action: {
                                 //                                                self.showAuthSheet = true

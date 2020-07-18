@@ -44,6 +44,7 @@
 		8F2EF43A24A2ADEE000EC1B7 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */; };
 		8F2EF43C24A34B74000EC1B7 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */; };
 		8F589F5F24B6178F00BA5E60 /* CurrentSongCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F589F5E24B6178F00BA5E60 /* CurrentSongCompactView.swift */; };
+		8F6ADE8924C3716100D8F1F8 /* LabeledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */; };
 		8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE231249E679C006674E8 /* SearchBar.swift */; };
 		8F8FE234249FBB0B006674E8 /* AuthenticationWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */; };
 		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
@@ -94,6 +95,7 @@
 		8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8F589F5E24B6178F00BA5E60 /* CurrentSongCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongCompactView.swift; sourceTree = "<group>"; };
+		8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledDivider.swift; sourceTree = "<group>"; };
 		8F8FE231249E679C006674E8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWebView.swift; sourceTree = "<group>"; };
 		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				23190663247DA25F00DA550B /* ContentView.swift */,
 				2361911A24B3B93D0096D806 /* ActivityIndicator.swift */,
 				231B16C42489A1700006E78B /* JoinViaURLView.swift */,
+				8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */,
 			);
 			path = EntryViews;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */,
 				231CDA2F249E0B9700632B8C /* ImageLoader.swift in Sources */,
 				231CDA28249D3CA600632B8C /* SuggestSongView.swift in Sources */,
+				8F6ADE8924C3716100D8F1F8 /* LabeledDivider.swift in Sources */,
 				23190664247DA25F00DA550B /* ContentView.swift in Sources */,
 				8F27498424A60C880084FC99 /* SuggestSongCell.swift in Sources */,
 				235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */,
@@ -616,7 +620,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
-				DEVELOPMENT_TEAM = UB7P88VGXV;
+				DEVELOPMENT_TEAM = L3RMDJH374;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
