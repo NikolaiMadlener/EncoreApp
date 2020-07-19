@@ -68,7 +68,7 @@ struct LoginView: View {
                             self.invalidUsername = false
                             }}) {
                                 Text("Join Session")
-                                    .modifier(RoundButtonModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
                             
                             .sheet(isPresented: self.$showScannerSheet) {
@@ -94,14 +94,7 @@ struct LoginView: View {
                                                 .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
                                         }
                                     }
-                                    .font(.headline)
-                                    .foregroundColor(username.count < 1 ? Color.gray : Color("purpleblue"))
-                                    .padding(15)
-                                    .frame(minWidth: 0, maxWidth: .infinity)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .stroke(username.count < 1 ? Color.gray : Color("purpleblue"), lineWidth: 2)
-                                    ).padding(.horizontal, 25)
+                                    .modifier(ButtonLightModifier(isDisabled: username.count < 1, foregroundColor: Color.gray))
                                     
                                 }.disabled(username.count < 1)
                                 

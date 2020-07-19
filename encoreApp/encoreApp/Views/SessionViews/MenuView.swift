@@ -89,7 +89,7 @@ struct MenuView: View {
                     Spacer()
                     Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
                         Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
-                            .modifier(RoundButtonModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
+                            .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
                         
                     }.alert(isPresented: self.$showAlert) {
                         Alert(title: Text("Delete Session"),
