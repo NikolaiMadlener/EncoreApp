@@ -50,8 +50,8 @@ struct ContentView: View {
                     TextField("Enter your Name", text: self.$username)
                         .padding(15)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 5)
-                                .stroke(Color("purpleblue"), lineWidth: 2)
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.gray, lineWidth: 2)
                         ).padding(.horizontal, 25)
                     if invalidUsername {
                         Text("Name should at least be three characters long and free of special characters and spaces.")
@@ -99,7 +99,7 @@ struct ContentView: View {
                                     .padding(15)
                                     .frame(minWidth: 0, maxWidth: .infinity)
                                     .overlay(
-                                        RoundedRectangle(cornerRadius: 5)
+                                        RoundedRectangle(cornerRadius: 15)
                                             .stroke(username.count < 1 ? Color.gray : Color("purpleblue"), lineWidth: 2)
                                     ).padding(.horizontal, 25)
                                     
