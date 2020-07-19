@@ -48,6 +48,7 @@
 		8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE231249E679C006674E8 /* SearchBar.swift */; };
 		8F8FE234249FBB0B006674E8 /* AuthenticationWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */; };
 		8F9AF39A24C4A18200FCEFD0 /* ButtonLightModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9AF39924C4A18200FCEFD0 /* ButtonLightModifier.swift */; };
+		8F9AF39C24C4CE3200FCEFD0 /* ScannerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */; };
 		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
 		8FB1058C24AB56DF007C15A1 /* AddSongsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */; };
 		8FDEBF7C24AD2D240090B5F2 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */; };
@@ -100,6 +101,7 @@
 		8F8FE231249E679C006674E8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWebView.swift; sourceTree = "<group>"; };
 		8F9AF39924C4A18200FCEFD0 /* ButtonLightModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLightModifier.swift; sourceTree = "<group>"; };
+		8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSheetView.swift; sourceTree = "<group>"; };
 		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongsBarView.swift; sourceTree = "<group>"; };
 		8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				23190663247DA25F00DA550B /* LoginView.swift */,
+				8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */,
 			);
 			path = LoginView;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */,
+				8F9AF39C24C4CE3200FCEFD0 /* ScannerSheetView.swift in Sources */,
 				2319067C247DBDB600DA550B /* SongListCell.swift in Sources */,
 				231CDA24249D3A8800632B8C /* MusicController.swift in Sources */,
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,
