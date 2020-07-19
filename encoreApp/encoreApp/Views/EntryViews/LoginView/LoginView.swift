@@ -10,7 +10,7 @@ import SwiftUI
 import CodeScanner
 import SafariServices
 
-struct ContentView: View {
+struct LoginView: View {
     @ObservedObject var userVM: UserVM
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
@@ -490,7 +490,7 @@ struct ContentView_Previews: PreviewProvider {
     static var userVM = UserVM()
     
     static var previews: some View {
-        ContentView(userVM: userVM, currentlyInSession: $signInSuccess)
+        LoginView(userVM: userVM, currentlyInSession: $signInSuccess)
     }
 }
 
