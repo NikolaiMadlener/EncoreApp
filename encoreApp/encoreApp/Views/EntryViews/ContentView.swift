@@ -11,6 +11,7 @@ import CodeScanner
 import SafariServices
 
 struct ContentView: View {
+    @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var userVM: UserVM
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
@@ -82,6 +83,7 @@ struct ContentView: View {
                             ZStack {
                                 //if !showActivityIndicator {
                                 Button(action: {
+                                    self.musicController.playMusic()
                                     self.createSession(username: self.username)
                                 }) {
                                     ZStack {
@@ -121,6 +123,7 @@ struct ContentView: View {
                                 //
                                 //                                }
                             }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                                
                                 self.getAuthToken()
                                 self.showActivityIndicator = false
                             }) {
