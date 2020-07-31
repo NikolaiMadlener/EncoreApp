@@ -83,7 +83,8 @@ struct ContentView: View {
                             ZStack {
                                 //if !showActivityIndicator {
                                 Button(action: {
-                                    self.musicController.playMusic()
+                                    //self.musicController.playMusic()
+                                    self.musicController.doConnect()
                                     self.createSession(username: self.username)
                                 }) {
                                     ZStack {
