@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct RoundButtonModifier: ViewModifier {
+struct ButtonHeavyModifier: ViewModifier {
     var isDisabled: Bool
     var backgroundColor: Color
     var foregroundColor: Color
@@ -19,7 +19,7 @@ struct RoundButtonModifier: ViewModifier {
             .frame(minWidth: 0, maxWidth: .infinity)
             .background(isDisabled ? Color("buttonDisabledGray") : backgroundColor)
             .foregroundColor(isDisabled ? Color("lightgray") : foregroundColor)
-            .cornerRadius(25)
+            .cornerRadius(15)
             .padding(.horizontal, 25)
     }
 }
