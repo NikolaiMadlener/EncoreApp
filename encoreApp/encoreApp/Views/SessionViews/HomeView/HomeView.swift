@@ -11,7 +11,7 @@ import URLImage
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
-    //@ObservedObject var musicController: MusicController = .shared
+    @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM

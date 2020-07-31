@@ -11,6 +11,7 @@ import CodeScanner
 import SafariServices
 
 struct ContentView: View {
+    @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var userVM: UserVM
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
@@ -82,6 +83,8 @@ struct ContentView: View {
                             ZStack {
                                 //if !showActivityIndicator {
                                 Button(action: {
+                                    //self.musicController.playMusic()
+                                    self.musicController.doConnect()
                                     self.createSession(username: self.username)
                                 }) {
                                     ZStack {
@@ -121,6 +124,7 @@ struct ContentView: View {
                                 //
                                 //                                }
                             }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                                
                                 self.getAuthToken()
                                 self.showActivityIndicator = false
                             }) {
@@ -434,7 +438,7 @@ struct ContentView: View {
                     let deviceList = try JSONDecoder().decode([String: [Device]].self, from: data)
                     print("DEVICES")
                     print(deviceList["devices"])
-                    self.deviceID = deviceList["devices"]?.first?.id ?? ""
+                    self.deviceID = deviceList["devices"]?.first(where: {$0.type == "Smartphone"})?.id ?? ""
                     self.connectWithSpotify()
                 } catch {
                     print("Error get Device ID")
