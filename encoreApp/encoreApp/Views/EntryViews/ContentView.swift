@@ -437,7 +437,7 @@ struct ContentView: View {
                     let deviceList = try JSONDecoder().decode([String: [Device]].self, from: data)
                     print("DEVICES")
                     print(deviceList["devices"])
-                    self.deviceID = deviceList["devices"]?.first?.id ?? ""
+                    self.deviceID = deviceList["devices"]?.first(where: {$0.type == "Smartphone"})?.id ?? ""
                     self.connectWithSpotify()
                 } catch {
                     print("Error get Device ID")
