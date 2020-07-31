@@ -11,6 +11,7 @@ import SafariServices
 
 struct LoginView: View {
     @ObservedObject var userVM: UserVM
+    @ObservedObject var musicController: MusicController = .shared
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
     @State var sessionID: String = ""
@@ -77,6 +78,7 @@ struct LoginView: View {
                         VStack {
                             ZStack {
                                 Button(action: {
+                                    self.musicController.doConnect()
                                     self.createSession(username: self.username)
                                 }) {
                                     ZStack {
@@ -91,6 +93,7 @@ struct LoginView: View {
                                     
                                 }.disabled(username.count < 1)
                             }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                                
                                 self.getAuthToken()
                                 self.showActivityIndicator = false
                             }) {
@@ -305,7 +308,7 @@ struct LoginView: View {
                     let deviceList = try JSONDecoder().decode([String: [Device]].self, from: data)
                     print("DEVICES")
                     print(deviceList["devices"])
-                    self.deviceID = deviceList["devices"]?.first?.id ?? ""
+                    self.deviceID = deviceList["devices"]?.first(where: {$0.type == "Smartphone"})?.id ?? ""
                     self.connectWithSpotify()
                 } catch {
                     print("Error get Device ID")

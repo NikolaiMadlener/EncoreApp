@@ -9,8 +9,10 @@
 import Foundation
 import IKEventSource
 import Kingfisher
+import SwiftUI
 
 class PlayerStateVM: ObservableObject {
+    @ObservedObject var musicController: MusicController = .shared
     @Published var song: Song
     @Published var progress: Int64
     @Published var isPlaying: Bool
@@ -79,6 +81,9 @@ class PlayerStateVM: ObservableObject {
                                 self?.song = sng
                                 self?.isPlaying = decodedData.is_playing
                                 self?.syncProgressBar()
+                                
+                                self?.musicController.startPlayback()
+                                
                                 
 //                                if userVM.isAdmin {
 //                                    self?.appRemote?.authorizeAndPlayURI("spotify:track:" + "\(String(describing: sng.id))")

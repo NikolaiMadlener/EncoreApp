@@ -75,6 +75,23 @@ class MusicController: NSObject, ObservableObject {
         print("GETSTATE:\(playerState)")
     }
     
+    func doConnect() {
+        if appRemote?.isConnected == false {
+            if appRemote?.authorizeAndPlayURI(self.playURI) == false { //returns false when spotify not installed, if true, attempts to obtain access token and starts playback
+                // The Spotify app is not installed, present the user with an App Store page
+                showAppStoreInstall()
+                self.getPlayerState()
+            }
+            self.appRemote?.playerAPI?.pause(self.defaultCallback)
+//        } else if playerState == nil || playerState!.isPaused {
+//            startPlayback()
+//            print("PLAYERSTATE:\(playerState)")
+//        } else {
+//            pausePlayback()
+//        }
+        }
+    }
+    
     func playMusic() {
         if appRemote?.isConnected == false {
             if appRemote?.authorizeAndPlayURI(self.playURI) == false { //returns false when spotify not installed, if true, attempts to obtain access token and starts playback
@@ -183,4 +200,3 @@ extension MusicController {
         getPlayerState()
     }
 }
-
