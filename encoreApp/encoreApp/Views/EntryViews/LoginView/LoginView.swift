@@ -78,7 +78,6 @@ struct LoginView: View {
                         VStack {
                             ZStack {
                                 Button(action: {
-                                    self.musicController.doConnect()
                                     self.createSession(username: self.username)
                                 }) {
                                     ZStack {
@@ -271,7 +270,10 @@ struct LoginView: View {
                             } else {
                                 self.currentlyInSession = true
                                 self.showActivityIndicator = false
+                                self.musicController.doConnect()
+                                self.musicController.pausePlayback()
                             }
+                            
                             self.getDeviceID()
                         }
                     }
