@@ -61,6 +61,7 @@ struct HomeView: View {
             menu_layer
         }//.onAppear{ self.playerStateVM.viewDidLoad() }
         // triggers updates on every second
+            .onAppear{ self.playerStateVM.playerPause() }
     }
     
     
