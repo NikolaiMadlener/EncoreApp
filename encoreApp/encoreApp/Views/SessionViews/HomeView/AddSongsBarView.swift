@@ -52,11 +52,18 @@ struct AddSongsBarView: View {
     
     var playPauseButton: some View {
         Button(action: {
-            self.isPlay ? self.playerPause() : self.playerPlay()
+            if !(self.musicController.appRemote?.isConnected ?? false) {
+                self.musicController.appRemote?.connect()
+                if !(self.musicController.appRemote?.isConnected ?? false) {
+                    self.musicController.appRemote?.authorizeAndPlayURI("")
+                    self.musicController.appRemote?.connect()
+                }
+            }
+            self.playerStateVM.isPlaying ? self.playerPause() : self.playerPlay()
         }) {
             ZStack {
                 Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                Image(systemName: self.isPlay ? "pause.circle.fill" : "play.circle.fill")
+                Image(systemName: self.playerStateVM.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 35, weight: .light))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             }
@@ -100,7 +107,7 @@ struct AddSongsBarView: View {
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
-                self.isPlay = true
+                //self.isPlay = true
                 //                do {
                 //                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
                 //                    DispatchQueue.main.async {
@@ -144,7 +151,7 @@ struct AddSongsBarView: View {
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
-                self.isPlay = false
+                //self.isPlay = false
                 //                do {
                 //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
                 //                    DispatchQueue.main.async {

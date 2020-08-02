@@ -12,6 +12,7 @@ struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
+    @ObservedObject var playerStateVM: PlayerStateVM
     
     @Binding var showMenuSheet: Bool
     @Binding var currentlyInSession: Bool
@@ -19,9 +20,10 @@ struct MenuView: View {
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
     
-    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
+    init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
         self.userListVM = UserListVM(userVM: userVM)
+        self.playerStateVM = playerStateVM
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
     }
@@ -95,6 +97,7 @@ struct MenuView: View {
                         Alert(title: Text("Delete Session"),
                               message: Text("By Deleting the current Session all Members will be kicked."),
                               primaryButton: .destructive(Text("Delete"), action: {
+                                self.playerStateVM.playerPause()
                                 self.deleteSession(username: self.userVM.username)
                               }),
                               secondaryButton: .cancel(Text("Cancel"), action: {
@@ -244,10 +247,11 @@ struct MenuView: View {
 
 struct MenuView_Previews: PreviewProvider {
     static var userVM = UserVM()
+    static var playerStateVM = PlayerStateVM(userVM: userVM)
     @State static var currentlyInSession = false
     @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
+        MenuView(userVM: userVM, playerStateVM: playerStateVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
     }
 }

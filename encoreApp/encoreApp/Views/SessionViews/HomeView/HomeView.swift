@@ -116,7 +116,7 @@ struct HomeView: View {
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                         .padding(20)
                 }.sheet(isPresented: self.$showMenuSheet) {
-                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                    MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()

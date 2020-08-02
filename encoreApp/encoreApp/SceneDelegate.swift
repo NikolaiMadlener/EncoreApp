@@ -21,10 +21,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     let SpotifyClientID = "a8be659c46584d1c818dadd8023a4f36"
     let SpotifyRedirectURL = URL(string: "encoreapp://spotify/callback")!
     
-    lazy var configuration = SPTConfiguration(
-        clientID: SpotifyClientID,
-        redirectURL: SpotifyRedirectURL
-    )
+//    lazy var configuration = SPTConfiguration(
+//        clientID: SpotifyClientID,
+//        redirectURL: SpotifyRedirectURL
+//    )
+    
+    private lazy var configuration: SPTConfiguration = {
+      let configuration = SPTConfiguration(clientID: SpotifyClientID, redirectURL: SpotifyRedirectURL)
+      configuration.playURI = ""
+      configuration.tokenSwapURL = URL(string: "swapurl")
+      configuration.tokenRefreshURL = URL(string: "refreshurl")
+      return configuration
+    }()
     
     lazy var appRemote: SPTAppRemote = {
         let appRemote = SPTAppRemote(configuration: self.configuration, logLevel: .debug)

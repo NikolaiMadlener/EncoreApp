@@ -42,7 +42,7 @@ struct LoginView: View {
                     .aspectRatio(contentMode: .fill)
                     .edgesIgnoringSafeArea(.all).offset(x: 0, y: 75)
                 VStack {
-                    Spacer().frame(height: 50)
+                    Spacer().frame(height: 30)
                     Text("encore.")
                         .font(.largeTitle)
                         .bold()
@@ -51,7 +51,7 @@ struct LoginView: View {
                         .padding(15)
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.gray, lineWidth: 2)
+                                .stroke(Color.gray, lineWidth: 1)
                         ).padding(.horizontal, 25)
                     if invalidUsername {
                         Text("Name should at least be three characters long and free of special characters and spaces.")
@@ -74,7 +74,7 @@ struct LoginView: View {
                             .sheet(isPresented: self.$showScannerSheet) {
                                 ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert)
                         }
-                        LabeledDivider(label: "OR")
+                        LabeledDivider(label: "or")
                         VStack {
                             ZStack {
                                 Button(action: {
@@ -89,7 +89,7 @@ struct LoginView: View {
                                                 .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
                                         }
                                     }
-                                    .modifier(ButtonLightModifier(isDisabled: username.count < 1, foregroundColor: Color.gray))
+                                    .modifier(ButtonLightModifier(isDisabled: username.count < 1, foregroundColor: Color("purpleblue")))
                                     
                                 }.disabled(username.count < 1)
                             }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
@@ -101,6 +101,7 @@ struct LoginView: View {
                             }
                         }
                         
+                        Spacer()
                         Spacer()
                     }.animation(.default)
                 }
