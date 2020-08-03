@@ -40,11 +40,11 @@ class UserListVM: ObservableObject {
                         DispatchQueue.main.async {
                             self?.members = decodedData
                             
+                            
                             print()
                         }
                     } catch {
                         print("Error SSE user list change")
-                        
                     }
                 }
             }  

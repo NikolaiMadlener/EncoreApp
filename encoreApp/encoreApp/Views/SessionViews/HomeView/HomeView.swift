@@ -60,7 +60,7 @@ struct HomeView: View {
             //Layer 3: Menu Layer
             menu_layer
         }//.onAppear{ self.playerStateVM.viewDidLoad() }
-        // triggers updates on every second
+            // triggers updates on every second
             .onAppear{ self.playerStateVM.playerPause() }
     }
     
@@ -123,7 +123,7 @@ struct HomeView: View {
             Spacer()
             HStack {
                 Spacer()
-                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
+                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
                 Spacer()
             }.padding(.bottom)
         }

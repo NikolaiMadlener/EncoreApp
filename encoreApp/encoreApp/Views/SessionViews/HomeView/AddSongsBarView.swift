@@ -17,6 +17,7 @@ struct AddSongsBarView: View {
     @ObservedObject var playerStateVM: PlayerStateVM
     @Binding var isPlay: Bool
     @Binding var showAddSongSheet:Bool
+    @Binding var currentlyInSession: Bool
     
     @ViewBuilder
     var body: some View {
@@ -46,7 +47,7 @@ struct AddSongsBarView: View {
                     .foregroundColor(Color("purpleblue"))
             }
         }.sheet(isPresented: self.$showAddSongSheet) {
-            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM)
+            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession)
         }
     }
     
@@ -214,8 +215,10 @@ struct AddSongsBarView: View {
 struct AddSongsBarView_Previews: PreviewProvider {
     @State static var isPlay = false
     @State static var showAddSongSheet = false
+    @State static var currentlyInSession = true
     
     static var previews: some View {
-        AddSongsBarView(userVM: UserVM(), searchResultListVM: SearchResultListVM(userVM: UserVM()), songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: UserVM()), isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
+        AddSongsBarView(userVM: UserVM(),
+                        searchResultListVM: SearchResultListVM(userVM: UserVM()), songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: UserVM()), isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
     }
 }

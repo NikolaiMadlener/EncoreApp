@@ -86,7 +86,13 @@ struct MenuView: View {
                             .onAppear{ UITableView.appearance().separatorColor = .clear }
                     }
                     Spacer()
-                }
+                }.alert(isPresented: self.$showSessionExpiredAlert) {
+                    Alert(title: Text("Session expired"),
+                          message: Text("The Host has ended the Session."),
+                          dismissButton: .destructive(Text("Leave"), action: {
+                            self.currentlyInSession = false
+                          }))
+                }.padding(.vertical)
                 VStack {
                     Spacer()
                     Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
@@ -103,70 +109,66 @@ struct MenuView: View {
                               secondaryButton: .cancel(Text("Cancel"), action: {
                                 self.showAlert = false
                               }))
-                        //            }.alert(isPresented: $showSessionExpiredAlert) {
-                        //                Alert(title: Text("Session Expired"),
-                        //                      message: Text("The Session was closed by the Host."),
-                        //                      dismissButton: .default(Text("OK"))
-                        //                )
                     }.padding(.vertical)
+                    
                 }
                 
             }.sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
+            }.onAppear{
+                self.getMembers(username: self.userVM.username)
             }
         }
     }
     
-    //    func getMembers(username: String) {
-    //
-    //        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
-    //            print("Invalid URL")
-    //            return
-    //        }
-    //        var request = URLRequest(url: url)
-    //
-    //        print("secret: " + self.user.secret)
-    //        print("sessionID: " + self.user.sessionID)
-    //
-    //        request.httpMethod = "GET"
-    //        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
-    //        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
-    //
-    //
-    //        // HTTP Request Parameters which will be sent in HTTP Request Body
-    //        //let postString = "userId=300&title=My urgent task&completed=false";
-    //        // Set HTTP Request Body
-    //        //request.httpBody = postString.data(using: String.Encoding.utf8);
-    //        // Perform HTTP Request
-    //        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-    //
-    //            // Check for Error
-    //            if let error = error {
-    //                print("Error took place \(error)")
-    //                return
-    //            }
-    //
-    //            // Convert HTTP Response Data to a String
-    //            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-    //                print("Response data string:\n \(dataString)")
-    //
-    //                do {
-    //                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
-    //                    DispatchQueue.main.async {
-    //                        self.members = decodedData
-    //                        print(self.members)
-    //                        print()
-    //                    }
-    //                } catch {
-    //                    print("Error")
-    //                    self.showSessionExpiredAlert = true
-    //                    self.currentlyInSession = false
-    //                }
-    //            }
-    //            self.currentlyInSession = true
-    //        }
-    //        task.resume()
-    //    }
+    func getMembers(username: String) {
+        
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        print("secret: " + self.userVM.secret)
+        print("sessionID: " + self.userVM.sessionID)
+        
+        request.httpMethod = "GET"
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                
+                do {
+                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
+                    DispatchQueue.main.async {
+                        
+                    }
+                } catch {
+                    print("Error")
+                    self.showSessionExpiredAlert = true
+                    
+                }
+            }
+            
+        }
+        task.resume()
+    }
     
     func deleteSession(username: String) {
         
