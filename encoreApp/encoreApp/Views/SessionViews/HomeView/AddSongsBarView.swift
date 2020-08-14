@@ -42,7 +42,7 @@ struct AddSongsBarView: View {
     var addButton: some View {
         Button(action: { self.showAddSongSheet = true }) {
             ZStack {
-                Circle().frame(width: 55, height: 55).foregroundColor(Color.white)
+                Circle().frame(width: 55, height: 55).foregroundColor(Color.clear)
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 60, weight: .light))
                     .foregroundColor(Color("purpleblue"))
@@ -57,7 +57,7 @@ struct AddSongsBarView: View {
             self.isPlay ? self.playerPause() : self.playerPlay()
         }) {
             ZStack {
-                Circle().frame(width: 35, height: 35).foregroundColor(Color.white)
+                Circle().frame(width: 35, height: 35).foregroundColor(Color.clear)
                 Image(systemName: self.isPlay ? "pause.fill" : "play.fill")
                     .font(.system(size: 35, weight: .ultraLight))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
