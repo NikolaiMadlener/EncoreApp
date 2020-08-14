@@ -39,6 +39,7 @@
 		8F0CAC2E24A10EA700531BB0 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CAC2D24A10EA700531BB0 /* AuthenticationView.swift */; };
 		8F0CAC3124A2001100531BB0 /* ButtonHeavyModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CAC3024A2001100531BB0 /* ButtonHeavyModifier.swift */; };
 		8F108A992480537F00D5C27B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F108A982480537F00D5C27B /* Model.swift */; };
+		8F17E6ED24E6F29B0050506F /* AnyGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F17E6EC24E6F29B0050506F /* AnyGestureRecognizer.swift */; };
 		8F27498424A60C880084FC99 /* SuggestSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F27498324A60C880084FC99 /* SuggestSongCell.swift */; };
 		8F27498624A610000084FC99 /* SpotifySearchPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F27498524A610000084FC99 /* SpotifySearchPayload.swift */; };
 		8F2EF43A24A2ADEE000EC1B7 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */; };
@@ -92,6 +93,7 @@
 		8F0CAC2D24A10EA700531BB0 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		8F0CAC3024A2001100531BB0 /* ButtonHeavyModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonHeavyModifier.swift; sourceTree = "<group>"; };
 		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		8F17E6EC24E6F29B0050506F /* AnyGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyGestureRecognizer.swift; sourceTree = "<group>"; };
 		8F27498324A60C880084FC99 /* SuggestSongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestSongCell.swift; sourceTree = "<group>"; };
 		8F27498524A610000084FC99 /* SpotifySearchPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifySearchPayload.swift; sourceTree = "<group>"; };
 		8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				2319066A247DA26400DA550B /* LaunchScreen.storyboard */,
 				2319066D247DA26400DA550B /* Info.plist */,
 				23190667247DA26400DA550B /* Preview Content */,
+				8F17E6EC24E6F29B0050506F /* AnyGestureRecognizer.swift */,
 			);
 			path = encoreApp;
 			sourceTree = "<group>";
@@ -462,6 +465,7 @@
 				233D2ACE2491990100994038 /* UserListVM.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
+				8F17E6ED24E6F29B0050506F /* AnyGestureRecognizer.swift in Sources */,
 				8FDEBF7C24AD2D240090B5F2 /* ProgressBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
