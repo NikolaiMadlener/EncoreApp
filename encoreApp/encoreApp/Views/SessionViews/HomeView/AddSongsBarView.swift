@@ -21,17 +21,19 @@ struct AddSongsBarView: View {
     @ViewBuilder
     var body: some View {
         if self.userVM.isAdmin {
-            HStack {
-                playPauseButton
-                Spacer().frame(width: 40)
-                addButton
-                Spacer().frame(width: 40)
-                skipButton
-            }.padding(10)
-                .padding(.horizontal, 10)
-                .background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
-                .cornerRadius(100)
-                .shadow(radius: 10)
+            ZStack {
+                HStack {
+                    playPauseButton
+                    Spacer().frame(width: 40)
+                    addButton
+                    Spacer().frame(width: 40)
+                    skipButton
+                }.padding(10)
+                    .padding(.horizontal, 10)
+                    .background(Blur(colorScheme: colorScheme))
+                    .cornerRadius(25)
+            }
+            
         } else {
             addButton
         }
@@ -40,7 +42,7 @@ struct AddSongsBarView: View {
     var addButton: some View {
         Button(action: { self.showAddSongSheet = true }) {
             ZStack {
-                Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 10)
+                Circle().frame(width: 55, height: 55).foregroundColor(Color.white)
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 60, weight: .light))
                     .foregroundColor(Color("purpleblue"))
@@ -53,20 +55,18 @@ struct AddSongsBarView: View {
     var playPauseButton: some View {
         Button(action: {
             self.isPlay ? self.playerPause() : self.playerPlay()
+            print("PAUSEPLAY\(self.isPlay)")
         }) {
-            ZStack {
-                Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                Image(systemName: self.isPlay ? "pause.circle.fill" : "play.circle.fill")
-                    .font(.system(size: 35, weight: .light))
+                Image(systemName: self.isPlay ? "pause.fill" : "play.fill")
+                    .font(.system(size: 35, weight: .ultraLight))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-            }
         }
     }
     
     var skipButton: some View {
         Button(action: { self.playerSkipNext() }) {
-            Image(systemName: "forward.end.fill")
-                .font(.system(size: 35, weight: .light))
+            Image(systemName: "forward.end")
+                .font(.system(size: 35, weight: .medium))
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
         }
     }
