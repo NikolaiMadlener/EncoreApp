@@ -55,14 +55,17 @@ struct AddSongsBarView: View {
     var playPauseButton: some View {
         Button(action: {
             self.isPlay ? self.playerPause() : self.playerPlay()
-            print("PAUSEPLAY\(self.isPlay)")
         }) {
+            ZStack {
+                Circle().frame(width: 35, height: 35).foregroundColor(Color.white)
                 Image(systemName: self.isPlay ? "pause.fill" : "play.fill")
                     .font(.system(size: 35, weight: .ultraLight))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+            }
+                
         }
     }
-    
+
     var skipButton: some View {
         Button(action: { self.playerSkipNext() }) {
             Image(systemName: "forward.end")
