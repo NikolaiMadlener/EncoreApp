@@ -19,12 +19,25 @@ struct SuggestSongView: View {
     
     var body: some View {
         VStack {
+            self.topBar.padding(.top)
+            Text("Add music to this session")
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(Color("purpleblue"))
+                .padding(7)
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search songs")
             List {
                 ForEach(searchResultListVM.items, id: \.self) { song in
                     SuggestSongCell(searchResultListVM: self.searchResultListVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, song: song)
                 }
             }
+        }
+    }
+    
+    var topBar: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color.secondary)
+                .frame(width: 60, height: 4)
         }
     }
 }
