@@ -7,11 +7,14 @@
 //
 
 import SwiftUI
+import CoreImage.CIFilterBuiltins
 
 struct PopupQRCodeView: View {
     @ObservedObject var userVM: UserVM
     @State var showShareSheet: Bool = false
     @Binding var showPopupQRCode: Bool
+    let filter = CIFilter.qrCodeGenerator()
+    let context = CIContext()
     
     var body: some View {
         VStack {
@@ -27,7 +30,6 @@ struct PopupQRCodeView: View {
         .background(Color.white)
         .cornerRadius(10)
         .frame(width: UIScreen.main.bounds.width * 0.73, height: UIScreen.main.bounds.height * 0.85)
-        
         .sheet(isPresented: self.$showShareSheet) {
             ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
         }
@@ -35,7 +37,7 @@ struct PopupQRCodeView: View {
     
     var saveQRCodeButton: some View {
         Button(action: {
-            
+            UIImageWriteToSavedPhotosAlbum(self.generateQRCodeImage("encoreApp://\(self.userVM.sessionID)"), nil, nil, nil)
         }) {
             Text("Save QR Code")
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
@@ -60,6 +62,18 @@ struct PopupQRCodeView: View {
                 .foregroundColor(Color("purpleblue"))
                 .padding(.bottom)
         }
+    }
+    
+    func generateQRCodeImage(_ url: String) -> UIImage {
+        let data = Data(url.utf8)
+        filter.setValue(data, forKey: "inputMessage")
+        
+        if let qrCodeImage = filter.outputImage {
+            if let qrCodeCGImage = context.createCGImage(qrCodeImage, from: qrCodeImage.extent) {
+                return UIImage(cgImage: qrCodeCGImage)
+            }
+        }
+        return UIImage(systemName: "xmark") ?? UIImage()
     }
 }
 
