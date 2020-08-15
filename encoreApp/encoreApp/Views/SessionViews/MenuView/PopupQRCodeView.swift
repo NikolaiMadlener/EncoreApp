@@ -14,14 +14,17 @@ struct PopupQRCodeView: View {
     
     var body: some View {
         VStack {
-            Text("Invite your friends").font(.title).bold().padding(.top)
-            QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 200).padding(10)
+            Text("Invite your friends")
+                .font(.system(size: 25, weight: .bold))
+                .foregroundColor(Color("purpleblue"))
+                .padding(.top)
+            QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
             saveQRCodeButton
             shareQRCodeButton
         }
         .background(Color.white)
         .cornerRadius(10)
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.85)
+        .frame(width: UIScreen.main.bounds.width * 0.73, height: UIScreen.main.bounds.height * 0.85)
         
         .sheet(isPresented: self.$showShareSheet) {
             ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
