@@ -120,7 +120,7 @@ struct MenuView: View {
                 GeometryReader { _ in
                     
                     
-                        PopupQRCodeView(userVM: self.userVM)
+                    PopupQRCodeView(userVM: self.userVM, showPopupQRCode: self.$showPopupQRCode)
                     
                 }.background(
                     Color.black.opacity(0.5)

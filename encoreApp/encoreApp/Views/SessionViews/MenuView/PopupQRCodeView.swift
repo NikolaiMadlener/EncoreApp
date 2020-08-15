@@ -11,16 +11,18 @@ import SwiftUI
 struct PopupQRCodeView: View {
     @ObservedObject var userVM: UserVM
     @State var showShareSheet: Bool = false
+    @Binding var showPopupQRCode: Bool
     
     var body: some View {
         VStack {
             Text("Invite your friends")
                 .font(.system(size: 25, weight: .bold))
-                .foregroundColor(Color("purpleblue"))
+                .foregroundColor(Color.black)
                 .padding(.top)
             QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
             saveQRCodeButton
             shareQRCodeButton
+            cancelButton
         }
         .background(Color.white)
         .cornerRadius(10)
@@ -33,7 +35,7 @@ struct PopupQRCodeView: View {
     
     var saveQRCodeButton: some View {
         Button(action: {
-            self.showShareSheet.toggle()
+            
         }) {
             Text("Save QR Code")
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
@@ -48,10 +50,22 @@ struct PopupQRCodeView: View {
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
         }.padding()
     }
+    
+    var cancelButton: some View {
+        Button(action: {
+            self.showPopupQRCode.toggle()
+        }) {
+            Text("Cancel")
+                .font(.headline)
+                .foregroundColor(Color("purpleblue"))
+                .padding(.bottom)
+        }
+    }
 }
 
 struct PopupQRCodeView_Previews: PreviewProvider {
+    @State static var show = false
     static var previews: some View {
-        PopupQRCodeView(userVM: UserVM())
+        PopupQRCodeView(userVM: UserVM(), showPopupQRCode: $show)
     }
 }
