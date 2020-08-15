@@ -19,11 +19,11 @@ struct SuggestSongView: View {
     
     var body: some View {
         VStack {
-            self.topBar.padding(.top)
-            Text("Add music to this session")
-                .font(.system(size: 20, weight: .medium))
+            self.topBar.padding()
+            Text("add music to session")
+                .font(.title)
+                .bold()
                 .foregroundColor(Color("purpleblue"))
-                .padding(7)
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search songs")
             List {
                 ForEach(searchResultListVM.items, id: \.self) { song in

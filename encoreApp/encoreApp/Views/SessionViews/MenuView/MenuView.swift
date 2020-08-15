@@ -18,6 +18,7 @@ struct MenuView: View {
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
+    @State var showPopupQRCode: Bool = false
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
@@ -32,7 +33,14 @@ struct MenuView: View {
                 VStack {
                     self.topBar.padding()
                     
-                    QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
+                    Button(action: {
+                        withAnimation {
+                            self.showPopupQRCode.toggle()
+                        }
+                    }) {
+                        QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 150).padding(10)
+                    }.buttonStyle(PlainButtonStyle())
+                    
                     
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
@@ -106,7 +114,27 @@ struct MenuView: View {
             }.sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }
+            
+            if self.showPopupQRCode {
+                
+                GeometryReader { _ in
+                    
+                    
+                        PopupQRCodeView(userVM: self.userVM)
+                    
+                }.background(
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            
+                            self.showPopupQRCode.toggle()
+                            
+                        }
+                )
+            }
         }
+        
+        
     }
     
     var topBar: some View {

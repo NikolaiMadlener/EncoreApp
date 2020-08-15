@@ -40,6 +40,7 @@
 		8F0CAC3124A2001100531BB0 /* ButtonHeavyModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CAC3024A2001100531BB0 /* ButtonHeavyModifier.swift */; };
 		8F108A992480537F00D5C27B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F108A982480537F00D5C27B /* Model.swift */; };
 		8F17E6ED24E6F29B0050506F /* AnyGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F17E6EC24E6F29B0050506F /* AnyGestureRecognizer.swift */; };
+		8F17E6F024E81C7B0050506F /* PopupQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F17E6EF24E81C7B0050506F /* PopupQRCodeView.swift */; };
 		8F27498424A60C880084FC99 /* SuggestSongCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F27498324A60C880084FC99 /* SuggestSongCell.swift */; };
 		8F27498624A610000084FC99 /* SpotifySearchPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F27498524A610000084FC99 /* SpotifySearchPayload.swift */; };
 		8F2EF43A24A2ADEE000EC1B7 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */; };
@@ -94,6 +95,7 @@
 		8F0CAC3024A2001100531BB0 /* ButtonHeavyModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonHeavyModifier.swift; sourceTree = "<group>"; };
 		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		8F17E6EC24E6F29B0050506F /* AnyGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyGestureRecognizer.swift; sourceTree = "<group>"; };
+		8F17E6EF24E81C7B0050506F /* PopupQRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupQRCodeView.swift; sourceTree = "<group>"; };
 		8F27498324A60C880084FC99 /* SuggestSongCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestSongCell.swift; sourceTree = "<group>"; };
 		8F27498524A610000084FC99 /* SpotifySearchPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifySearchPayload.swift; sourceTree = "<group>"; };
 		8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
@@ -192,12 +194,9 @@
 		233D2AD0249273A500994038 /* SessionViews */ = {
 			isa = PBXGroup;
 			children = (
+				8F17E6EE24E81C140050506F /* MenuView */,
 				8FB1058824AB5589007C15A1 /* HomeView */,
 				8F27498224A60C440084FC99 /* SuggestSongView */,
-				235EB4D02480F6CC007A720D /* MenuView.swift */,
-				2319067B247DBDB600DA550B /* SongListCell.swift */,
-				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
-				233D2AD5249381C600994038 /* QRCodeView.swift */,
 			);
 			path = SessionViews;
 			sourceTree = "<group>";
@@ -254,6 +253,17 @@
 			path = Modifiers;
 			sourceTree = "<group>";
 		};
+		8F17E6EE24E81C140050506F /* MenuView */ = {
+			isa = PBXGroup;
+			children = (
+				235EB4D02480F6CC007A720D /* MenuView.swift */,
+				233D2AD5249381C600994038 /* QRCodeView.swift */,
+				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
+				8F17E6EF24E81C7B0050506F /* PopupQRCodeView.swift */,
+			);
+			path = MenuView;
+			sourceTree = "<group>";
+		};
 		8F27498224A60C440084FC99 /* SuggestSongView */ = {
 			isa = PBXGroup;
 			children = (
@@ -283,6 +293,7 @@
 				8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */,
 				8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */,
 				8F589F5E24B6178F00BA5E60 /* CurrentSongCompactView.swift */,
+				2319067B247DBDB600DA550B /* SongListCell.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
@@ -462,6 +473,7 @@
 				8F27498424A60C880084FC99 /* SuggestSongCell.swift in Sources */,
 				235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */,
 				231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */,
+				8F17E6F024E81C7B0050506F /* PopupQRCodeView.swift in Sources */,
 				233D2ACE2491990100994038 /* UserListVM.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
