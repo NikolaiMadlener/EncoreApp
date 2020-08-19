@@ -24,7 +24,7 @@ struct PopupQRCodeView: View {
                 .padding(.top)
             QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
             saveQRCodeButton
-            shareQRCodeButton
+            shareLinkButton
             cancelButton
         }
         .background(Color.white)
@@ -44,7 +44,7 @@ struct PopupQRCodeView: View {
         }.padding(.horizontal)
     }
     
-    var shareQRCodeButton: some View {
+    var shareLinkButton: some View {
         Button(action: {
             self.showShareSheet.toggle()
         }) {

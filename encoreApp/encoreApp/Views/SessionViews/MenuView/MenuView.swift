@@ -31,10 +31,10 @@ struct MenuView: View {
         GeometryReader { geo in
             ZStack {
                 VStack {
-                    self.topBar.padding()
+                    self.topBar.padding(10)
                     
                     Button(action: {
-                        withAnimation {
+                        withAnimation() {
                             self.showPopupQRCode.toggle()
                         }
                     }) {
@@ -43,22 +43,8 @@ struct MenuView: View {
                     
                     
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
-                    Button(action: { self.showShareSheet.toggle() }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 50).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
-                            HStack {
-                                Text("Share Session-Link")
-                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                                    .font(.system(size: 15))
-                                    .padding(.leading, 30)
-                                Spacer()
-                                Image(systemName: "square.and.arrow.up")
-                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                                    .font(.system(size: 20))
-                                    .padding(.trailing, 30)
-                            }
-                        }.padding(.horizontal, 25)
-                    }
+                    
+                    self.shareLinkButton
                     VStack() {
                         List {
                             VStack {
@@ -135,6 +121,15 @@ struct MenuView: View {
         }
         
         
+    }
+    
+    var shareLinkButton: some View {
+        Button(action: {
+            self.showShareSheet.toggle()
+        }) {
+            Text("Share Invite Link")
+                .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+        }.padding()
     }
     
     var topBar: some View {

@@ -37,7 +37,7 @@ struct HomeView: View {
         ZStack {
             
             //Layer 1: Song Queue Layer
-            songQueue_layer
+            songlistLayer
             
             // for hiding Song Queue Layer above Song Title Layer
             if (self.current_title_offset <= -260) {
@@ -49,30 +49,25 @@ struct HomeView: View {
                 }.edgesIgnoringSafeArea(.top)
             }
             
-            //Layer 2: Song Title Layer
-            if (self.current_title_offset <= -260) {
-                VStack {
-                    SongTitleBarView(playerStateVM: self.playerStateVM)
-                    Spacer()
-                }
-            }
+            //Layer 2: Navbar and AddSongsBar
+            navigationLayer
             
-            //Layer 3: Menu Layer
-            menu_layer
-        }//.onAppear{ self.playerStateVM.viewDidLoad() }
-        // triggers updates on every second
+        }
     }
-    
-    
-    //MARK: Layer 1: Song Queue Layer
-    private var songQueue_layer: some View {
+
+    //MARK: Layer 1: Song List Layer
+    private var songlistLayer: some View {
         ScrollView {
             GeometryReader { geo -> AnyView? in
                 let thisOffset = geo.frame(in: .global).minY
                 if thisOffset > -190 {
-                    self.current_title_offset = thisOffset
+                    withAnimation {
+                        self.current_title_offset = thisOffset
+                    }
                 } else {
-                    self.current_title_offset = -260
+                    withAnimation {
+                        self.current_title_offset = -260
+                    }
                 }
                 return nil
             }
@@ -89,6 +84,7 @@ struct HomeView: View {
             }
             
             VStack {
+                //WTF does this do??
                 if (self.current_title_offset <= -260) {
                     Spacer().frame(height: 280)
                 }
@@ -105,26 +101,44 @@ struct HomeView: View {
         }
     }
     
-    //MARK: Layer 3: Menu Layer
-    private var menu_layer: some View {
+    //MARK: Layer 2: Navigation Layer
+    private var navigationLayer: some View {
         VStack {
             HStack {
-                Spacer()
-                Button(action: { self.showMenuSheet = true }) {
-                    Image(systemName: "ellipsis")
-                        .font(Font.system(.title))
-                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .padding(20)
-                }.sheet(isPresented: self.$showMenuSheet) {
-                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                if self.current_title_offset > -260 {
+                    Text("encore.")
+                        .transition(.asymmetric(insertion: AnyTransition.opacity.combined(with: .move(edge: .top)), removal: AnyTransition.opacity.combined(with: .move(edge: .top))))
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(Color.white)
+                        
+                } else {
+                    CurrentSongCompactView(playerStateVM: playerStateVM)
+                    .transition(.asymmetric(insertion: AnyTransition.opacity.combined(with: .move(edge: .bottom)), removal: AnyTransition.opacity.combined(with: .move(edge: .bottom))))
                 }
+                Spacer()
+                menuButton
             }
+            .padding(.top).padding(.top).padding(.bottom).padding(.horizontal)
+            .background(Color("purpleblue"))
+            .cornerRadius(radius: 15, corners: [.bottomLeft, .bottomRight])
             Spacer()
             HStack {
                 Spacer()
                 AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
                 Spacer()
             }.padding(.bottom)
+        }.edgesIgnoringSafeArea(.all)
+        
+    }
+    
+    private var menuButton: some View {
+        Button(action: { self.showMenuSheet = true }) {
+            Image(systemName: "ellipsis")
+                .font(Font.system(.title))
+                .foregroundColor(Color.white)
+        }
+        .sheet(isPresented: self.$showMenuSheet) {
+            MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
         }
     }
 }

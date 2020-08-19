@@ -19,7 +19,7 @@ struct SuggestSongView: View {
     
     var body: some View {
         VStack {
-            self.topBar.padding()
+            self.topBar.padding(10)
             Text("add music to session")
                 .font(.title)
                 .bold()
