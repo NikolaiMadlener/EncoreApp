@@ -39,66 +39,61 @@ struct HomeView: View {
             //Layer 1: Song Queue Layer
             songlistLayer
             
-            // for hiding Song Queue Layer above Song Title Layer
-            if (self.current_title_offset <= -260) {
-                VStack {
-                    Rectangle()
-                        .frame(height: 50)
-                        .foregroundColor(self.colorScheme == .dark ? Color(.black) : Color(.white))
-                    Spacer()
-                }.edgesIgnoringSafeArea(.top)
-            }
-            
             //Layer 2: Navbar and AddSongsBar
             navigationLayer
-            
         }
     }
 
     //MARK: Layer 1: Song List Layer
     private var songlistLayer: some View {
-        ScrollView {
-            GeometryReader { geo -> AnyView? in
-                let thisOffset = geo.frame(in: .global).minY
-                if thisOffset > -190 {
-                    withAnimation {
-                        self.current_title_offset = thisOffset
+        VStack {
+            ScrollView {
+                GeometryReader { geo -> AnyView? in
+                    let thisOffset = geo.frame(in: .global).minY
+                    if thisOffset > -190 {
+                        withAnimation {
+                            self.current_title_offset = thisOffset
+                        }
+                    } else {
+                        withAnimation {
+                            self.current_title_offset = -260
+                        }
                     }
-                } else {
-                    withAnimation {
-                        self.current_title_offset = -260
-                    }
+                    return nil
                 }
-                return nil
-            }
-            if (self.current_title_offset > -260) {
-                VStack {
-                    HStack {
-                        Spacer()
-                        CurrentSongView(playerStateVM: self.playerStateVM)
-                        Spacer()
-                    }
-                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
-                    Spacer()
-                }
-            }
-            
-            VStack {
-                //WTF does this do??
-                if (self.current_title_offset <= -260) {
-                    Spacer().frame(height: 280)
-                }
-                ForEach(self.songListVM.songs, id: \.self) { song in
+                
+                if (self.current_title_offset > -260) {
                     VStack {
-                        SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
-                        Divider()
-                            .padding(.horizontal)
-                            .padding(.top, -5)
+                        Rectangle()
+                        .frame(height: 60)
+                        .foregroundColor(Color.white)
+                        .edgesIgnoringSafeArea(.all)
+                        HStack {
+                            Spacer()
+                            CurrentSongView(playerStateVM: self.playerStateVM)
+                            Spacer()
+                        }
+                        ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
+                        Spacer()
                     }
                 }
-                Spacer().frame(height: 100)
-            }.animation(.easeInOut(duration: 0.2))
+                
+                VStack {
+                    if (self.current_title_offset <= -260) {
+                        Spacer().frame(height: 280)
+                    }
+                    ForEach(self.songListVM.songs, id: \.self) { song in
+                        VStack {
+                            SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
+                            Divider()
+                                .padding(.horizontal)
+                                .padding(.top, -5)
+                        }
+                    }
+                }.animation(.easeInOut(duration: 0.2))
+            }
         }
+        
     }
     
     //MARK: Layer 2: Navigation Layer
@@ -113,12 +108,13 @@ struct HomeView: View {
                         
                 } else {
                     CurrentSongCompactView(playerStateVM: playerStateVM)
-                    .transition(.asymmetric(insertion: AnyTransition.opacity.combined(with: .move(edge: .bottom)), removal: AnyTransition.opacity.combined(with: .move(edge: .bottom))))
+                        .transition(.asymmetric(insertion: AnyTransition.opacity.combined(with: .move(edge: .bottom)), removal: AnyTransition.opacity.combined(with: .move(edge: .bottom))))
+                    
                 }
                 Spacer()
                 menuButton
             }
-            .padding(.top).padding(.top).padding(.bottom).padding(.horizontal)
+            .padding(.top, UIScreen.main.bounds.height * 0.05).padding(.bottom).padding(.horizontal)
             .background(Color("purpleblue"))
             .cornerRadius(radius: 15, corners: [.bottomLeft, .bottomRight])
             Spacer()
