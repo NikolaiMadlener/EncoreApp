@@ -41,6 +41,11 @@ struct HomeView: View {
             
             //Layer 2: Navbar and AddSongsBar
             navigationLayer
+            
+            VStack {
+                Text("\(self.current_title_offset)").foregroundColor(Color.yellow)
+                Spacer()
+            }
         }
     }
 
@@ -50,7 +55,7 @@ struct HomeView: View {
             ScrollView {
                 GeometryReader { geo -> AnyView? in
                     let thisOffset = geo.frame(in: .global).minY
-                    if thisOffset > -190 {
+                    if thisOffset > -260 {
                         withAnimation {
                             self.current_title_offset = thisOffset
                         }
@@ -61,13 +66,13 @@ struct HomeView: View {
                     }
                     return nil
                 }
-                
+                Rectangle()
+                .frame(height: 60)
+                .foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
+                .edgesIgnoringSafeArea(.all)
                 if (self.current_title_offset > -260) {
                     VStack {
-                        Rectangle()
-                        .frame(height: 60)
-                        .foregroundColor(Color.white)
-                        .edgesIgnoringSafeArea(.all)
+                        
                         HStack {
                             Spacer()
                             CurrentSongView(playerStateVM: self.playerStateVM)
