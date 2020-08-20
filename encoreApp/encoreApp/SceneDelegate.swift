@@ -9,7 +9,7 @@
 import UIKit
 import SwiftUI
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate, UIGestureRecognizerDelegate {
     
     var window: UIWindow?
     //var model = Model()
@@ -60,6 +60,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
             window.makeKeyAndVisible()
             connect()
         }
+        
+        let tapGesture = AnyGestureRecognizer(target: window, action:#selector(UIView.endEditing))
+        tapGesture.requiresExclusiveTouchType = false
+        tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
+        window?.addGestureRecognizer(tapGesture)
     }
     
     // MARK: App IS running and App is called from Join Link
@@ -101,6 +107,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
                 window.makeKeyAndVisible()
             }
         }
+        
+//        let tapGesture = AnyGestureRecognizer(target: window, action:#selector(UIView.endEditing))
+//        tapGesture.requiresExclusiveTouchType = false
+//        tapGesture.cancelsTouchesInView = false
+//        tapGesture.delegate = self
+//        window?.addGestureRecognizer(tapGesture)
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -171,8 +183,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
             self.appRemote.disconnect()
         }
     }
-    
-    
-    
+}
+
+extension SceneDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }
 

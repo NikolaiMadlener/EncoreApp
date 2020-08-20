@@ -18,6 +18,7 @@ struct MenuView: View {
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
+    @State var showPopupQRCode: Bool = false
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
@@ -30,32 +31,20 @@ struct MenuView: View {
         GeometryReader { geo in
             ZStack {
                 VStack {
-                    Button(action: { self.showMenuSheet = false }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
-                            .font(.largeTitle)
-                            .padding()
-                    }
+                    self.topBar.padding(10)
                     
-                    QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
+                    Button(action: {
+                        withAnimation() {
+                            self.showPopupQRCode.toggle()
+                        }
+                    }) {
+                        QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 150).padding(10)
+                    }.buttonStyle(PlainButtonStyle())
+                    
                     
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
-                    Button(action: { self.showShareSheet.toggle() }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 50).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
-                            HStack {
-                                Text("Share Session-Link")
-                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                                    .font(.system(size: 15))
-                                    .padding(.leading, 30)
-                                Spacer()
-                                Image(systemName: "square.and.arrow.up")
-                                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                                    .font(.system(size: 20))
-                                    .padding(.trailing, 30)
-                            }
-                        }.padding(.horizontal, 25)
-                    }
+                    
+                    self.shareLinkButton
                     VStack() {
                         List {
                             VStack {
@@ -111,8 +100,46 @@ struct MenuView: View {
             }.sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }
+            
+            if self.showPopupQRCode {
+                
+                GeometryReader { _ in
+                    
+                    
+                    PopupQRCodeView(userVM: self.userVM, showPopupQRCode: self.$showPopupQRCode)
+                    
+                }.background(
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            
+                            self.showPopupQRCode.toggle()
+                            
+                        }
+                )
+            }
+        }
+        
+        
+    }
+    
+    var shareLinkButton: some View {
+        Button(action: {
+            self.showShareSheet.toggle()
+        }) {
+            Text("Share Invite Link")
+                .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+        }.padding()
+    }
+    
+    var topBar: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color.secondary)
+                .frame(width: 60, height: 4)
         }
     }
+    
     
     //    func getMembers(username: String) {
     //
