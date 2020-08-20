@@ -60,7 +60,8 @@ struct HomeView: View {
             //Layer 3: Menu Layer
             menu_layer
         }//.onAppear{ self.playerStateVM.viewDidLoad() }
-        // triggers updates on every second
+            // triggers updates on every second
+            .onAppear{ self.playerStateVM.playerPause() }
     }
     
     
@@ -83,14 +84,14 @@ struct HomeView: View {
                         CurrentSongView(playerStateVM: self.playerStateVM)
                         Spacer()
                     }
-                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
-                    Spacer()
+//                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
+//                    Spacer()
                 }
             }
-            
+            Spacer().frame(height: 40)
             VStack {
                 if (self.current_title_offset <= -260) {
-                    Spacer().frame(height: 280)
+                    Spacer().frame(height: 240)
                 }
                 ForEach(self.songListVM.songs, id: \.self) { song in
                     VStack {
@@ -116,13 +117,13 @@ struct HomeView: View {
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                         .padding(20)
                 }.sheet(isPresented: self.$showMenuSheet) {
-                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                    MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()
             HStack {
                 Spacer()
-                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
+                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
                 Spacer()
             }.padding(.bottom)
         }

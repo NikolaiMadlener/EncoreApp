@@ -52,6 +52,7 @@ struct ScannerSheetView: View {
                 Text("Scan the Session's QR code to join")
                     .font(.system(size: 12))
                     .padding(5)
+                    .foregroundColor(Color.white)
                     .background(Color.gray)
                     .cornerRadius(25)
                     .padding()

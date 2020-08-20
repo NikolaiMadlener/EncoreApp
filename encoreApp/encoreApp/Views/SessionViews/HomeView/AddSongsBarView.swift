@@ -17,6 +17,7 @@ struct AddSongsBarView: View {
     @ObservedObject var playerStateVM: PlayerStateVM
     @Binding var isPlay: Bool
     @Binding var showAddSongSheet:Bool
+    @Binding var currentlyInSession: Bool
     
     @ViewBuilder
     var body: some View {
@@ -46,17 +47,24 @@ struct AddSongsBarView: View {
                     .foregroundColor(Color("purpleblue"))
             }
         }.sheet(isPresented: self.$showAddSongSheet) {
-            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM)
+            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession)
         }
     }
     
     var playPauseButton: some View {
         Button(action: {
-            self.isPlay ? self.playerPause() : self.playerPlay()
+            if !(self.musicController.appRemote?.isConnected ?? false) {
+                self.musicController.appRemote?.connect()
+                if !(self.musicController.appRemote?.isConnected ?? false) {
+                    self.musicController.appRemote?.authorizeAndPlayURI("")
+                    self.musicController.appRemote?.connect()
+                }
+            }
+            self.playerStateVM.isPlaying ? self.playerPause() : self.playerPlay()
         }) {
             ZStack {
                 Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                Image(systemName: self.isPlay ? "pause.circle.fill" : "play.circle.fill")
+                Image(systemName: self.playerStateVM.isPlaying ? "pause.circle.fill" : "play.circle.fill")
                     .font(.system(size: 35, weight: .light))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             }
@@ -100,7 +108,7 @@ struct AddSongsBarView: View {
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
-                self.isPlay = true
+                //self.isPlay = true
                 //                do {
                 //                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
                 //                    DispatchQueue.main.async {
@@ -144,7 +152,7 @@ struct AddSongsBarView: View {
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
-                self.isPlay = false
+                //self.isPlay = false
                 //                do {
                 //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
                 //                    DispatchQueue.main.async {
@@ -207,8 +215,10 @@ struct AddSongsBarView: View {
 struct AddSongsBarView_Previews: PreviewProvider {
     @State static var isPlay = false
     @State static var showAddSongSheet = false
+    @State static var currentlyInSession = true
     
     static var previews: some View {
-        AddSongsBarView(userVM: UserVM(), searchResultListVM: SearchResultListVM(userVM: UserVM()), songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: UserVM()), isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
+        AddSongsBarView(userVM: UserVM(),
+                        searchResultListVM: SearchResultListVM(userVM: UserVM()), songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: UserVM()), isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
     }
 }

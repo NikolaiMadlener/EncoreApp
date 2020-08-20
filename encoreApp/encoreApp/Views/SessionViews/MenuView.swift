@@ -12,6 +12,7 @@ struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
+    @ObservedObject var playerStateVM: PlayerStateVM
     
     @Binding var showMenuSheet: Bool
     @Binding var currentlyInSession: Bool
@@ -19,9 +20,10 @@ struct MenuView: View {
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
     
-    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
+    init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
         self.userListVM = UserListVM(userVM: userVM)
+        self.playerStateVM = playerStateVM
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
     }
@@ -42,17 +44,17 @@ struct MenuView: View {
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
                         ZStack {
-                            RoundedRectangle(cornerRadius: 50).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                            RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                             HStack {
                                 Text("Share Session-Link")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                                     .font(.system(size: 15))
-                                    .padding(.leading, 30)
+                                    .padding(.leading)
                                 Spacer()
                                 Image(systemName: "square.and.arrow.up")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                                     .font(.system(size: 20))
-                                    .padding(.trailing, 30)
+                                    .padding(.trailing)
                             }
                         }.padding(.horizontal, 25)
                     }
@@ -84,7 +86,13 @@ struct MenuView: View {
                             .onAppear{ UITableView.appearance().separatorColor = .clear }
                     }
                     Spacer()
-                }
+                }.alert(isPresented: self.$showSessionExpiredAlert) {
+                    Alert(title: Text("Session expired"),
+                          message: Text("The Host has ended the Session."),
+                          dismissButton: .destructive(Text("Leave"), action: {
+                            self.currentlyInSession = false
+                          }))
+                }.padding(.vertical)
                 VStack {
                     Spacer()
                     Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
@@ -95,75 +103,72 @@ struct MenuView: View {
                         Alert(title: Text("Delete Session"),
                               message: Text("By Deleting the current Session all Members will be kicked."),
                               primaryButton: .destructive(Text("Delete"), action: {
+                                self.playerStateVM.playerPause()
                                 self.deleteSession(username: self.userVM.username)
                               }),
                               secondaryButton: .cancel(Text("Cancel"), action: {
                                 self.showAlert = false
                               }))
-                        //            }.alert(isPresented: $showSessionExpiredAlert) {
-                        //                Alert(title: Text("Session Expired"),
-                        //                      message: Text("The Session was closed by the Host."),
-                        //                      dismissButton: .default(Text("OK"))
-                        //                )
                     }.padding(.vertical)
+                    
                 }
                 
             }.sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
+            }.onAppear{
+                self.getMembers(username: self.userVM.username)
             }
         }
     }
     
-    //    func getMembers(username: String) {
-    //
-    //        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
-    //            print("Invalid URL")
-    //            return
-    //        }
-    //        var request = URLRequest(url: url)
-    //
-    //        print("secret: " + self.user.secret)
-    //        print("sessionID: " + self.user.sessionID)
-    //
-    //        request.httpMethod = "GET"
-    //        request.addValue(self.user.secret, forHTTPHeaderField: "Authorization")
-    //        request.addValue(self.user.sessionID, forHTTPHeaderField: "Session")
-    //
-    //
-    //        // HTTP Request Parameters which will be sent in HTTP Request Body
-    //        //let postString = "userId=300&title=My urgent task&completed=false";
-    //        // Set HTTP Request Body
-    //        //request.httpBody = postString.data(using: String.Encoding.utf8);
-    //        // Perform HTTP Request
-    //        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-    //
-    //            // Check for Error
-    //            if let error = error {
-    //                print("Error took place \(error)")
-    //                return
-    //            }
-    //
-    //            // Convert HTTP Response Data to a String
-    //            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-    //                print("Response data string:\n \(dataString)")
-    //
-    //                do {
-    //                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
-    //                    DispatchQueue.main.async {
-    //                        self.members = decodedData
-    //                        print(self.members)
-    //                        print()
-    //                    }
-    //                } catch {
-    //                    print("Error")
-    //                    self.showSessionExpiredAlert = true
-    //                    self.currentlyInSession = false
-    //                }
-    //            }
-    //            self.currentlyInSession = true
-    //        }
-    //        task.resume()
-    //    }
+    func getMembers(username: String) {
+        
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
+            print("Invalid URL")
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        print("secret: " + self.userVM.secret)
+        print("sessionID: " + self.userVM.sessionID)
+        
+        request.httpMethod = "GET"
+        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        
+        // HTTP Request Parameters which will be sent in HTTP Request Body
+        //let postString = "userId=300&title=My urgent task&completed=false";
+        // Set HTTP Request Body
+        //request.httpBody = postString.data(using: String.Encoding.utf8);
+        // Perform HTTP Request
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string:\n \(dataString)")
+                
+                do {
+                    let decodedData = try JSONDecoder().decode([UserListElement].self, from: data)
+                    DispatchQueue.main.async {
+                        
+                    }
+                } catch {
+                    print("Error")
+                    self.showSessionExpiredAlert = true
+                    
+                }
+            }
+            
+        }
+        task.resume()
+    }
     
     func deleteSession(username: String) {
         
@@ -244,10 +249,11 @@ struct MenuView: View {
 
 struct MenuView_Previews: PreviewProvider {
     static var userVM = UserVM()
+    static var playerStateVM = PlayerStateVM(userVM: userVM)
     @State static var currentlyInSession = false
     @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
+        MenuView(userVM: userVM, playerStateVM: playerStateVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
     }
 }
