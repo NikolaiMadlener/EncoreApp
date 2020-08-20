@@ -44,17 +44,17 @@ struct MenuView: View {
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
                     Button(action: { self.showShareSheet.toggle() }) {
                         ZStack {
-                            RoundedRectangle(cornerRadius: 50).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                            RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                             HStack {
                                 Text("Share Session-Link")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                                     .font(.system(size: 15))
-                                    .padding(.leading, 30)
+                                    .padding(.leading)
                                 Spacer()
                                 Image(systemName: "square.and.arrow.up")
                                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                                     .font(.system(size: 20))
-                                    .padding(.trailing, 30)
+                                    .padding(.trailing)
                             }
                         }.padding(.horizontal, 25)
                     }

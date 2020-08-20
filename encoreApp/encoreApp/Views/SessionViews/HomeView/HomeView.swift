@@ -84,14 +84,14 @@ struct HomeView: View {
                         CurrentSongView(playerStateVM: self.playerStateVM)
                         Spacer()
                     }
-                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
-                    Spacer()
+//                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
+//                    Spacer()
                 }
             }
-            
+            Spacer().frame(height: 40)
             VStack {
                 if (self.current_title_offset <= -260) {
-                    Spacer().frame(height: 280)
+                    Spacer().frame(height: 240)
                 }
                 ForEach(self.songListVM.songs, id: \.self) { song in
                     VStack {
