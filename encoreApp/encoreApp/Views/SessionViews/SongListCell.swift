@@ -18,7 +18,7 @@ struct SongListCell: View {
     
     var body: some View {
         HStack {
-            rankView.frame(width: 50)
+            rankView.frame(width: 55)
             albumView
             songView
             Spacer()

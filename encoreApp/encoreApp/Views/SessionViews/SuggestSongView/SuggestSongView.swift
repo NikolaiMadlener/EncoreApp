@@ -41,6 +41,7 @@ struct SuggestSongView: View {
                         self.currentlyInSession = false
                       }))
             }.padding(.vertical)
+                .edgesIgnoringSafeArea(.all)
         }.onAppear {
             self.getMembers(username: self.userVM.username)
         }
