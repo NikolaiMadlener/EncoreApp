@@ -125,7 +125,8 @@ struct LoginView: View {
             return true
         }
         if username.contains("ä") || username.contains("ö") || username.contains("ü") ||
-            username.contains("Ä") || username.contains("Ö") || username.contains("Ü") {
+            username.contains("Ä") || username.contains("Ö") || username.contains("Ü") ||
+            username.count > 10 {
             return true
         }
         return false
