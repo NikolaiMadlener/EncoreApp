@@ -33,6 +33,7 @@ struct LoginView: View {
     @State var deviceID = ""
     
     @State var showActivityIndicator = false
+    @State var showUsernameExistsAlert = false
     
     var body: some View {
         NavigationView {
@@ -54,10 +55,10 @@ struct LoginView: View {
                                 .stroke(Color.gray, lineWidth: 1)
                         ).padding(.horizontal, 25)
                     if invalidUsername {
-                        Text("Name should at least be three characters long and free of special characters and spaces.")
-                            .font(.system(size: 10))
+                        Text("Name should be between three and 10 characters long and free of special characters and spaces.")
+                            .font(.system(size: 12))
                             .foregroundColor(.red)
-                            .padding([.horizontal, .bottom])
+                            .padding(.horizontal, 25)
                     }
                     Spacer().frame(height: 20)
                     Group {
@@ -70,9 +71,8 @@ struct LoginView: View {
                                 Text("Join Session")
                                     .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
-                            
                             .sheet(isPresented: self.$showScannerSheet) {
-                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert)
+                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert)
                         }
                         LabeledDivider(label: "or")
                         VStack {
@@ -103,8 +103,7 @@ struct LoginView: View {
                         Spacer()
                         Spacer()
                     }.animation(.default)
-                }
-                .alert(isPresented: $showServerErrorAlert) {
+                }.alert(isPresented: $showServerErrorAlert) {
                     Alert(title: Text("Server Error"),
                           message: Text(""),
                           dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
@@ -113,6 +112,10 @@ struct LoginView: View {
                           message: Text("Try again"),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                     
+                }.alert(isPresented: $showUsernameExistsAlert) {
+                        Alert(title: Text("Invalid Name"),
+                              message: Text("A user with the given username already exists."),
+                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                 }
             }
         }

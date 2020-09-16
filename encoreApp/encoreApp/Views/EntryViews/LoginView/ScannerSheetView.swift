@@ -20,6 +20,7 @@ struct ScannerSheetView: View {
     @Binding var secret: String
     @Binding var invalidUsername: Bool
     @Binding var showWrongIDAlert: Bool
+    @Binding var showUsernameExistsAlert: Bool
     
     var body: some View {
         ZStack {
@@ -89,7 +90,11 @@ struct ScannerSheetView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 if dataString.starts(with: "{\"error") {
-                    self.showWrongIDAlert = true
+                    if dataString.starts(with: "{\"error\":\"UserConflictError\"") {
+                        self.showUsernameExistsAlert = true
+                    } else {
+                        self.showWrongIDAlert = true
+                    }
                     return
                 } else {
                     do {
