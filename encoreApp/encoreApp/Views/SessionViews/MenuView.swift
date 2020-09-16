@@ -103,7 +103,7 @@ struct MenuView: View {
                         
                     }.alert(isPresented: self.$showAlert) {
                         Alert(title: Text("Delete Session"),
-                              message: Text("By Deleting the current Session all Members will be kicked."),
+                              message: Text("By deleting the current session all members will be kicked."),
                               primaryButton: .destructive(Text("Delete"), action: {
                                 self.playerStateVM.playerPause()
                                 self.deleteSession(username: self.userVM.username)
