@@ -19,6 +19,7 @@ struct JoinViaURLView: View {
     @State var invalidUsername = false
     @State var showActivityIndicator = false
     @State var showUsernameExistsAlert = false
+    @State var showNetworkErrorAlert = false
     
     var body: some View {
         VStack {
@@ -59,6 +60,12 @@ struct JoinViaURLView: View {
                           message: Text("A user with the given username already exists."),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
             }
+            .alert(isPresented: $showNetworkErrorAlert) {
+                    Alert(title: Text("Network Error"),
+                          message: Text("The Internet connection appears to be offline."),
+                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+            }
+            
         }
     }
     
@@ -89,6 +96,9 @@ struct JoinViaURLView: View {
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
+                if error.localizedDescription == "The Internet connection appears to be offline." {
+                    self.showNetworkErrorAlert = true
+                }
                 self.showActivityIndicator = false
                 return
             }
@@ -117,6 +127,7 @@ struct JoinViaURLView: View {
                         }
                     } catch let error as NSError {
                         print("Failed to load: \(error.localizedDescription)")
+                        self.showActivityIndicator = false
                     }
                     DispatchQueue.main.async {
                         self.userVM.username = username

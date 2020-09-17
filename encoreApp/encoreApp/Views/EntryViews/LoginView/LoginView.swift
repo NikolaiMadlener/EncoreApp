@@ -34,6 +34,7 @@ struct LoginView: View {
     
     @State var showActivityIndicator = false
     @State var showUsernameExistsAlert = false
+    @State var showNetworkErrorAlert = false
     
     var body: some View {
         NavigationView {
@@ -72,7 +73,9 @@ struct LoginView: View {
                                     .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
                             .sheet(isPresented: self.$showScannerSheet) {
-                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert)
+                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert,
+                                    showNetworkErrorAlert:
+                                    self.$showNetworkErrorAlert)
                         }
                         LabeledDivider(label: "or")
                         VStack {
@@ -115,6 +118,10 @@ struct LoginView: View {
                 }.alert(isPresented: $showUsernameExistsAlert) {
                         Alert(title: Text("Invalid Name"),
                               message: Text("A user with the given username already exists."),
+                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                }.alert(isPresented: $showNetworkErrorAlert) {
+                        Alert(title: Text("Network Error"),
+                              message: Text("The Internet connection appears to be offline."),
                               dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                 }
             }
@@ -166,6 +173,11 @@ struct LoginView: View {
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
+                print(error.localizedDescription)
+                if error.localizedDescription == "The Internet connection appears to be offline." {
+                    self.showNetworkErrorAlert = true
+                }
+                self.showActivityIndicator = false
                 return
             }
             
@@ -188,6 +200,7 @@ struct LoginView: View {
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
                     self.showServerErrorAlert = true
+                    self.showActivityIndicator = false
                 }
                 
             }

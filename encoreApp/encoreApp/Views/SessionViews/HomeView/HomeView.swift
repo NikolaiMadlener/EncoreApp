@@ -53,7 +53,7 @@ struct HomeView: View {
                         }
                     }
                     VStack {
-                        Spacer().frame(height: 280)
+                        Spacer().frame(height: 300)
                         ForEach(self.songListVM.songs, id: \.self) { song in
                             VStack {
                                 SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)

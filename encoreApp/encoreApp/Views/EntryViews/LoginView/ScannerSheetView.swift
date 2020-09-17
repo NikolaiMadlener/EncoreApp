@@ -21,6 +21,7 @@ struct ScannerSheetView: View {
     @Binding var invalidUsername: Bool
     @Binding var showWrongIDAlert: Bool
     @Binding var showUsernameExistsAlert: Bool
+    @Binding var showNetworkErrorAlert: Bool
     
     var body: some View {
         ZStack {
@@ -83,6 +84,9 @@ struct ScannerSheetView: View {
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
+                if error.localizedDescription == "The Internet connection appears to be offline." {
+                    self.showNetworkErrorAlert = true
+                }
                 return
             }
             
