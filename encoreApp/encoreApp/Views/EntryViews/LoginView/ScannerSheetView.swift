@@ -20,6 +20,8 @@ struct ScannerSheetView: View {
     @Binding var secret: String
     @Binding var invalidUsername: Bool
     @Binding var showWrongIDAlert: Bool
+    @Binding var showUsernameExistsAlert: Bool
+    @Binding var showNetworkErrorAlert: Bool
     
     var body: some View {
         ZStack {
@@ -49,11 +51,11 @@ struct ScannerSheetView: View {
                         .padding()
                 }
                 Spacer()
-                Text("Scan the Session's QR code to join")
-                    .font(.system(size: 12))
+                Text("Scan the session's QR code to join")
+                    .font(.system(size: 14))
                     .padding(5)
                     .foregroundColor(Color.white)
-                    .background(Color.gray)
+                    .background(Color("purpleblue"))
                     .cornerRadius(25)
                     .padding()
             }
@@ -82,6 +84,9 @@ struct ScannerSheetView: View {
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
+                if error.localizedDescription == "The Internet connection appears to be offline." {
+                    self.showNetworkErrorAlert = true
+                }
                 return
             }
             
@@ -89,7 +94,11 @@ struct ScannerSheetView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 if dataString.starts(with: "{\"error") {
-                    self.showWrongIDAlert = true
+                    if dataString.starts(with: "{\"error\":\"UserConflictError\"") {
+                        self.showUsernameExistsAlert = true
+                    } else {
+                        self.showWrongIDAlert = true
+                    }
                     return
                 } else {
                     do {

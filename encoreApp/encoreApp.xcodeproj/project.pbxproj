@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23050BBC2513627D00B59A4C /* AnyGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23050BBB2513627D00B59A4C /* AnyGestureRecognizer.swift */; };
 		23117C5224895F6B0023B680 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23117C5124895F6B0023B680 /* ActivityViewController.swift */; };
 		23190660247DA25F00DA550B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319065F247DA25F00DA550B /* AppDelegate.swift */; };
 		23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190661247DA25F00DA550B /* SceneDelegate.swift */; };
@@ -57,6 +58,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		23050BBB2513627D00B59A4C /* AnyGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyGestureRecognizer.swift; sourceTree = "<group>"; };
 		23117C5124895F6B0023B680 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		2319065C247DA25F00DA550B /* encoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = encoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2319065F247DA25F00DA550B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				8FE5348E24812EFB00D4D630 /* VoteState.swift */,
 				231CDA23249D3A8800632B8C /* MusicController.swift */,
 				231CDA2E249E0B9700632B8C /* ImageLoader.swift */,
+				23050BBB2513627D00B59A4C /* AnyGestureRecognizer.swift */,
 				231CDA30249E0BB700632B8C /* AsyncImage.swift */,
 				23190665247DA26400DA550B /* Assets.xcassets */,
 				2319066A247DA26400DA550B /* LaunchScreen.storyboard */,
@@ -462,6 +465,7 @@
 				233D2ACE2491990100994038 /* UserListVM.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,
 				8F108A992480537F00D5C27B /* Model.swift in Sources */,
+				23050BBC2513627D00B59A4C /* AnyGestureRecognizer.swift in Sources */,
 				8FDEBF7C24AD2D240090B5F2 /* ProgressBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -610,7 +614,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = encoreApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -643,7 +647,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = encoreApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -31,6 +31,7 @@ struct CurrentSongView: View {
                 .resizable()
                 .frame(width: 180, height: 180)
                 .cornerRadius(10)
+                .shadow(radius: 10)
 //                .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
 //                .shadow(color: Color(uiColorTopRight).opacity(0.1), radius: 8, x: 10, y: -10)
 //                .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)

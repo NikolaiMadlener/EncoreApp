@@ -28,7 +28,7 @@ struct SuggestSongView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search songs")
             List {
                 ForEach(searchResultListVM.items, id: \.self) { song in
@@ -40,8 +40,7 @@ struct SuggestSongView: View {
                       dismissButton: .destructive(Text("Leave"), action: {
                         self.currentlyInSession = false
                       }))
-            }.padding(.vertical)
-                .edgesIgnoringSafeArea(.all)
+            }.edgesIgnoringSafeArea(.all)
         }.onAppear {
             self.getMembers(username: self.userVM.username)
         }

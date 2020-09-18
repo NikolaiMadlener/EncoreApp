@@ -31,7 +31,7 @@ struct MenuView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                VStack {
+                VStack(spacing: 0) {
                     Button(action: { self.showMenuSheet = false }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
@@ -41,7 +41,7 @@ struct MenuView: View {
                     
                     QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
                     
-                    Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center)
+                    Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center).padding(.bottom)
                     Button(action: { self.showShareSheet.toggle() }) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
@@ -61,6 +61,7 @@ struct MenuView: View {
                     VStack() {
                         List {
                             VStack {
+                                Spacer().frame(height: 10)
                                 ForEach(self.userListVM.members, id: \.self) { member in
                                     VStack {
                                         HStack {
@@ -74,25 +75,26 @@ struct MenuView: View {
                                                 Image(systemName: "music.house")
                                             }
                                             else if member.username == self.userVM.username {
-                                                Text("You")
+                                                Text("You").bold()
                                             }
                                         }
                                         Divider()
                                     }
                                 }
+                                Spacer().frame(height: 10)
                             }
                             
-                        }.padding()
+                        }.padding(.horizontal, 30)
                             .onAppear{ UITableView.appearance().separatorColor = .clear }
                     }
-                    Spacer()
+                    Spacer().frame(height: 65)
                 }.alert(isPresented: self.$showSessionExpiredAlert) {
                     Alert(title: Text("Session expired"),
                           message: Text("The Host has ended the Session."),
                           dismissButton: .destructive(Text("Leave"), action: {
                             self.currentlyInSession = false
                           }))
-                }.padding(.vertical)
+                }
                 VStack {
                     Spacer()
                     Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
@@ -101,7 +103,7 @@ struct MenuView: View {
                         
                     }.alert(isPresented: self.$showAlert) {
                         Alert(title: Text("Delete Session"),
-                              message: Text("By Deleting the current Session all Members will be kicked."),
+                              message: Text("By deleting the current session all members will be kicked."),
                               primaryButton: .destructive(Text("Delete"), action: {
                                 self.playerStateVM.playerPause()
                                 self.deleteSession(username: self.userVM.username)
@@ -109,7 +111,7 @@ struct MenuView: View {
                               secondaryButton: .cancel(Text("Cancel"), action: {
                                 self.showAlert = false
                               }))
-                    }.padding(.vertical)
+                    }.padding(.bottom)
                     
                 }
                 
