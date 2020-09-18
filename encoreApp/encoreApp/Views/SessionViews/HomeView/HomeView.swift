@@ -62,14 +62,14 @@ struct HomeView: View {
                                     .padding(.top, -5)
                             }
                         }
-                        Spacer().frame(height: 100)
+                        Spacer().frame(height: 50)
                     }.animation(.easeInOut(duration: 0.2))
                     
                     // for hiding Song Queue Layer above Song Title Layer
                     if (geo.frame(in: .global).minY <= -150) {
                         VStack {
                             Rectangle()
-                                .frame(height: 50)
+                                .frame(height: 60)
                                 .foregroundColor(self.colorScheme == .dark ? Color(.black) : Color(.white))
                             Spacer()
                         }.edgesIgnoringSafeArea(.top).offset(y: -geo.frame(in: .global).minY)
@@ -83,7 +83,8 @@ struct HomeView: View {
                         }.offset(y: -geo.frame(in: .global).minY + self.offset)
                     }
                     
-                }.frame(height: (CGFloat(self.songListVM.songs.count * 87 + 380)))
+                }
+                .frame(height: (CGFloat(self.songListVM.songs.count * 77 + 380)))
             }
             
             //Layer 3: Menu Layer
@@ -102,7 +103,7 @@ struct HomeView: View {
                     Image(systemName: "ellipsis")
                         .font(Font.system(.title))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .padding(20)
+                        .padding(25)
                 }.sheet(isPresented: self.$showMenuSheet) {
                     MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }

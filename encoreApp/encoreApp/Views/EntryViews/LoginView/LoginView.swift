@@ -36,19 +36,35 @@ struct LoginView: View {
     @State var showUsernameExistsAlert = false
     @State var showNetworkErrorAlert = false
     
+    
     var body: some View {
         NavigationView {
             ZStack {
-                Image("entryBackground")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .edgesIgnoringSafeArea(.all).offset(x: 0, y: 75)
+                if #available(iOS 14.0, *) {
+                    VStack {
+                        Spacer()
+                        Image("vinyl")
+                            .resizable()
+                            .scaledToFit()
+                            .offset(x:0,y:70)
+                            .scaleEffect(x:1.3, y:1.3)
+                    }.ignoresSafeArea(.keyboard)
+                } else {
+                    VStack {
+                        Spacer()
+                        Image("vinyl")
+                            .resizable()
+                            .scaledToFit()
+                            .offset(x:0,y:70)
+                            .scaleEffect(x:1.3, y:1.3)
+                    }
+                }
+                
                 VStack {
-                    Spacer().frame(height: 30)
                     Text("encore.")
                         .font(.largeTitle)
                         .bold()
-                    Spacer().frame(height: 80)
+                    Spacer().frame(height: 40)
                     TextField("Enter your Name", text: self.$username)
                         .padding(15)
                         .overlay(
@@ -68,14 +84,14 @@ struct LoginView: View {
                         } else {
                             self.showScannerSheet = true
                             self.invalidUsername = false
-                            }}) {
-                                Text("Join Session")
-                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                        }}) {
+                            Text("Join Session")
+                                .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
                         }.disabled(username.count < 1)
-                            .sheet(isPresented: self.$showScannerSheet) {
-                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert,
-                                    showNetworkErrorAlert:
-                                    self.$showNetworkErrorAlert)
+                        .sheet(isPresented: self.$showScannerSheet) {
+                            ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert,
+                                             showNetworkErrorAlert:
+                                                self.$showNetworkErrorAlert)
                         }
                         LabeledDivider(label: "or")
                         VStack {
@@ -102,10 +118,8 @@ struct LoginView: View {
                                 AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
                             }
                         }
-                        
                         Spacer()
-                        Spacer()
-                    }.animation(.default)
+                    }
                 }.alert(isPresented: $showServerErrorAlert) {
                     Alert(title: Text("Server Error"),
                           message: Text(""),
@@ -116,13 +130,13 @@ struct LoginView: View {
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                     
                 }.alert(isPresented: $showUsernameExistsAlert) {
-                        Alert(title: Text("Invalid Name"),
-                              message: Text("A user with the given username already exists."),
-                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                    Alert(title: Text("Invalid Name"),
+                          message: Text("A user with the given username already exists."),
+                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                 }.alert(isPresented: $showNetworkErrorAlert) {
-                        Alert(title: Text("Network Error"),
-                              message: Text("The Internet connection appears to be offline."),
-                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                    Alert(title: Text("Network Error"),
+                          message: Text("The Internet connection appears to be offline."),
+                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                 }
             }
         }
