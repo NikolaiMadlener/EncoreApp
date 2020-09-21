@@ -38,107 +38,114 @@ struct LoginView: View {
     
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                if #available(iOS 14.0, *) {
-                    VStack {
-                        Spacer()
-                        Image("vinyl")
-                            .resizable()
-                            .scaledToFit()
-                            .offset(x:0,y:70)
-                            .scaleEffect(x:1.3, y:1.3)
-                    }.ignoresSafeArea(.keyboard)
-                } else {
-                    VStack {
-                        Spacer()
-                        Image("vinyl")
-                            .resizable()
-                            .scaledToFit()
-                            .offset(x:0,y:70)
-                            .scaleEffect(x:1.3, y:1.3)
-                    }
-                }
-                
-                VStack {
-                    Text("encore.")
-                        .font(.largeTitle)
-                        .bold()
-                    Spacer().frame(height: 40)
-                    TextField("Enter your Name", text: self.$username)
-                        .padding(15)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.gray, lineWidth: 1)
-                        ).padding(.horizontal, 25)
-                    if invalidUsername {
-                        Text("Name should be between three and 10 characters long and free of special characters and spaces.")
-                            .font(.system(size: 12))
-                            .foregroundColor(.red)
-                            .padding(.horizontal, 25)
-                    }
-                    Spacer().frame(height: 20)
-                    Group {
-                        Button(action: { if self.checkUsernameInvalid(username: self.username) {
-                            self.invalidUsername = true
-                        } else {
-                            self.showScannerSheet = true
-                            self.invalidUsername = false
-                        }}) {
-                            Text("Join Session")
-                                .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-                        }.disabled(username.count < 1)
-                        .sheet(isPresented: self.$showScannerSheet) {
-                            ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert,
-                                             showNetworkErrorAlert:
-                                                self.$showNetworkErrorAlert)
-                        }
-                        LabeledDivider(label: "or")
+        GeometryReader { geo in
+            NavigationView {
+                ZStack {
+                    if #available(iOS 14.0, *) {
                         VStack {
-                            ZStack {
-                                Button(action: {
-                                    self.createSession(username: self.username)
-                                }) {
-                                    ZStack {
-                                        if !showActivityIndicator {
-                                            Text("Create Session")
-                                        } else {
-                                            ActivityIndicator()
-                                                .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
-                                        }
-                                    }
-                                    .modifier(ButtonLightModifier(isDisabled: username.count < 1, foregroundColor: Color("purpleblue")))
-                                    
-                                }.disabled(username.count < 1)
-                            }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
-                                
-                                self.getAuthToken()
-                                self.showActivityIndicator = false
-                            }) {
-                                AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
-                            }
+                            Spacer()
+                            Image("vinyl")
+                                .resizable()
+                                .scaledToFit()
+                                .offset(x:0, y:geo.size.width/10)
+                                .scaleEffect(x:1.5, y:1.5)
+                        }.ignoresSafeArea(.keyboard)
+                    } else {
+                        VStack {
+                            Spacer()
+                            Image("vinyl")
+                                .resizable()
+                                .scaledToFit()
+                                .offset(x:0, y:geo.size.width/10)
+                                .scaleEffect(x:1.5, y:1.5)
                         }
-                        Spacer()
                     }
-                }.alert(isPresented: $showServerErrorAlert) {
-                    Alert(title: Text("Server Error"),
-                          message: Text(""),
-                          dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
-                }.alert(isPresented: $showWrongIDAlert) {
-                    Alert(title: Text("Session doesn't exist"),
-                          message: Text("Try again"),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
                     
-                }.alert(isPresented: $showUsernameExistsAlert) {
-                    Alert(title: Text("Invalid Name"),
-                          message: Text("A user with the given username already exists."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
-                }.alert(isPresented: $showNetworkErrorAlert) {
-                    Alert(title: Text("Network Error"),
-                          message: Text("The Internet connection appears to be offline."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                    VStack {
+                        Spacer()
+                        Text("encore.")
+                            .font(.largeTitle)
+                            .bold()
+                        Spacer()
+                        TextField("Enter your Name", text: self.$username)
+                            .padding(15)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            ).padding(.horizontal, 25)
+                        if invalidUsername {
+                            Text("Name should be between three and 10 characters long and free of special characters and spaces.")
+                                .font(.system(size: 12))
+                                .foregroundColor(.red)
+                                .padding(.horizontal, 25)
+                        }
+                        Spacer().frame(height: 20)
+                        Group {
+                            Button(action: { if self.checkUsernameInvalid(username: self.username) {
+                                self.invalidUsername = true
+                            } else {
+                                self.showScannerSheet = true
+                                self.invalidUsername = false
+                            }}) {
+                                Text("Join Session")
+                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                            }.disabled(username.count < 1)
+                            .sheet(isPresented: self.$showScannerSheet) {
+                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert,
+                                                 showNetworkErrorAlert:
+                                                    self.$showNetworkErrorAlert)
+                            }
+                            LabeledDivider(label: "or")
+                            VStack {
+                                ZStack {
+                                    Button(action: {
+                                        self.createSession(username: self.username)
+                                    }) {
+                                        ZStack {
+                                            if !showActivityIndicator {
+                                                Text("Create Session")
+                                            } else {
+                                                ActivityIndicator()
+                                                    .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
+                                            }
+                                        }
+                                        .modifier(ButtonLightModifier(isDisabled: username.count < 1, foregroundColor: Color("purpleblue")))
+                                        
+                                    }.disabled(username.count < 1)
+                                }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                                    
+                                    self.getAuthToken()
+                                    self.showActivityIndicator = false
+                                }) {
+                                    AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
+                                }
+                            }
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                        }
+                    }.alert(isPresented: $showServerErrorAlert) {
+                        Alert(title: Text("Server Error"),
+                              message: Text(""),
+                              dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
+                    }.alert(isPresented: $showWrongIDAlert) {
+                        Alert(title: Text("Session doesn't exist"),
+                              message: Text("Try again"),
+                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                    }.alert(isPresented: $showUsernameExistsAlert) {
+                        Alert(title: Text("Invalid Name"),
+                              message: Text("A user with the given username already exists."),
+                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                    }.alert(isPresented: $showNetworkErrorAlert) {
+                        Alert(title: Text("Network Error"),
+                              message: Text("The Internet connection appears to be offline."),
+                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                    }.frame(maxWidth: 500)
+                    .navigationBarTitle("")
+                    .navigationBarHidden(true)
                 }
             }
+            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
     

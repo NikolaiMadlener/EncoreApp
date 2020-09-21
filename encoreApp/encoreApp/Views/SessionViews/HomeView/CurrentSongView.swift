@@ -16,9 +16,9 @@ struct CurrentSongView: View {
 //    var uiColorBottomLeft: UIColor
 //    var uiColorTopRight: UIColor
     
-    init(playerStateVM: PlayerStateVM) {
+    init(playerStateVM: PlayerStateVM, albumWidth: CGFloat) {
         self.playerStateVM = playerStateVM
-        self.albumWidth = playerStateVM.albumCover.size.width
+        self.albumWidth = albumWidth
 //        self.uiColorTopLeft = playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2, y: albumWidth * 0.2))
 //        self.uiColorBottomRight = playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
 //        self.uiColorBottomLeft = playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
@@ -26,10 +26,11 @@ struct CurrentSongView: View {
     }
     
     var body: some View {
+        
         VStack {
             Image(uiImage: self.playerStateVM.albumCover)
                 .resizable()
-                .frame(width: 180, height: 180)
+                .frame(width: albumWidth, height: albumWidth)
                 .cornerRadius(10)
                 .shadow(radius: 10)
 //                .shadow(color: Color(uiColorTopLeft).opacity(0.1), radius: 8, x: -10, y: -10)
@@ -41,12 +42,12 @@ struct CurrentSongView: View {
                 .font(.system(size: 22, weight: .bold))
             Text("\(self.playerStateVM.song.artists[0])")
                 .font(.system(size: 18, weight: .semibold))
-        }
+        } 
     }
 }
 
 struct CurrentSongView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentSongView(playerStateVM: PlayerStateVM(userVM: UserVM()))
+        CurrentSongView(playerStateVM: PlayerStateVM(userVM: UserVM()), albumWidth: 180)
     }
 }

@@ -20,7 +20,6 @@ struct HomeView: View {
     @State var showMenuSheet = false
     @State var showAddSongSheet = false
     @Binding var currentlyInSession: Bool
-    //@State var current_title_offset: CGFloat = 0
     @State var isPlay = true
     @State var value: Float = 0.8
     @State var offset = CGFloat()
@@ -40,12 +39,12 @@ struct HomeView: View {
                 GeometryReader { geo in
                     //                    Text("\(geo.frame(in: .global).minY)").offset(y: -geo.frame(in: .global).minY + self.offset)
                     Text("").onAppear {self.offset = geo.frame(in: .global).minY}
-                    if (geo.frame(in: .global).minY > -150) {
+                    if (geo.frame(in: .global).minY > -geo.size.width*0.5) {
                         VStack {
                             Spacer().frame(height: 20)
                             HStack {
                                 Spacer()
-                                CurrentSongView(playerStateVM: self.playerStateVM)
+                                CurrentSongView(playerStateVM: self.playerStateVM, albumWidth: geo.size.width*0.5)
                                 Spacer()
                             }
                             //                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
@@ -53,7 +52,7 @@ struct HomeView: View {
                         }
                     }
                     VStack {
-                        Spacer().frame(height: 300)
+                        Spacer().frame(height: geo.size.width*0.5 + 100)
                         ForEach(self.songListVM.songs, id: \.self) { song in
                             VStack {
                                 SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
@@ -66,7 +65,7 @@ struct HomeView: View {
                     }.animation(.easeInOut(duration: 0.2))
                     
                     // for hiding Song Queue Layer above Song Title Layer
-                    if (geo.frame(in: .global).minY <= -150) {
+                    if (geo.frame(in: .global).minY <= -geo.size.width*0.5) {
                         VStack {
                             Rectangle()
                                 .frame(height: 60)
@@ -76,7 +75,7 @@ struct HomeView: View {
                     }
                     
                     //Layer 2: Song Title Layer
-                    if (geo.frame(in: .global).minY <= -150) {
+                    if (geo.frame(in: .global).minY <= -geo.size.width*0.5) {
                         VStack {
                             SongTitleBarView(playerStateVM: self.playerStateVM)
                             Spacer()
@@ -84,14 +83,19 @@ struct HomeView: View {
                     }
                     
                 }
-                .frame(height: (CGFloat(self.songListVM.songs.count * 77 + 380)))
+                .frame(height: { () -> CGFloat in
+                    if UIDevice.current.localizedModel == "iPhone" {
+                        return CGFloat(self.songListVM.songs.count * 75 + 400)
+                    }
+                    return CGFloat(self.songListVM.songs.count * 75 + 650)
+                }() )
             }
             
             //Layer 3: Menu Layer
             self.menu_layer
         }//.onAppear{ self.playerStateVM.viewDidLoad() }
-            // triggers updates on every second
-            .onAppear{ self.playerStateVM.playerPause() }
+        // triggers updates on every second
+        .onAppear{ self.playerStateVM.playerPause() }
     }
     
     //MARK: Layer 3: Menu Layer
