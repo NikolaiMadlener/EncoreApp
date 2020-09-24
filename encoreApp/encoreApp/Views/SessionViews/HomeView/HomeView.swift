@@ -52,18 +52,17 @@ struct HomeView: View {
                             Spacer()
                         }
                     }
-                    VStack {
+                    VStack(spacing: 0) {
                         Spacer().frame(height: 300)
-                        ForEach(self.songListVM.songs, id: \.self) { song in
-                            VStack {
+                        
+                            ForEach(self.songListVM.songs, id: \.self) { song in
                                 SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
+                                    .frame(height: 80)
                                 Divider()
                                     .padding(.horizontal)
-                                    .padding(.top, -5)
                             }
-                        }
                         Spacer().frame(height: 50)
-                    }.animation(.easeInOut(duration: 0.2))
+                    }.animation(.easeInOut(duration: 0.3))
                     
                     // for hiding Song Queue Layer above Song Title Layer
                     if (geo.frame(in: .global).minY <= -150) {
@@ -108,6 +107,7 @@ struct HomeView: View {
                     MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
+
             Spacer()
             HStack {
                 Spacer()

@@ -39,9 +39,12 @@ struct CurrentSongView: View {
 //                .blendMode(.multiply)
             Text("\(self.playerStateVM.song.name)")
                 .font(.system(size: 22, weight: .bold))
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+             
             Text("\(self.playerStateVM.song.artists[0])")
                 .font(.system(size: 18, weight: .semibold))
-        }
+        }.frame(width: UIScreen.main.bounds.width * 0.8)
     }
 }
 

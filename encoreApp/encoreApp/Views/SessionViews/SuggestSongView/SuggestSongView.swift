@@ -33,6 +33,7 @@ struct SuggestSongView: View {
             List {
                 ForEach(searchResultListVM.items, id: \.self) { song in
                     SuggestSongCell(searchResultListVM: self.searchResultListVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, song: song)
+                        .frame(height: 60)
                 }
             }.alert(isPresented: self.$showSessionExpiredAlert) {
                 Alert(title: Text("Session expired"),

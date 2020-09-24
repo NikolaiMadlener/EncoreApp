@@ -18,7 +18,7 @@ struct SongListCell: View {
     
     var body: some View {
         HStack {
-            rankView.frame(width: 55)
+            //rankView.frame(width: 55)
             albumView
             songView
             Spacer()
@@ -51,6 +51,7 @@ struct SongListCell: View {
                 .frame(width: 55, height: 55)
                 .cornerRadius(5)
             }).frame(width: 55, height: 55)
+            .padding(.horizontal, 10)
     }
     
     private var songView: some View {
@@ -61,14 +62,16 @@ struct SongListCell: View {
     }
     
     private var voteView: some View {
-        ZStack {
+        HStack {
             Text("\(self.song.upvoters.count - self.song.downvoters.count)")
-                .font(.system(size: 20, weight: .regular))
-            VStack {
+                .font(.system(size: 23, weight: .semibold))
+                .padding(.leading, 10)
+                .padding(.trailing, 5)
+            VStack(spacing: 0) {
                 upvoteButton
                 downvoteButton
-            }
-        }.padding(.horizontal)
+            }.padding(.trailing, 10)
+        }
     }
     
     private var upvoteButton: some View {
@@ -76,19 +79,16 @@ struct SongListCell: View {
             switch self.voteState {
             case .NEUTRAL:
                 self.upvote()
-                //self.model.upvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.UPVOTE
             case .UPVOTE: break
             case .DOWNVOTE:
                 self.upvote()
-                //self.model.upvote(song: self.song, username: "Myself")
-                self.voteState = VoteState.NEUTRAL
             }
         }) {
-            Image(systemName: "chevron.up")
-                .font(.system(size: 30, weight: .semibold))
-                .foregroundColor(voteState != VoteState.DOWNVOTE ? voteState.color : Color.gray)
-                .padding(.bottom, 5)
+            Image(systemName: voteState == VoteState.UPVOTE ? "triangle.fill" : "triangle")
+                .font(.system(size: 23, weight: .semibold))
+                .foregroundColor(voteState == VoteState.UPVOTE ? voteState.color : Color.gray)
+                .padding(.bottom, 3)
         }
     }
     
@@ -97,24 +97,21 @@ struct SongListCell: View {
             switch self.voteState {
             case .NEUTRAL:
                 self.downvote()
-                //self.model.downvote(song: self.song, username: "Myself")
                 self.voteState = VoteState.DOWNVOTE
             case .UPVOTE:
                 self.downvote()
-                //self.model.downvote(song: self.song, username: "Myself")
-                self.voteState = VoteState.NEUTRAL
             case .DOWNVOTE: break
             }
         }) {
-            Image(systemName: "chevron.down")
-                .font(.system(size: 30, weight: .semibold))
-                .foregroundColor(voteState != VoteState.UPVOTE ? voteState.color : Color.gray)
-                .padding(.top, 5)
+            Image(systemName: voteState == VoteState.DOWNVOTE ? "triangle.fill" : "triangle")
+                .font(.system(size: 23, weight: .semibold))
+                .foregroundColor(voteState == VoteState.DOWNVOTE ? voteState.color : Color.gray)
+                .rotationEffect(.degrees(-180))
+                .padding(.top, 3)
         }
     }
     
     func upvote() {
-        self.voteState = .UPVOTE
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/up") else {
             print("Invalid URL")
             return
@@ -160,7 +157,6 @@ struct SongListCell: View {
     }
     
     func downvote() {
-        self.voteState = .DOWNVOTE
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(self.userVM.username)"+"/vote/"+"\(self.song.id)"+"/down") else {
             print("Invalid URL")
             return
