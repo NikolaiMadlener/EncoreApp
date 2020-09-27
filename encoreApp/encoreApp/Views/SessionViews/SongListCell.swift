@@ -86,7 +86,7 @@ struct SongListCell: View {
             }
         }) {
             Image(systemName: voteState == VoteState.UPVOTE ? "triangle.fill" : "triangle")
-                .font(.system(size: 23, weight: .semibold))
+                .font(.system(size: 22, weight: .regular))
                 .foregroundColor(voteState == VoteState.UPVOTE ? voteState.color : Color.gray)
                 .padding(.bottom, 3)
         }
@@ -104,7 +104,7 @@ struct SongListCell: View {
             }
         }) {
             Image(systemName: voteState == VoteState.DOWNVOTE ? "triangle.fill" : "triangle")
-                .font(.system(size: 23, weight: .semibold))
+                .font(.system(size: 23, weight: .regular))
                 .foregroundColor(voteState == VoteState.DOWNVOTE ? voteState.color : Color.gray)
                 .rotationEffect(.degrees(-180))
                 .padding(.top, 3)
