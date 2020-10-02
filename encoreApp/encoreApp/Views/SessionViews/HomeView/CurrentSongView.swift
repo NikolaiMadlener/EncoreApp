@@ -26,7 +26,6 @@ struct CurrentSongView: View {
     }
     
     var body: some View {
-        
         VStack {
             Image(uiImage: self.playerStateVM.albumCover)
                 .resizable()
@@ -45,6 +44,7 @@ struct CurrentSongView: View {
         } 
     }
 }
+
 
 struct CurrentSongView_Previews: PreviewProvider {
     static var previews: some View {

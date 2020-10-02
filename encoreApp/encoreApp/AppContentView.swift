@@ -7,8 +7,10 @@
 //
 
 import SwiftUI
+//import StoreKit
 
 struct AppContentView: View {
+    //@EnvironmentObject var musicController: MusicController
     @ObservedObject var userVM = UserVM()
     @State var currentlyInSession = false
     @State var showJoinSheet: Bool = false
@@ -17,21 +19,21 @@ struct AppContentView: View {
     
     var body: some View {
         return Group {
-                if currentlyInSession {
-                    HomeView(userVM: userVM, currentlyInSession: $currentlyInSession)
-                }
-                else {
-                    LoginView(userVM: userVM, currentlyInSession: $currentlyInSession)
-                        .sheet(isPresented: self.$showJoinSheet) {
-                            JoinViaURLView(userVM: self.userVM, sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
+            if currentlyInSession {
+                HomeView(userVM: userVM, currentlyInSession: $currentlyInSession)
+            }
+            else {
+                LoginView(userVM: userVM, currentlyInSession: $currentlyInSession)
+                    .sheet(isPresented: self.$showJoinSheet) {
+                        JoinViaURLView(userVM: self.userVM, sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
                     }
-                }
+            }
         }.onAppear{ self.showJoinSheet = self.joinedViaURL }
     }
 }
 
 struct AppContentView_Previews: PreviewProvider {
-
+    
     static var previews: some View {
         AppContentView(joinedViaURL: false, sessionID: "")
     }

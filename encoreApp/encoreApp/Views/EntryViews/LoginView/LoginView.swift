@@ -8,10 +8,37 @@
 
 import SwiftUI
 import SafariServices
+//import StoreKit
+
+//struct LoginParentView: View {
+//    //@EnvironmentObject var musicController: MusicController
+//    @ObservedObject var musicController: MusicController = .shared
+//
+//    @ObservedObject var userVM: UserVM
+//    @Binding var currentlyInSession: Bool
+//
+//    var body: some View {
+//        if #available(iOS 14.0, *) {
+//            LoginView(userVM: userVM, currentlyInSession: $currentlyInSession)
+////                .appStoreOverlay(isPresented: $musicController.showAppStoreOverlay) {
+////                    SKOverlay.AppConfiguration(appIdentifier: "324684580", position: .bottom)
+////                }
+//        } else {
+//            LoginView(userVM: userVM, currentlyInSession: $currentlyInSession)
+//                .alert(isPresented: $musicController.showNoSpotifyAppAlert) {
+//                    Alert(title: Text("Spotify App not installed"),
+//                          message: Text("Get the Spotify App to create a Session."),
+//                          dismissButton: .default(Text("OK"), action: { self.musicController.showNoSpotifyAppAlert = false }))
+//                }
+//        }
+//    }
+//}
 
 struct LoginView: View {
     @ObservedObject var userVM: UserVM
+    //@EnvironmentObject var musicController: MusicController
     @ObservedObject var musicController: MusicController = .shared
+
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
     @State var sessionID: String = ""
@@ -35,7 +62,7 @@ struct LoginView: View {
     @State var showActivityIndicator = false
     @State var showUsernameExistsAlert = false
     @State var showNetworkErrorAlert = false
-    
+    @State var showNoPremiumError = false
     
     var body: some View {
         GeometryReader { geo in
@@ -56,7 +83,7 @@ struct LoginView: View {
                             Image("vinyl")
                                 .resizable()
                                 .scaledToFit()
-                                .offset(x:0, y:geo.size.width/10)
+                                .offset(x:0, y:geo.size.width/4)
                                 .scaleEffect(x:1.5, y:1.5)
                         }
                     }
@@ -113,7 +140,7 @@ struct LoginView: View {
                                         
                                     }.disabled(username.count < 1)
                                 }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
-                                    
+                                    print("dismiss")
                                     self.getAuthToken()
                                     self.showActivityIndicator = false
                                 }) {
@@ -135,17 +162,20 @@ struct LoginView: View {
                     }.alert(isPresented: $showUsernameExistsAlert) {
                         Alert(title: Text("Invalid Name"),
                               message: Text("A user with the given username already exists."),
-                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                              dismissButton: .default(Text("OK"), action: { self.showUsernameExistsAlert = false }))
                     }.alert(isPresented: $showNetworkErrorAlert) {
                         Alert(title: Text("Network Error"),
                               message: Text("The Internet connection appears to be offline."),
-                              dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                              dismissButton: .default(Text("OK"), action: { self.showNetworkErrorAlert = false }))
+                    }.alert(isPresented: $showNoPremiumError) {
+                        Alert(title: Text("No Premium Account"),
+                              message: Text("To create a Session you need a Spotify Premium Account."),
+                              dismissButton: .default(Text("OK"), action: { self.showNoPremiumError = false }))
                     }.frame(maxWidth: 500)
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
                 }
-            }
-            .navigationViewStyle(StackNavigationViewStyle())
+            }.navigationViewStyle(StackNavigationViewStyle())
         }
     }
     
@@ -163,8 +193,6 @@ struct LoginView: View {
         return false
     }
     
-    
-    
     func createSession(username: String) {
         if checkUsernameInvalid(username: username) {
             invalidUsername = true
@@ -172,25 +200,18 @@ struct LoginView: View {
         } else {
             invalidUsername = false
         }
-        
         self.showActivityIndicator = true
         
         guard let url = URL(string: "https://api.encore-fm.com/admin/"+"\(username)"+"/createSession") else {
             print("Invalid URL")
             return
         }
+        
         var request = URLRequest(url: url)
-        
         request.httpMethod = "POST"
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
         var auth_url = ""
+        
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
@@ -210,20 +231,19 @@ struct LoginView: View {
                     // make sure this JSON is in the format we expect
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         // try to read out a string array
+                        
                         if let userInfo = json["user_info"] as? [String: Any] {
                             self.sessionID = userInfo["session_id"] as! String
                             self.secret = userInfo["secret"] as! String
-                            
                         }
-                        
                         self.auth_url = json["auth_url"] as! String
+                        
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
                     self.showServerErrorAlert = true
                     self.showActivityIndicator = false
                 }
-                
             }
             DispatchQueue.main.async {
                 self.userVM.username = username
@@ -231,20 +251,83 @@ struct LoginView: View {
                 self.userVM.secret = self.secret
                 self.userVM.sessionID = self.sessionID
                 self.userVM.auth_url = self.auth_url
-                
+                print("AUTH_URL:" + "\(self.userVM.auth_url)")
                 self.getClientToken()
             }
         }
         task.resume()
     }
     
+    func getUserInfo() {
+        guard let url = URL(string: "https://api.spotify.com/v1/me") else {
+            print("Invalid URL")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        print(userVM.authToken)
+        request.addValue("Bearer " + userVM.authToken, forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            // Check for Error
+            if let error = error {
+                print("Error took place \(error)")
+                return
+            }
+            
+            // Convert HTTP Response Data to a String
+            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                print("Response data string clientToken:\n \(dataString)")
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        print(json)
+                        let userProduct = json["product"] as! String
+                        DispatchQueue.main.async {
+                            print(userProduct.description)
+                            if userProduct.description == "open" {
+                                self.showNoPremiumError = true
+                            } else if userProduct.description == "free" {
+                                self.showNoPremiumError = true
+                            }
+                            
+                            if showNoPremiumError {
+                                self.showActivityIndicator = false
+                                self.currentlyInSession = false
+                                return
+                            } else {
+                                self.currentlyInSession = true
+                                self.showActivityIndicator = false
+                                print("LOGIN USER")
+                                print(userVM.username)
+                                print(userVM.sessionID)
+                                musicController.userVM = userVM
+                                
+                                self.musicController.doConnect()
+                                if musicController.showAppStoreOverlay {
+                                    currentlyInSession = false
+                                }
+                                if musicController.showNoSpotifyAppAlert {
+                                    currentlyInSession = false
+                                }
+                                self.musicController.pausePlayback()
+                                self.getDeviceID()
+                            }
+                        }
+                    }
+                } catch {
+                    print("Error Get User Product (Spotify Premium Request)")
+                }
+            }
+        }
+        task.resume()
+    }
     
     func getClientToken() {
         var clientToken = ""
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/clientToken") else {
             print("Invalid URL")
             return
-            
         }
         
         var request = URLRequest(url: url)
@@ -277,17 +360,20 @@ struct LoginView: View {
         }
         task.resume()
     }
+    
     func getAuthToken() {
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/authToken") else {
             print("Invalid URL")
             return
-            
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
         request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        
+        print("SECRET:" + "\(userVM.secret)")
+        print("SESSION_ID:" + "\(userVM.sessionID)")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             // Check for Error
@@ -302,17 +388,16 @@ struct LoginView: View {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                         DispatchQueue.main.async {
+                            print(json)
                             self.userVM.authToken = json["access_token"] as? String ?? ""
+                            print("Auth.token")
+                            print(self.userVM.authToken)
                             if self.userVM.authToken == "" {
+                                self.showActivityIndicator = false
                                 self.currentlyInSession = false
                             } else {
-                                self.currentlyInSession = true
-                                self.showActivityIndicator = false
-                                self.musicController.doConnect()
-                                self.musicController.pausePlayback()
+                                self.getUserInfo()
                             }
-                            
-                            self.getDeviceID()
                         }
                     }
                 } catch {
@@ -327,8 +412,8 @@ struct LoginView: View {
         guard let url = URL(string: "https://api.spotify.com/v1/me/player/devices") else {
             print("Invalid URL")
             return
-            
         }
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("Bearer " + userVM.authToken, forHTTPHeaderField: "Authorization")
@@ -364,11 +449,10 @@ struct LoginView: View {
         guard let url = URL(string: "https://api.spotify.com/v1/me/player") else {
             print("Invalid URL")
             return
-            
         }
+        
         var request = URLRequest(url: url)
-        let json: [String: Any] = ["device_ids": [deviceID],
-                                   "play": true]
+        let json: [String: Any] = ["device_ids": [deviceID], "play": true]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
         
         request.httpMethod = "PUT"

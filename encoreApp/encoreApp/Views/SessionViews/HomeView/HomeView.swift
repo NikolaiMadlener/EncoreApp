@@ -8,10 +8,14 @@
 
 import SwiftUI
 import URLImage
+import UIKit
+import AVKit
+import StoreKit
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var musicController: MusicController = .shared
+    //@EnvironmentObject var musicController: MusicController
+    
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
@@ -23,7 +27,6 @@ struct HomeView: View {
     @State var isPlay = true
     @State var value: Float = 0.8
     @State var offset = CGFloat()
-    
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
         self.userVM = userVM
@@ -93,15 +96,24 @@ struct HomeView: View {
             
             //Layer 3: Menu Layer
             self.menu_layer
-        }//.onAppear{ self.playerStateVM.viewDidLoad() }
+        }
+        //.onAppear{ self.playerStateVM.viewDidLoad() }
         // triggers updates on every second
-        .onAppear{ self.playerStateVM.playerPause() }
+        //.onAppear{ self.musicController.playerPause() }
     }
     
     //MARK: Layer 3: Menu Layer
     private var menu_layer: some View {
         VStack {
             HStack {
+                if userVM.isAdmin {
+                    AirPlayView()
+                        .frame(width: 30, height: 30)
+                        
+                        .background(self.colorScheme == .dark ? Color.white : Color.black)
+                        .clipShape(Circle(), style: FillStyle())
+                        .padding(25)
+                }
                 Spacer()
                 Button(action: { self.showMenuSheet = true }) {
                     Image(systemName: "ellipsis")
@@ -109,7 +121,7 @@ struct HomeView: View {
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                         .padding(25)
                 }.sheet(isPresented: self.$showMenuSheet) {
-                    MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
             Spacer()
@@ -118,6 +130,25 @@ struct HomeView: View {
                 AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
                 Spacer()
             }.padding(.bottom)
+        }
+    }
+    
+    struct AirPlayView: UIViewRepresentable {
+        var tintColor = UIColor.clear
+        
+        func makeUIView(context: Context) -> UIView {
+
+            let routePickerView = AVRoutePickerView()
+            routePickerView.backgroundColor = UIColor.clear
+            
+            routePickerView.activeTintColor = UIColor.white
+            routePickerView.tintColor = UIColor.white
+            
+
+            return routePickerView
+        }
+
+        func updateUIView(_ uiView: UIView, context: Context) {
         }
     }
 }

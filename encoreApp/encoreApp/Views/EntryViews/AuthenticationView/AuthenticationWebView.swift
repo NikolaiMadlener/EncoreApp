@@ -20,11 +20,14 @@ struct AuthenticationWebView: UIViewRepresentable {
 
     func makeUIView(context: UIViewRepresentableContext<AuthenticationWebView>) -> WKWebView {
         self.webView.navigationDelegate = context.coordinator
+       
         if let url = URL(string: webVM.link) {
             self.webView.load(URLRequest(url: url))
         
         }
+        
         return self.webView
+        
     }
 
     func updateUIView(_ uiView: WKWebView, context: UIViewRepresentableContext<AuthenticationWebView>) {
@@ -33,9 +36,10 @@ struct AuthenticationWebView: UIViewRepresentable {
             self.showAuthSheet = false
             self.showActivityIndicator = false
         }
-        
+    
         return
     }
+
 
     class Coordinator: NSObject, WKNavigationDelegate {
         private var webVM: WebVM

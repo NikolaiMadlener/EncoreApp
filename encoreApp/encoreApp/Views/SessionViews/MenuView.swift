@@ -10,9 +10,10 @@ import SwiftUI
 
 struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
+//    @EnvironmentObject var musicController: MusicController
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
-    @ObservedObject var playerStateVM: PlayerStateVM
+    //@ObservedObject var playerStateVM: PlayerStateVM
     
     @Binding var showMenuSheet: Bool
     @Binding var currentlyInSession: Bool
@@ -20,10 +21,10 @@ struct MenuView: View {
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
     
-    init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
         self.userListVM = UserListVM(userVM: userVM)
-        self.playerStateVM = playerStateVM
+        
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
     }
@@ -105,7 +106,7 @@ struct MenuView: View {
                         Alert(title: Text("Delete Session"),
                               message: Text("By deleting the current session all members will be kicked."),
                               primaryButton: .destructive(Text("Delete"), action: {
-                                self.playerStateVM.playerPause()
+//                                self.musicController.playerPause()
                                 self.deleteSession(username: self.userVM.username)
                               }),
                               secondaryButton: .cancel(Text("Cancel"), action: {
@@ -256,6 +257,6 @@ struct MenuView_Previews: PreviewProvider {
     @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, playerStateVM: playerStateVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
+        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
     }
 }

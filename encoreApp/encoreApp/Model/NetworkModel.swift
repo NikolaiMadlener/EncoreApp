@@ -11,6 +11,7 @@ import Foundation
 class SearchResultListVM: ObservableObject {
     var userVM: UserVM
     @Published var items: [SpotifySearchPayload.Tracks.Item] = []
+    @Published var showNetworkAlert = false
     var authToken = ""
     var auth_url = ""
     typealias JSONStandard = [String : AnyObject]
@@ -68,6 +69,9 @@ class SearchResultListVM: ObservableObject {
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
+                DispatchQueue.main.async {
+                    self.showNetworkAlert = true
+                }
                 return
             }
             
@@ -104,6 +108,9 @@ class SearchResultListVM: ObservableObject {
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
+                DispatchQueue.main.async {
+                    self.showNetworkAlert = true
+                }
                 return
             }
             

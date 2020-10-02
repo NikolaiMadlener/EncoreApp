@@ -58,12 +58,12 @@ struct JoinViaURLView: View {
             .alert(isPresented: $showUsernameExistsAlert) {
                     Alert(title: Text("Invalid Name"),
                           message: Text("A user with the given username already exists."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                          dismissButton: .default(Text("OK"), action: { self.showUsernameExistsAlert = false }))
             }
             .alert(isPresented: $showNetworkErrorAlert) {
                     Alert(title: Text("Network Error"),
                           message: Text("The Internet connection appears to be offline."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                          dismissButton: .default(Text("OK"), action: { self.showNetworkErrorAlert = false }))
             }
             
         }

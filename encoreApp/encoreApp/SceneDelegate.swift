@@ -9,12 +9,15 @@
 import UIKit
 import SwiftUI
 
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, SPTAppRemotePlayerStateDelegate, UIGestureRecognizerDelegate {
+    
+    //let remoteCommandCenter = MPRemoteCommandCenter.shared()
     
     var window: UIWindow?
     //var model = Model()
     var accessToken = "accessToken"
-    var musicController = MusicController()
+    var musicController = MusicController.shared
     
     var playURI = ""
     
@@ -42,11 +45,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
         return appRemote
     }()
     
+    
     // MARK: App IS NOT running and App is called from either Join Link or normally from App Icon
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        
+        
         var joinedViaURL = false
         var sessionID = ""
         if let url = connectionOptions.urlContexts.first?.url {
@@ -59,12 +65,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
         }
         
         // Create the SwiftUI view that provides the window contents.
+        
         let contentView = AppContentView(joinedViaURL: joinedViaURL, sessionID: sessionID)
         
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
+            window.rootViewController = UIHostingController(rootView: contentView)//.environmentObject(musicController))
             self.window = window
             window.makeKeyAndVisible()
             connect()
@@ -78,7 +85,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     
     // MARK: App IS running and App is called from Join Link
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-         
+
         guard let url = URLContexts.first?.url else {
             return
         }
@@ -107,6 +114,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
             }
             
             let contentView = AppContentView(joinedViaURL: true, sessionID: sessionID)
+            
             // Use a UIHostingController as window root view controller.
             if let windowScene = scene as? UIWindowScene {
                 let window = UIWindow(windowScene: windowScene)
@@ -153,7 +161,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
 //                debugPrint(error.localizedDescription)
 //            }
 //        })
-        print("AppREMOTECOnnected")
+        print("AppRemoteConnected")
 //        self.appRemote = appRemote
 //        musicController.appRemoteConnected()
         

@@ -10,7 +10,9 @@ import SwiftUI
 
 struct AddSongsBarView: View {
     @Environment(\.colorScheme) var colorScheme
+    //@EnvironmentObject var musicController: MusicController
     @ObservedObject var musicController: MusicController = .shared
+
     @ObservedObject var userVM: UserVM
     @ObservedObject var searchResultListVM: SearchResultListVM
     @ObservedObject var songListVM: SongListVM
@@ -21,6 +23,22 @@ struct AddSongsBarView: View {
     
     @ViewBuilder
     var body: some View {
+        VStack {
+        if self.musicController.showNetworkAlert {
+            Text("No Internet connection")
+                .font(.system(size: 14))
+                .padding(5)
+                .foregroundColor(Color.white)
+                .background(Color("purpleblue"))
+                .cornerRadius(25)
+                .padding()
+                .animation(.easeInOut)
+                .onAppear{
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        self.musicController.showNetworkAlert = false
+                    }
+                }
+        }
         if self.userVM.isAdmin {
             HStack {
                 playPauseButton
@@ -35,6 +53,7 @@ struct AddSongsBarView: View {
                 .shadow(radius: 10)
         } else {
             addButton
+        }
         }
     }
     
@@ -57,159 +76,124 @@ struct AddSongsBarView: View {
                 self.musicController.appRemote?.connect()
                 if !(self.musicController.appRemote?.isConnected ?? false) {
                     self.musicController.appRemote?.authorizeAndPlayURI("")
+                    self.musicController.playerPlay()
                     self.musicController.appRemote?.connect()
                 }
             }
-            self.playerStateVM.isPlaying ? self.playerPause() : self.playerPlay()
+            if !self.musicController.isPaused {
+                //self.musicController.playerPause()
+                self.musicController.pausePlayback()
+            } else {
+                //self.musicController.playerPlay()
+                self.musicController.startPlayback()
+            }
         }) {
             ZStack {
                 Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                Image(systemName: self.playerStateVM.isPlaying ? "pause.circle.fill" : "play.circle.fill")
+                Image(systemName: (self.musicController.isPaused) ? "play.circle.fill" : "pause.circle.fill")
                     .font(.system(size: 35, weight: .light))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             }
-        }
+        }//.disabled(!musicController.buttonReady)
     }
     
     var skipButton: some View {
-        Button(action: { self.playerSkipNext() }) {
+        Button(action: { self.musicController.playerSkipNext() }) {
             Image(systemName: "forward.end.fill")
                 .font(.system(size: 35, weight: .light))
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
         }
     }
     
-    func playerPlay() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
-            print("Invalid URL")
-            return
-            
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string:\n \(dataString)")
-                //self.isPlay = true
-                //                do {
-                //                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
-                //                    DispatchQueue.main.async {
-                //                        print("Successfully post of player play")
-                //
-                //                    }
-                //                } catch {
-                //                    print("Error")
-                //                }
-            }
-        }
-        task.resume()
-    }
+//    func playerPlay() {
+//        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
+//            print("Invalid URL")
+//            return
+//            
+//        }
+//        var request = URLRequest(url: url)
+//        
+//        request.httpMethod = "POST"
+//        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
+//        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+//        
+//        // HTTP Request Parameters which will be sent in HTTP Request Body
+//        //let postString = "userId=300&title=My urgent task&completed=false";
+//        // Set HTTP Request Body
+//        //request.httpBody = postString.data(using: String.Encoding.utf8);
+//        // Perform HTTP Request
+//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+//            
+//            // Check for Error
+//            if let error = error {
+//                print("Error took place \(error)")
+//                return
+//            }
+//            
+//            
+//            // Convert HTTP Response Data to a String
+//            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+//                print("Response data string:\n \(dataString)")
+//                //self.isPlay = true
+//                //                do {
+//                //                    let decodedData = try JSONDecoder().decode(Song.self, from: data)
+//                //                    DispatchQueue.main.async {
+//                //                        print("Successfully post of player play")
+//                //
+//                //                    }
+//                //                } catch {
+//                //                    print("Error")
+//                //                }
+//            }
+//        }
+//        task.resume()
+//    }
+//    
+//    func playerPause() {
+//        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
+//            print("Invalid URL")
+//            return
+//            
+//        }
+//        var request = URLRequest(url: url)
+//        
+//        request.httpMethod = "POST"
+//        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
+//        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+//        
+//        // HTTP Request Parameters which will be sent in HTTP Request Body
+//        //let postString = "userId=300&title=My urgent task&completed=false";
+//        // Set HTTP Request Body
+//        //request.httpBody = postString.data(using: String.Encoding.utf8);
+//        // Perform HTTP Request
+//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+//            
+//            // Check for Error
+//            if let error = error {
+//                print("Error took place \(error)")
+//                return
+//            }
+//            
+//            
+//            // Convert HTTP Response Data to a String
+//            if let data = data, let dataString = String(data: data, encoding: .utf8) {
+//                print("Response data string:\n \(dataString)")
+//                //self.isPlay = false
+//                //                do {
+//                //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
+//                //                    DispatchQueue.main.async {
+//                //                        print("Successfully post of player pause")
+//                //
+//                //                    }
+//                //                } catch {
+//                //                    print("Error")
+//                //                }
+//            }
+//        }
+//        task.resume()
+//    }
     
-    func playerPause() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
-            print("Invalid URL")
-            return
-            
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string:\n \(dataString)")
-                //self.isPlay = false
-                //                do {
-                //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
-                //                    DispatchQueue.main.async {
-                //                        print("Successfully post of player pause")
-                //
-                //                    }
-                //                } catch {
-                //                    print("Error")
-                //                }
-            }
-        }
-        task.resume()
-    }
     
-    func playerSkipNext() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/skip") else {
-            print("Invalid URL")
-            return
-            
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
-            if let error = error {
-                print("Error took place \(error)")
-                return
-            }
-            
-            
-            // Convert HTTP Response Data to a String
-            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-                print("Response data string:\n \(dataString)")
-                self.isPlay = true
-                //                do {
-                //                    let decodedData = try JSONDecoder().decode(String.self, from: data)
-                //                    DispatchQueue.main.async {
-                //                        print("Successfully post of player pause")
-                //
-                //                    }
-                //                } catch {
-                //                    print("Error")
-                //                }
-            }
-        }
-        task.resume()
-    }
 }
 
 struct AddSongsBarView_Previews: PreviewProvider {

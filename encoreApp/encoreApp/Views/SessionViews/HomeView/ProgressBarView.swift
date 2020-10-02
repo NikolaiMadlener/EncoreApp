@@ -29,9 +29,9 @@ struct ProgressBarView: View {
                 .cornerRadius(isWide ? 0 : 5)
                 .onReceive(timer) { _ in
                     //if song is playing, increment the progressBar
-                    if self.playerStateVM.isPlaying {
-                        self.playerStateVM.songTimestamp_ms += self.updateFrequency_ms
-                    }
+//                    if self.playerStateVM.isPlaying {
+//                        self.playerStateVM.songTimestamp_ms += self.updateFrequency_ms
+//                    }
                 }
         }.padding(.bottom)
     }

@@ -29,6 +29,22 @@ struct SuggestSongView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            if searchResultListVM.showNetworkAlert {
+                Text("No Internet connection")
+                    .font(.system(size: 14))
+                    .padding(5)
+                    .foregroundColor(Color.white)
+                    .background(Color("purpleblue"))
+                    .cornerRadius(25)
+                    .padding()
+                    
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                            self.searchResultListVM.showNetworkAlert = false
+                        }
+                    }
+                
+            }
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search songs")
             List {
                 ForEach(searchResultListVM.items, id: \.self) { song in
@@ -41,9 +57,11 @@ struct SuggestSongView: View {
                         self.currentlyInSession = false
                       }))
             }.edgesIgnoringSafeArea(.all)
+            .animation(.none)
         }.onAppear {
             self.getMembers(username: self.userVM.username)
         }
+        .animation(.easeInOut)
     }
     
     func getMembers(username: String) {
@@ -72,6 +90,7 @@ struct SuggestSongView: View {
             // Check for Error
             if let error = error {
                 print("Error took place \(error)")
+                
                 return
             }
             

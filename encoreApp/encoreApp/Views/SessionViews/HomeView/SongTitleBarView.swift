@@ -14,7 +14,6 @@ struct SongTitleBarView: View {
     
     var body: some View {
         ZStack {
-            
             Rectangle()
                 .frame(height: 50)
                 .cornerRadius(10)

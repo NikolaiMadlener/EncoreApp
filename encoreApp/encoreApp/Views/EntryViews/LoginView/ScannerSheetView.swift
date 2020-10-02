@@ -158,7 +158,7 @@ struct ScannerSheetView: View {
                         clientToken = json["access_token"] as! String
                         DispatchQueue.main.async {
                             self.userVM.clientToken = clientToken
-                            self.showAuthSheet = true
+                            //self.showAuthSheet = true
                         }
                     }
                 } catch {
