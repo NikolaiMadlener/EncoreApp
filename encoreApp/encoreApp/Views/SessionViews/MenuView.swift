@@ -32,12 +32,7 @@ struct MenuView: View {
         GeometryReader { geo in
             ZStack {
                 VStack(spacing: 0) {
-                    Button(action: { self.showMenuSheet = false }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
-                            .font(.largeTitle)
-                            .padding()
-                    }
+                    self.topBar.padding()
                     
                     QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
                     
@@ -122,6 +117,14 @@ struct MenuView: View {
             }
         }
     }
+    
+    var topBar: some View {
+             ZStack {
+                 RoundedRectangle(cornerRadius: 6)
+                     .fill(Color.secondary)
+                     .frame(width: 60, height: 4)
+             }
+         }
     
     func getMembers(username: String) {
         

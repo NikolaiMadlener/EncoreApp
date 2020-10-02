@@ -29,6 +29,7 @@ struct SuggestSongView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            topBar.padding(.vertical)
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search songs")
             List {
                 ForEach(searchResultListVM.items, id: \.self) { song in
@@ -46,6 +47,14 @@ struct SuggestSongView: View {
             self.getMembers(username: self.userVM.username)
         }
     }
+    
+    var topBar: some View {
+             ZStack {
+                 RoundedRectangle(cornerRadius: 6)
+                     .fill(Color.secondary)
+                     .frame(width: 60, height: 4)
+             }
+         }
     
     func getMembers(username: String) {
         
