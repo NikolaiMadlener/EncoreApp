@@ -63,8 +63,8 @@ struct AddSongsBarView: View {
             self.playerStateVM.isPlaying ? self.playerPause() : self.playerPlay()
         }) {
             ZStack {
-                Image(systemName: self.isPlay ? "pause.fill" : "play.fill")
-                    .font(.system(size: 35, weight: .ultraLight))
+                Image(systemName: self.isPlay ? "pause" : "play")
+                    .font(.system(size: 30, weight: .semibold))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             }
         }
@@ -73,7 +73,7 @@ struct AddSongsBarView: View {
     var skipButton: some View {
         Button(action: { self.playerSkipNext() }) {
             Image(systemName: "forward.end")
-                .font(.system(size: 35, weight: .medium))
+                .font(.system(size: 30, weight: .semibold))
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
         }
     }
