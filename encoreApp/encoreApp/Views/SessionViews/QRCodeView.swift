@@ -13,12 +13,13 @@ struct QRCodeView: View {
     let context = CIContext()
     let filter = CIFilter.qrCodeGenerator()
     var url: String
+    var size: CGFloat
     
     var body: some View {
         Image(uiImage: generateQRCodeImage(url))
             .interpolation(.none)
             .resizable()
-            .frame(width: 150, height: 150)
+            .frame(width: size, height: size)
     }
     
     func generateQRCodeImage(_ url: String) -> UIImage {
@@ -38,6 +39,6 @@ struct QRCodeView_Previews: PreviewProvider {
     static let url = "encoreapp://test"
     
     static var previews: some View {
-        QRCodeView(url: url)
+        QRCodeView(url: url, size: 150)
     }
 }

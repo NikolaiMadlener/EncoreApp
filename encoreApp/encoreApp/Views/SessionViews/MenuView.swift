@@ -19,6 +19,7 @@ struct MenuView: View {
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
+    @State var showPopupQRCode: Bool = false
     
     init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
@@ -34,7 +35,13 @@ struct MenuView: View {
                 VStack(spacing: 0) {
                     self.topBar.padding()
                     
-                    QRCodeView(url: "encoreApp://\(self.userVM.sessionID)").padding(10)
+                    Button(action: {
+                        withAnimation {
+                            self.showPopupQRCode.toggle()
+                        }
+                    }) {
+                        QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 150).padding(10)
+                    }.buttonStyle(PlainButtonStyle())
                     
                     Text("Let your friends scan the QR code \nor share the Session-Link to let them join. ").font(.footnote).multilineTextAlignment(.center).padding(.bottom)
                     Button(action: { self.showShareSheet.toggle() }) {
@@ -114,6 +121,23 @@ struct MenuView: View {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
                 self.getMembers(username: self.userVM.username)
+            }
+            
+            if self.showPopupQRCode {
+                GeometryReader { _ in
+                    VStack(spacing: 0) {
+                        PopupQRCodeView(userVM: self.userVM, showPopupQRCode: self.$showPopupQRCode)
+                    }.frame(width: geo.size.width,
+                            height: geo.size.height,
+                            alignment: .center)
+                    
+                }.background(
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            self.showPopupQRCode.toggle()
+                        }
+                )
             }
         }
     }

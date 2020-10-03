@@ -52,6 +52,7 @@
 		8F9AF39C24C4CE3200FCEFD0 /* ScannerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */; };
 		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
 		8FB1058C24AB56DF007C15A1 /* AddSongsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */; };
+		8FB738DE252884C800DC5BDF /* PopupQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB738DD252884C800DC5BDF /* PopupQRView.swift */; };
 		8FDEBF7C24AD2D240090B5F2 /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */; };
 		8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5348E24812EFB00D4D630 /* VoteState.swift */; };
 		9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */; };
@@ -106,6 +107,7 @@
 		8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSheetView.swift; sourceTree = "<group>"; };
 		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongsBarView.swift; sourceTree = "<group>"; };
+		8FB738DD252884C800DC5BDF /* PopupQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupQRView.swift; sourceTree = "<group>"; };
 		8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
 		CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_encoreApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,6 +200,7 @@
 				2319067B247DBDB600DA550B /* SongListCell.swift */,
 				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
 				233D2AD5249381C600994038 /* QRCodeView.swift */,
+				8FB738DD252884C800DC5BDF /* PopupQRView.swift */,
 			);
 			path = SessionViews;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				8F27498624A610000084FC99 /* SpotifySearchPayload.swift in Sources */,
 				8F9AF39A24C4A18200FCEFD0 /* ButtonLightModifier.swift in Sources */,
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
+				8FB738DE252884C800DC5BDF /* PopupQRView.swift in Sources */,
 				8F8FE234249FBB0B006674E8 /* AuthenticationWebView.swift in Sources */,
 				231CDA31249E0BB700632B8C /* AsyncImage.swift in Sources */,
 				234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */,
