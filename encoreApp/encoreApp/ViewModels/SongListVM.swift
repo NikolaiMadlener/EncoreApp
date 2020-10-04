@@ -8,6 +8,7 @@
 
 import Foundation
 import IKEventSource
+import WidgetKit
 
 class SongListVM: ObservableObject {
     @Published var songs: [Song] = []
@@ -44,6 +45,26 @@ class SongListVM: ObservableObject {
                             print("UPDATE SongList SSE")
                             print(self?.songs)
                             print()
+                            
+                            if #available(iOS 14.0, *) {
+            
+                                 do {
+                                    let encoder = JSONEncoder()
+                                    if let encoded = try? encoder.encode(decodedData) {
+                                        let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
+                                        container?.set(encoded, forKey: "sharedSongList")
+                                    }
+                                    
+                                      WidgetCenter.shared.reloadAllTimelines()
+
+                                      } catch {
+                                        print("Unable to encode WidgetDay: \(error.localizedDescription)")
+                                   }
+                            } else {
+                                // Fallback on earlier versions
+                            }
+                            
+                            
                         }
                     } catch {
                         print("Error SSE playlist change")

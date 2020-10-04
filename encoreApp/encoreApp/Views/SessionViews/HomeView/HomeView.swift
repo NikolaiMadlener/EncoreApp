@@ -10,6 +10,7 @@ import SwiftUI
 import URLImage
 
 struct HomeView: View {
+    
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM

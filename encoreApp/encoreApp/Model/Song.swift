@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct Song: Codable, Hashable {
+struct Song: Codable, Hashable, Identifiable {
 
     var id: String
     var name: String

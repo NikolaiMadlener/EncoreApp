@@ -33,10 +33,20 @@
 		234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9224839C9200C0F7F3 /* UserListElement.swift */; };
 		234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* UserVM.swift */; };
 		234B8D9924884EBC00C0F7F3 /* Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9824884EBC00C0F7F3 /* Blur.swift */; };
+		234E1C6F25275C6300E90AA4 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E1C6E25275C6300E90AA4 /* WidgetKit.framework */; };
+		234E1C7125275C6300E90AA4 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 234E1C7025275C6300E90AA4 /* SwiftUI.framework */; };
+		234E1C7425275C6300E90AA4 /* EncoreWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234E1C7325275C6300E90AA4 /* EncoreWidget.swift */; };
+		234E1C7725275C6700E90AA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 234E1C7625275C6700E90AA4 /* Assets.xcassets */; };
+		234E1C7925275C6700E90AA4 /* EncoreWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 234E1C7525275C6300E90AA4 /* EncoreWidget.intentdefinition */; };
+		234E1C7A25275C6700E90AA4 /* EncoreWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 234E1C7525275C6300E90AA4 /* EncoreWidget.intentdefinition */; };
+		234E1C7D25275C6700E90AA4 /* EncoreWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 234E1C6D25275C6300E90AA4 /* EncoreWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		234E1C8425275D3600E90AA4 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190675247DB75800DA550B /* Song.swift */; };
 		235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4CE247FB79A007A720D /* AppContentView.swift */; };
 		235EB4D12480F6CC007A720D /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D02480F6CC007A720D /* MenuView.swift */; };
 		2361911B24B3B93D0096D806 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361911A24B3B93D0096D806 /* ActivityIndicator.swift */; };
 		2361911D24B45F790096D806 /* SongTitleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361911C24B45F790096D806 /* SongTitleBarView.swift */; };
+		238575A9252793B000206578 /* UserVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D942483A4BF00C0F7F3 /* UserVM.swift */; };
+		7FDE50750A44022C44E4B2A6 /* Pods_encoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */; };
 		8F0CAC2E24A10EA700531BB0 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CAC2D24A10EA700531BB0 /* AuthenticationView.swift */; };
 		8F0CAC3124A2001100531BB0 /* ButtonHeavyModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CAC3024A2001100531BB0 /* ButtonHeavyModifier.swift */; };
 		8F108A992480537F00D5C27B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F108A982480537F00D5C27B /* Model.swift */; };
@@ -57,7 +67,32 @@
 		9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		234E1C7B25275C6700E90AA4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23190654247DA25F00DA550B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 234E1C6C25275C6300E90AA4;
+			remoteInfo = EncoreWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		234E1C7E25275C6700E90AA4 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				234E1C7D25275C6700E90AA4 /* EncoreWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		11383591DDC7A9B017875D21 /* Pods_EncoreWidgetExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EncoreWidgetExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		23050BBB2513627D00B59A4C /* AnyGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyGestureRecognizer.swift; sourceTree = "<group>"; };
 		23117C5124895F6B0023B680 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		2319065C247DA25F00DA550B /* encoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = encoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,11 +121,25 @@
 		234B8D9224839C9200C0F7F3 /* UserListElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListElement.swift; sourceTree = "<group>"; };
 		234B8D942483A4BF00C0F7F3 /* UserVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVM.swift; sourceTree = "<group>"; };
 		234B8D9824884EBC00C0F7F3 /* Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
+		234E1C6D25275C6300E90AA4 /* EncoreWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EncoreWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		234E1C6E25275C6300E90AA4 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		234E1C7025275C6300E90AA4 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		234E1C7325275C6300E90AA4 /* EncoreWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncoreWidget.swift; sourceTree = "<group>"; };
+		234E1C7525275C6300E90AA4 /* EncoreWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = EncoreWidget.intentdefinition; sourceTree = "<group>"; };
+		234E1C7625275C6700E90AA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		234E1C7825275C6700E90AA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		234E1C8A25275E0900E90AA4 /* EncoreWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EncoreWidgetExtension.entitlements; sourceTree = "<group>"; };
+		234E1C8D25275E3600E90AA4 /* encoreApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = encoreApp.entitlements; sourceTree = "<group>"; };
 		235EB4CE247FB79A007A720D /* AppContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentView.swift; sourceTree = "<group>"; };
 		235EB4D02480F6CC007A720D /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		2361911A24B3B93D0096D806 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		2361911C24B45F790096D806 /* SongTitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTitleBarView.swift; sourceTree = "<group>"; };
+		238576032528FE8A00206578 /* Kingfisher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Kingfisher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		238576102528FF8A00206578 /* Kingfisher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Kingfisher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		28D207F1B30D65EFB872B243 /* Pods-EncoreWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EncoreWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-EncoreWidgetExtension/Pods-EncoreWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
 		4A562C93984E36AA41F353FD /* Pods-encoreApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp.debug.xcconfig"; path = "Target Support Files/Pods-encoreApp/Pods-encoreApp.debug.xcconfig"; sourceTree = "<group>"; };
+		571455EC0B16782828B2CEE2 /* Pods-EncoreWidgetExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EncoreWidgetExtension.debug.xcconfig"; path = "Target Support Files/Pods-EncoreWidgetExtension/Pods-EncoreWidgetExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		8315FAAE6A90DF79CCA6117B /* Pods-encoreApp-EncoreWidgetExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp-EncoreWidgetExtension.release.xcconfig"; path = "Target Support Files/Pods-encoreApp-EncoreWidgetExtension/Pods-encoreApp-EncoreWidgetExtension.release.xcconfig"; sourceTree = "<group>"; };
 		8F0CAC2D24A10EA700531BB0 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		8F0CAC3024A2001100531BB0 /* ButtonHeavyModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonHeavyModifier.swift; sourceTree = "<group>"; };
 		8F108A982480537F00D5C27B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -108,6 +157,7 @@
 		8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongsBarView.swift; sourceTree = "<group>"; };
 		8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		8FE5348E24812EFB00D4D630 /* VoteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteState.swift; sourceTree = "<group>"; };
+		CA3A71A27EE7DCFEC9D28822 /* Pods-encoreApp-EncoreWidgetExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp-EncoreWidgetExtension.debug.xcconfig"; path = "Target Support Files/Pods-encoreApp-EncoreWidgetExtension/Pods-encoreApp-EncoreWidgetExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_encoreApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-encoreApp.release.xcconfig"; path = "Target Support Files/Pods-encoreApp/Pods-encoreApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -120,6 +170,16 @@
 				233D2ADD2493E36C00994038 /* CodeScanner in Frameworks */,
 				231CDA2C249D3FDD00632B8C /* SpotifyiOS.framework in Frameworks */,
 				9294009AE55977D9C7CE79BE /* Pods_encoreApp.framework in Frameworks */,
+				7FDE50750A44022C44E4B2A6 /* Pods_encoreApp.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		234E1C6A25275C6300E90AA4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				234E1C7125275C6300E90AA4 /* SwiftUI.framework in Frameworks */,
+				234E1C6F25275C6300E90AA4 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,9 +189,11 @@
 		23190653247DA25F00DA550B = {
 			isa = PBXGroup;
 			children = (
+				234E1C8A25275E0900E90AA4 /* EncoreWidgetExtension.entitlements */,
 				231CDA2D249D48BC00632B8C /* encoreApp-Bridging-Header.h */,
 				234B8D9824884EBC00C0F7F3 /* Blur.swift */,
 				2319065E247DA25F00DA550B /* encoreApp */,
+				234E1C7225275C6300E90AA4 /* EncoreWidget */,
 				2319065D247DA25F00DA550B /* Products */,
 				B2F70876ABD56E2CD04EB69B /* Pods */,
 				231CDA2B249D3FDD00632B8C /* SpotifyiOS.framework */,
@@ -143,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				2319065C247DA25F00DA550B /* encoreApp.app */,
+				234E1C6D25275C6300E90AA4 /* EncoreWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,6 +213,7 @@
 		2319065E247DA25F00DA550B /* encoreApp */ = {
 			isa = PBXGroup;
 			children = (
+				234E1C8D25275E3600E90AA4 /* encoreApp.entitlements */,
 				2319065F247DA25F00DA550B /* AppDelegate.swift */,
 				23190661247DA25F00DA550B /* SceneDelegate.swift */,
 				235EB4CE247FB79A007A720D /* AppContentView.swift */,
@@ -235,6 +299,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		234E1C7225275C6300E90AA4 /* EncoreWidget */ = {
+			isa = PBXGroup;
+			children = (
+				234E1C7325275C6300E90AA4 /* EncoreWidget.swift */,
+				234E1C7525275C6300E90AA4 /* EncoreWidget.intentdefinition */,
+				234E1C7625275C6700E90AA4 /* Assets.xcassets */,
+				234E1C7825275C6700E90AA4 /* Info.plist */,
+			);
+			path = EncoreWidget;
+			sourceTree = "<group>";
+		};
 		8F0CAC2F24A15E5700531BB0 /* AuthenticationView */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,6 +367,10 @@
 			children = (
 				4A562C93984E36AA41F353FD /* Pods-encoreApp.debug.xcconfig */,
 				DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */,
+				CA3A71A27EE7DCFEC9D28822 /* Pods-encoreApp-EncoreWidgetExtension.debug.xcconfig */,
+				8315FAAE6A90DF79CCA6117B /* Pods-encoreApp-EncoreWidgetExtension.release.xcconfig */,
+				571455EC0B16782828B2CEE2 /* Pods-EncoreWidgetExtension.debug.xcconfig */,
+				28D207F1B30D65EFB872B243 /* Pods-EncoreWidgetExtension.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -299,7 +378,12 @@
 		EA0C8535CA145DB755EB7178 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				238576102528FF8A00206578 /* Kingfisher.framework */,
+				238576032528FE8A00206578 /* Kingfisher.framework */,
 				CB562E311EF290F2CF787D15 /* Pods_encoreApp.framework */,
+				234E1C6E25275C6300E90AA4 /* WidgetKit.framework */,
+				234E1C7025275C6300E90AA4 /* SwiftUI.framework */,
+				11383591DDC7A9B017875D21 /* Pods_EncoreWidgetExtension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -316,10 +400,12 @@
 				23190659247DA25F00DA550B /* Frameworks */,
 				2319065A247DA25F00DA550B /* Resources */,
 				75E45AA7C1FA3BE9ABCDC371 /* [CP] Embed Pods Frameworks */,
+				234E1C7E25275C6700E90AA4 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				234E1C7C25275C6700E90AA4 /* PBXTargetDependency */,
 			);
 			name = encoreApp;
 			packageProductDependencies = (
@@ -329,18 +415,41 @@
 			productReference = 2319065C247DA25F00DA550B /* encoreApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		234E1C6C25275C6300E90AA4 /* EncoreWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 234E1C8125275C6700E90AA4 /* Build configuration list for PBXNativeTarget "EncoreWidgetExtension" */;
+			buildPhases = (
+				3EF94EAF7CEDEF854BEAAE2F /* [CP] Check Pods Manifest.lock */,
+				234E1C6925275C6300E90AA4 /* Sources */,
+				234E1C6A25275C6300E90AA4 /* Frameworks */,
+				234E1C6B25275C6300E90AA4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EncoreWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = EncoreWidgetExtension;
+			productReference = 234E1C6D25275C6300E90AA4 /* EncoreWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		23190654247DA25F00DA550B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = NikolaiEtienne;
 				TargetAttributes = {
 					2319065B247DA25F00DA550B = {
 						CreatedOnToolsVersion = 11.5;
+					};
+					234E1C6C25275C6300E90AA4 = {
+						CreatedOnToolsVersion = 12.0;
 					};
 				};
 			};
@@ -361,6 +470,7 @@
 			projectRoot = "";
 			targets = (
 				2319065B247DA25F00DA550B /* encoreApp */,
+				234E1C6C25275C6300E90AA4 /* EncoreWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -376,9 +486,39 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		234E1C6B25275C6300E90AA4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				234E1C7725275C6700E90AA4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3EF94EAF7CEDEF854BEAAE2F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EncoreWidgetExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		75E45AA7C1FA3BE9ABCDC371 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -437,6 +577,7 @@
 				231CDA31249E0BB700632B8C /* AsyncImage.swift in Sources */,
 				234B8D9324839C9200C0F7F3 /* UserListElement.swift in Sources */,
 				231CDA26249D3B9A00632B8C /* SongListVM.swift in Sources */,
+				234E1C7A25275C6700E90AA4 /* EncoreWidget.intentdefinition in Sources */,
 				8F0CAC2E24A10EA700531BB0 /* AuthenticationView.swift in Sources */,
 				2361911B24B3B93D0096D806 /* ActivityIndicator.swift in Sources */,
 				8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */,
@@ -470,7 +611,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		234E1C6925275C6300E90AA4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				234E1C8425275D3600E90AA4 /* Song.swift in Sources */,
+				238575A9252793B000206578 /* UserVM.swift in Sources */,
+				234E1C7925275C6700E90AA4 /* EncoreWidget.intentdefinition in Sources */,
+				234E1C7425275C6300E90AA4 /* EncoreWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		234E1C7C25275C6700E90AA4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 234E1C6C25275C6300E90AA4 /* EncoreWidgetExtension */;
+			targetProxy = 234E1C7B25275C6700E90AA4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2319066A247DA26400DA550B /* LaunchScreen.storyboard */ = {
@@ -487,6 +647,7 @@
 		2319066E247DA26400DA550B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -548,6 +709,7 @@
 		2319066F247DA26400DA550B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -604,7 +766,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4A562C93984E36AA41F353FD /* Pods-encoreApp.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = encoreApp/encoreApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
@@ -638,7 +802,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DB52A25E9E25B46F5C98F1E1 /* Pods-encoreApp.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = encoreApp/encoreApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"encoreApp/Preview Content\"";
@@ -668,6 +834,56 @@
 			};
 			name = Release;
 		};
+		234E1C7F25275C6700E90AA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 571455EC0B16782828B2CEE2 /* Pods-EncoreWidgetExtension.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = EncoreWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 356PGZV9W9;
+				INFOPLIST_FILE = EncoreWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bitkitApps.encore.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		234E1C8025275C6700E90AA4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28D207F1B30D65EFB872B243 /* Pods-EncoreWidgetExtension.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = EncoreWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 356PGZV9W9;
+				INFOPLIST_FILE = EncoreWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bitkitApps.encore.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -685,6 +901,15 @@
 			buildConfigurations = (
 				23190671247DA26400DA550B /* Debug */,
 				23190672247DA26400DA550B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		234E1C8125275C6700E90AA4 /* Build configuration list for PBXNativeTarget "EncoreWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				234E1C7F25275C6700E90AA4 /* Debug */,
+				234E1C8025275C6700E90AA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

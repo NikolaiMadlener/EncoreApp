@@ -10,8 +10,10 @@ import Foundation
 import IKEventSource
 import Kingfisher
 import SwiftUI
+import WidgetKit
 
 class PlayerStateVM: ObservableObject {
+    
     @ObservedObject var musicController: MusicController = .shared
     @Published var song: Song
     @Published var progress: Int64
@@ -102,7 +104,11 @@ class PlayerStateVM: ObservableObject {
                                 KingfisherManager.shared.retrieveImage(with: URL(string: sng.cover_url)!, options: nil, progressBlock: nil, completionHandler: { image, error, cacheType, imageURL in
                                     self?.albumCover = image ?? UIImage(imageLiteralResourceName: "albumPlaceholder")
                                 })
-                                
+                                if #available(iOS 14.0, *) {
+                                    WidgetCenter.shared.reloadAllTimelines()
+                                } else {
+                                    // Fallback on earlier versions
+                                }
                             } else {
                                 self?.progress = 0
                             }

@@ -8,8 +8,12 @@
 
 import SwiftUI
 import SafariServices
+import WidgetKit
+import SharedObjects
+
 
 struct LoginView: View {
+    
     @ObservedObject var userVM: UserVM
     @ObservedObject var musicController: MusicController = .shared
     @Binding var currentlyInSession: Bool
@@ -137,6 +141,25 @@ struct LoginView: View {
                     Alert(title: Text("Network Error"),
                           message: Text("The Internet connection appears to be offline."),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                }.onAppear{
+                    if #available(iOS 14.0, *) {
+                        do {
+                           let encoder = JSONEncoder()
+                           if let encoded = try? encoder.encode(["", "", ""]) {
+                               let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
+                               container?.set(encoded, forKey: "sharedUser")
+                           }
+                            if let encoded = try? encoder.encode([""]) {
+                                let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
+                                container?.set(encoded, forKey: "sharedSongList")
+                            }
+                           
+                             WidgetCenter.shared.reloadAllTimelines()
+
+                             } catch {
+                               print("Unable to encode WidgetDay: \(error.localizedDescription)")
+                          }
+                    }
                 }
             }
         }
@@ -303,6 +326,25 @@ struct LoginView: View {
                                 self.showActivityIndicator = false
                                 self.musicController.doConnect()
                                 self.musicController.pausePlayback()
+                                
+                                
+                                if #available(iOS 14.0, *) {
+                
+                                     do {
+                                        let encoder = JSONEncoder()
+                                        if let encoded = try? encoder.encode([userVM.username, userVM.secret, userVM.sessionID]) {
+                                            let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
+                                            container?.set(encoded, forKey: "sharedUser")
+                                        }
+                                        
+                                          WidgetCenter.shared.reloadAllTimelines()
+
+                                          } catch {
+                                            print("Unable to encode WidgetDay: \(error.localizedDescription)")
+                                       }
+                                } else {
+                                    // Fallback on earlier versions
+                                }
                             }
                             
                             self.getDeviceID()
