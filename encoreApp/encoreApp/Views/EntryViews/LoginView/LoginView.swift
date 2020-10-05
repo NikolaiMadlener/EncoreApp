@@ -9,7 +9,6 @@
 import SwiftUI
 import SafariServices
 import WidgetKit
-import SharedObjects
 
 
 struct LoginView: View {

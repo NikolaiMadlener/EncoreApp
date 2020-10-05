@@ -13,29 +13,43 @@ struct CurrentSongViewWidgetSmall: View {
     var songEntry: Provider.Entry
     
     var body: some View {
-        VStack {
-            HStack {
-                Group{
-                    Image(uiImage: songEntry.albumCover)
+        ZStack {
+            VStack() {
+                HStack {
+                    Group{
+                        Image(uiImage: songEntry.albumCover)
+                            .resizable()
+                            .frame(width: 85, height: 85)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                    }
+                    Spacer()
+                }
+                Spacer()
+                HStack {
+                    Text("\(self.songEntry.song.name)")
+                        .font(.system(size: 14, weight: .bold))
+                    Spacer()
+                }
+                HStack {
+                    Text("\(self.songEntry.song.artists[0])")
+                        .font(.system(size: 10, weight: .semibold))
+                    Spacer()
+                }
+            }.padding()
+            VStack {
+                HStack {
+                    Spacer()
+                    
+                    Image("AppIconImage")
                         .resizable()
-                        .frame(width: 75, height: 75)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
+                        .frame(width: 30, height: 30)
+                        .padding([.top, .trailing], 8)
+                    
                 }
                 Spacer()
             }
-            Spacer()
-            HStack {
-                Text("\(self.songEntry.song.name)")
-                    .font(.system(size: 18, weight: .bold))
-                Spacer()
-            }
-            HStack {
-                Text("\(self.songEntry.song.artists[0])")
-                    .font(.system(size: 12, weight: .semibold))
-                Spacer()
-            }
-        }.padding()
+        }
     }
 }
 
@@ -44,47 +58,60 @@ struct CurrentSongViewWidgetMedium: View {
     
     var body: some View {
         GeometryReader { geo in
-            HStack {
-                VStack {
-                    HStack {
-                        Group{
+            ZStack {
+                HStack {
+                    VStack {
+                        HStack {
+                            
                             Image(uiImage: songEntry.albumCover)
                                 .resizable()
-                                .frame(width: 75, height: 75)
+                                .frame(width: 85, height: 85)
                                 .cornerRadius(10)
                                 .shadow(radius: 5)
+                            
+                            Spacer()
                         }
                         Spacer()
-                    }
-                    Spacer()
-                    HStack {
-                        Text("\(self.songEntry.song.name)")
-                            .font(.system(size: 18, weight: .bold))
-                        Spacer()
-                    }
-                    HStack {
-                        Text("\(self.songEntry.song.artists[0])")
-                            .font(.system(size: 12, weight: .semibold))
-                        Spacer()
-                    }
-                }.padding()
-                .frame(width: geo.size.width/2, height: geo.size.height, alignment: .center)
-                
-                
-                VStack(alignment: .leading) {
+                        HStack {
+                            Text("\(self.songEntry.song.name)")
+                                .font(.system(size: 14, weight: .bold))
+                            Spacer()
+                        }
+                        HStack {
+                            Text("\(self.songEntry.song.artists[0])")
+                                .font(.system(size: 10, weight: .semibold))
+                            Spacer()
+                        }
+                    }.padding()
+                    //                    .frame(width: geo.size.width/2, height: geo.size.height, alignment: .leading)
                     
-                    Text("Up Next").font(.system(size: 18, weight: .bold))
-                    Spacer().frame(height: 5)
-                    ForEach(songEntry.songList.prefix(3)) { song in
-                        VStack(alignment: .leading, spacing: 0) {
-                        Text(song.name).font(.system(size: 12, weight: .semibold))
-                        Text(song.artists[0]).font(.system(size: 10))
-                            Spacer().frame(height: 5)
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("Up Next").font(.system(size: 18, weight: .bold))
+                        Spacer().frame(height: 5)
+                        ForEach(songEntry.songList.prefix(3)) { song in
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text(song.name).font(.system(size: 12, weight: .semibold))
+                                Text(song.artists[0]).font(.system(size: 10))
+                                Spacer().frame(height: 5)
+                            }
+                            
                         }
+                        Spacer()
+                    }.padding([.trailing, .bottom, .top]).frame(width: geo.size.width/2, height: geo.size.height, alignment: .leading)
+                }
+                VStack {
+                    HStack {
+                        Spacer()
+                        
+                        Image("AppIconImage")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .padding([.top, .trailing], 8)
                         
                     }
                     Spacer()
-                }.padding([.trailing, .bottom, .top])
+                }
             }
         }
     }
@@ -142,6 +169,26 @@ struct Provider : TimelineProvider {
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<SongEntry>) -> Void) {
+        let date = Date()
+        let nextUpdate = Calendar.current.date(byAdding: .second, value: 30, to: date)
+        
+        let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
+        if let sharedUserData = container?.object(forKey: "sharedUser") as? Data {
+            let decoder = JSONDecoder()
+            if let sharedUser = try? decoder.decode([String].self, from: sharedUserData) {
+            } else {
+                let entry = SongEntry(date: Date(), song: emptySong, albumCover: UIImage(imageLiteralResourceName: "albumPlaceholder"), songList: [emptySong])
+                let timeline = Timeline(entries: [entry], policy: .after(nextUpdate!))
+                completion(timeline)
+                return
+            }
+        } else {
+            let entry = SongEntry(date: Date(), song: emptySong, albumCover: UIImage(imageLiteralResourceName: "albumPlaceholder"), songList: [emptySong])
+            let timeline = Timeline(entries: [entry], policy: .after(nextUpdate!))
+            completion(timeline)
+            return
+        }
+        
         getData { (modelData) in
             
             var sharedSongList = [emptySong]
@@ -155,7 +202,7 @@ struct Provider : TimelineProvider {
                 
             }
             
-            let date = Date()
+            
             
             var data = SongEntry(date: date, song: modelData.0, albumCover: modelData.1 ?? UIImage(imageLiteralResourceName: "albumPlaceholder"), songList: sharedSongList)
             
@@ -167,12 +214,12 @@ struct Provider : TimelineProvider {
             
             let task = URLSession.shared.dataTask(with: url) { fetchedData, response, error in
                 guard let fetchedData = fetchedData else { return }
-
+                
                 data.albumCover = UIImage(data: fetchedData) ?? UIImage(imageLiteralResourceName: "albumPlaceholder")
                 
-                let nextUpdate = Calendar.current.date(byAdding: .second, value: 15, to: date)
                 
-                let timeline = Timeline(entries: [data], policy: .never)
+                
+                let timeline = Timeline(entries: [data], policy: .after(nextUpdate!))
                 
                 completion(timeline)
                 
@@ -261,5 +308,11 @@ struct PlayerStateChangePayload: Codable, Hashable {
         self.is_playing = is_playing
         self.progress = progress
         self.timestamp = timestamp
+    }
+}
+
+struct EncoreWidget_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }
