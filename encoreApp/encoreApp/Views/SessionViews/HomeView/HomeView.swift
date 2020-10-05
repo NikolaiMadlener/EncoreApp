@@ -55,12 +55,12 @@ struct HomeView: View {
                     VStack(spacing: 0) {
                         Spacer().frame(height: 300)
                         
-                            ForEach(self.songListVM.songs, id: \.self) { song in
-                                SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
-                                    .frame(height: 80)
-                                Divider()
-                                    .padding(.horizontal)
-                            }
+                        ForEach(self.songListVM.songs, id: \.self) { song in
+                            SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
+                                .frame(height: 80)
+                            Divider()
+                                .padding(.horizontal)
+                        }
                         Spacer().frame(height: 50)
                     }.animation(.easeInOut(duration: 0.3))
                     
@@ -78,12 +78,24 @@ struct HomeView: View {
                     if (geo.frame(in: .global).minY <= -150) {
                         VStack {
                             SongTitleBarView(playerStateVM: self.playerStateVM)
+                                .onAppear(perform: simpleSuccessHaptic)
                             Spacer()
                         }.offset(y: -geo.frame(in: .global).minY + self.offset)
                     }
                     
                 }
                 .frame(height: (CGFloat(self.songListVM.songs.count * 77 + 380)))
+            }
+            
+            if songListVM.songs.isEmpty {
+                VStack(alignment: .center) {
+                    Spacer()
+                    
+                    Text("tap + to add songs to session.")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(Color("purpleblue"))
+                    Spacer()
+                }
             }
             
             //Layer 3: Menu Layer
@@ -115,6 +127,11 @@ struct HomeView: View {
                 Spacer()
             }.padding(.bottom)
         }
+    }
+    
+    func simpleSuccessHaptic() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
     }
 }
 

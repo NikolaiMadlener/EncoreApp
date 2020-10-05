@@ -30,19 +30,36 @@ struct SuggestSongView: View {
     var body: some View {
         VStack(spacing: 0) {
             topBar.padding(.vertical)
-            SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search songs")
-            List {
-                ForEach(searchResultListVM.items, id: \.self) { song in
-                    SuggestSongCell(searchResultListVM: self.searchResultListVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, song: song)
-                        .frame(height: 60)
+            SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search")
+            if searchResultListVM.items.isEmpty {
+                VStack(alignment: .center) {
+                    Spacer()
+                    Group {
+                        Text("find your favourite songs by ")
+                        Text("artist, album or title.")
+                    }.font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(Color("purpleblue"))
+                    .padding(.horizontal)
+                    .padding(.vertical, 2)
+                    Spacer()
+                    Spacer()
                 }
-            }.alert(isPresented: self.$showSessionExpiredAlert) {
-                Alert(title: Text("Session expired"),
-                      message: Text("The Host has ended the Session."),
-                      dismissButton: .destructive(Text("Leave"), action: {
-                        self.currentlyInSession = false
-                      }))
-            }.edgesIgnoringSafeArea(.all)
+            } else {
+                List {
+                    ForEach(searchResultListVM.items, id: \.self) { song in
+                        SuggestSongCell(searchResultListVM: self.searchResultListVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, song: song)
+                            .frame(height: 60)
+                    }
+                }.alert(isPresented: self.$showSessionExpiredAlert) {
+                    Alert(title: Text("Session expired"),
+                          message: Text("The host has ended the session."),
+                          dismissButton: .destructive(Text("Leave"), action: {
+                            self.currentlyInSession = false
+                          }))
+                }.edgesIgnoringSafeArea(.all)
+            }
+            
+            
         }.onAppear {
             self.getMembers(username: self.userVM.username)
         }

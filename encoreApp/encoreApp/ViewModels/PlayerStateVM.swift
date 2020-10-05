@@ -17,7 +17,7 @@ class PlayerStateVM: ObservableObject {
     @Published var progress: Int64
     @Published var isPlaying: Bool
     @Published var normalizedPlaybackPosition: CGFloat = 0
-    @Published var albumCover: UIImage = UIImage(imageLiteralResourceName: "albumPlaceholder")
+    @Published var albumCover: UIImage = UIImage(imageLiteralResourceName: "IconPlaceholder")
     @Published var songTimestamp_ms: CGFloat = 0
     var serverURL: URL
     var userVM: UserVM
