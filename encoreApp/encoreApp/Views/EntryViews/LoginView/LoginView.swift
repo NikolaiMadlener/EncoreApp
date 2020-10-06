@@ -72,7 +72,7 @@ struct LoginView: View {
                                 .stroke(Color.gray, lineWidth: 1)
                         ).padding(.horizontal, 25)
                     if invalidUsername {
-                        Text("Name should be between three and 10 characters long and free of special characters and spaces.")
+                        Text("Name should be between 3 and 10 characters long and free of special characters and spaces.")
                             .font(.system(size: 12))
                             .foregroundColor(.red)
                             .padding(.horizontal, 25)

@@ -24,15 +24,15 @@ struct AddSongsBarView: View {
         if self.userVM.isAdmin {
             HStack {
                 playPauseButton
-                Spacer().frame(width: 40)
+                Spacer().frame(width: 50)
                 addButton
-                Spacer().frame(width: 40)
+                Spacer().frame(width: 50)
                 skipButton
             }.padding(10)
-                .padding(.horizontal, 10)
-                .background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
-                .cornerRadius(100)
-                .shadow(radius: 10)
+            .padding(.horizontal, 10)
+            .background(self.colorScheme == .dark ? Color("superdarkgray") : Color(.white))
+            .cornerRadius(25)
+            .shadow(radius: 10)
         } else {
             addButton
         }
@@ -41,7 +41,7 @@ struct AddSongsBarView: View {
     var addButton: some View {
         Button(action: { self.showAddSongSheet = true }) {
             ZStack {
-                Circle().frame(width: 55, height: 55).foregroundColor(Color.white).shadow(radius: 10)
+                Circle().frame(width: 55, height: 55).foregroundColor(Color.white)
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 60, weight: .light))
                     .foregroundColor(Color("purpleblue"))
@@ -63,9 +63,8 @@ struct AddSongsBarView: View {
             self.playerStateVM.isPlaying ? self.playerPause() : self.playerPlay()
         }) {
             ZStack {
-                Circle().frame(width: 35, height: 35).foregroundColor(self.colorScheme == .dark ? Color.black : Color.white)
-                Image(systemName: self.playerStateVM.isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                    .font(.system(size: 35, weight: .light))
+                Image(systemName: self.isPlay ? "pause" : "play")
+                    .font(.system(size: 30, weight: .semibold))
                     .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             }
         }
@@ -73,8 +72,8 @@ struct AddSongsBarView: View {
     
     var skipButton: some View {
         Button(action: { self.playerSkipNext() }) {
-            Image(systemName: "forward.end.fill")
-                .font(.system(size: 35, weight: .light))
+            Image(systemName: "forward.end")
+                .font(.system(size: 30, weight: .semibold))
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
         }
     }

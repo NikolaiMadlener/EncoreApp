@@ -8,6 +8,7 @@
 
 import SwiftUI
 import URLImage
+import CoreHaptics
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -24,6 +25,7 @@ struct HomeView: View {
     @State var isPlay = true
     @State var value: Float = 0.8
     @State var offset = CGFloat()
+    @State private var engine: CHHapticEngine?
     
     
     init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
@@ -38,8 +40,9 @@ struct HomeView: View {
         ZStack {
             ScrollView {
                 GeometryReader { geo in
-                    //                    Text("\(geo.frame(in: .global).minY)").offset(y: -geo.frame(in: .global).minY + self.offset)
-                    Text("").onAppear {self.offset = geo.frame(in: .global).minY}
+                    // Text("\(geo.frame(in: .global).minY)").offset(y: -geo.frame(in: .global).minY + self.offset)
+                    Text("")
+                        .onAppear {self.offset = geo.frame(in: .global).minY}
                     if (geo.frame(in: .global).minY > -150) {
                         VStack {
                             Spacer().frame(height: 20)
@@ -48,22 +51,20 @@ struct HomeView: View {
                                 CurrentSongView(playerStateVM: self.playerStateVM)
                                 Spacer()
                             }
-                            //                    ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
+                            //ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
                             Spacer()
                         }
                     }
-                    VStack {
+                    VStack(spacing: 0) {
                         Spacer().frame(height: 300)
                         ForEach(self.songListVM.songs, id: \.self) { song in
-                            VStack {
-                                SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
-                                Divider()
-                                    .padding(.horizontal)
-                                    .padding(.top, -5)
-                            }
+                            SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
+                                .frame(height: 80)
+                            Divider()
+                                .padding(.horizontal)
                         }
                         Spacer().frame(height: 50)
-                    }.animation(.easeInOut(duration: 0.2))
+                    }.animation(.easeInOut(duration: 0.3))
                     
                     // for hiding Song Queue Layer above Song Title Layer
                     if (geo.frame(in: .global).minY <= -150) {
@@ -79,12 +80,23 @@ struct HomeView: View {
                     if (geo.frame(in: .global).minY <= -150) {
                         VStack {
                             SongTitleBarView(playerStateVM: self.playerStateVM)
+                                .onAppear(perform: hapticEvent)
+                                .onDisappear(perform: hapticEvent)
                             Spacer()
                         }.offset(y: -geo.frame(in: .global).minY + self.offset)
                     }
-                    
                 }
                 .frame(height: (CGFloat(self.songListVM.songs.count * 77 + 380)))
+            }
+            
+            if songListVM.songs.isEmpty {
+                VStack(alignment: .center) {
+                    Spacer()
+                    Text("tap + to add songs to session.")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(Color("purpleblue"))
+                    Spacer()
+                }
             }
             
             //Layer 3: Menu Layer
@@ -108,12 +120,48 @@ struct HomeView: View {
                     MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
                 }
             }
+
             Spacer()
             HStack {
                 Spacer()
                 AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
                 Spacer()
             }.padding(.bottom)
+        }
+    }
+    
+    func prepareHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+
+        do {
+            self.engine = try CHHapticEngine()
+            try engine?.start()
+        } catch {
+            print("There was an error creating the engine: \(error.localizedDescription)")
+        }
+    }
+    
+    func hapticEvent() {
+        
+        prepareHaptics()
+        
+        // make sure that the device supports haptics
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+        var events = [CHHapticEvent]()
+
+        // create one intense, sharp tap
+        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.6)
+        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.5)
+        let event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: 0)
+        events.append(event)
+
+        // convert those events into a pattern and play it immediately
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try engine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        } catch {
+            print("Failed to play pattern: \(error.localizedDescription).")
         }
     }
 }
