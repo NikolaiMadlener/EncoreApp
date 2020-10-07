@@ -10,6 +10,7 @@ import WidgetKit
 import SwiftUI
 
 struct CurrentSongViewWidgetSmall: View {
+    @Environment(\.colorScheme) var colorScheme
     var songEntry: Provider.Entry
     
     var body: some View {
@@ -44,16 +45,18 @@ struct CurrentSongViewWidgetSmall: View {
                     Image("AppIconImage")
                         .resizable()
                         .frame(width: 30, height: 30)
+                        .cornerRadius(5)
                         .padding([.top, .trailing], 8)
-                    
+
                 }
                 Spacer()
             }
-        }
+        }.background(colorScheme == .dark ? Color("superdarkgray") : Color.white)
     }
 }
 
 struct CurrentSongViewWidgetMedium: View {
+    @Environment(\.colorScheme) var colorScheme
     var songEntry: Provider.Entry
     
     var body: some View {
@@ -66,7 +69,7 @@ struct CurrentSongViewWidgetMedium: View {
                             Image(uiImage: songEntry.albumCover)
                                 .resizable()
                                 .frame(width: 85, height: 85)
-                                .cornerRadius(10)
+                                .cornerRadius(15)
                                 .shadow(radius: 5)
                             
                             Spacer()
@@ -107,12 +110,13 @@ struct CurrentSongViewWidgetMedium: View {
                         Image("AppIconImage")
                             .resizable()
                             .frame(width: 30, height: 30)
+                            .cornerRadius(15)
                             .padding([.top, .trailing], 8)
-                        
+                            
                     }
                     Spacer()
                 }
-            }
+            }.background(colorScheme == .dark ? Color("superdarkgray") : Color.white)
         }
     }
 }
@@ -169,22 +173,22 @@ struct Provider : TimelineProvider {
     }
     
     func getTimeline(in context: Context, completion: @escaping (Timeline<SongEntry>) -> Void) {
-        let date = Date()
-        let nextUpdate = Calendar.current.date(byAdding: .second, value: 30, to: date)
+        var date = Date()
+        let nextUpdate = Calendar.current.date(byAdding: .second, value: 15, to: date)
         
         let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
         if let sharedUserData = container?.object(forKey: "sharedUser") as? Data {
             let decoder = JSONDecoder()
             if let sharedUser = try? decoder.decode([String].self, from: sharedUserData) {
             } else {
-                let entry = SongEntry(date: Date(), song: emptySong, albumCover: UIImage(imageLiteralResourceName: "albumPlaceholder"), songList: [emptySong])
-                let timeline = Timeline(entries: [entry], policy: .after(nextUpdate!))
+                let entry = SongEntry(date: date, song: emptySong, albumCover: UIImage(imageLiteralResourceName: "albumPlaceholder"), songList: [emptySong])
+                let timeline = Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(20)))
                 completion(timeline)
                 return
             }
         } else {
-            let entry = SongEntry(date: Date(), song: emptySong, albumCover: UIImage(imageLiteralResourceName: "albumPlaceholder"), songList: [emptySong])
-            let timeline = Timeline(entries: [entry], policy: .after(nextUpdate!))
+            let entry = SongEntry(date: date, song: emptySong, albumCover: UIImage(imageLiteralResourceName: "albumPlaceholder"), songList: [emptySong])
+            let timeline = Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(20)))
             completion(timeline)
             return
         }
@@ -219,7 +223,7 @@ struct Provider : TimelineProvider {
                 
                 
                 
-                let timeline = Timeline(entries: [data], policy: .after(nextUpdate!))
+                let timeline = Timeline(entries: [data], policy: .after(Date().addingTimeInterval(20)))
                 
                 completion(timeline)
                 
