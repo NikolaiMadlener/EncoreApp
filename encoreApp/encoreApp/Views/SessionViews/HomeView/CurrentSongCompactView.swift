@@ -23,7 +23,7 @@ struct CurrentSongCompactView: View {
                     .foregroundColor(Color.clear)
                     .background(self.colorScheme == .dark ? Color(.black) : Color(.white))
                 ZStack(alignment: .leading) {
-                    ProgressBarView(playerStateVM: playerStateVM, isWide: true)
+                    //ProgressBarView(playerStateVM: playerStateVM, isWide: true)
                 }
             }
             HStack() {
