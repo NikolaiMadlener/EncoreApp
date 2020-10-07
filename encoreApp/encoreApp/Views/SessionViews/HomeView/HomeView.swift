@@ -51,7 +51,7 @@ struct HomeView: View {
                                 CurrentSongView(playerStateVM: self.playerStateVM)
                                 Spacer()
                             }
-                            //ProgressBarView(playerStateVM: self.playerStateVM, isWide: false)
+                            ProgressBarView(playerStateVM: self.playerStateVM, showMenuSheet: $showMenuSheet, isWide: false)
                             Spacer()
                         }
                     }

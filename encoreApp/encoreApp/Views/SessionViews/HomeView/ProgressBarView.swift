@@ -11,6 +11,7 @@ import SwiftUI
 struct ProgressBarView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var playerStateVM: PlayerStateVM
+    @Binding var showMenuSheet: Bool
     var isWide: Bool
     var width: CGFloat { isWide ? UIScreen.main.bounds.width : UIScreen.main.bounds.width * 0.8 }
     var updateFrequency_ms: CGFloat = 100
@@ -28,8 +29,8 @@ struct ProgressBarView: View {
                 .animation(.easeOut(duration: 0.6))
                 .cornerRadius(isWide ? 0 : 5)
                 .onReceive(timer) { _ in
-                    //if song is playing, increment the progressBar
-                    if self.playerStateVM.isPlaying {
+                    //if song is playing and MenuView is not showing, increment the progressBar
+                    if self.playerStateVM.isPlaying && !self.showMenuSheet {
                         self.playerStateVM.songTimestamp_ms += self.updateFrequency_ms
                     }
                 }
@@ -39,7 +40,8 @@ struct ProgressBarView: View {
 
 struct ProgressBarView_Previews: PreviewProvider {
     static var duration_ms: Int = 50000
+    @State static var showMenuView = false
     static var previews: some View {
-        ProgressBarView(playerStateVM: PlayerStateVM(userVM: UserVM()), isWide: false)
+        ProgressBarView(playerStateVM: PlayerStateVM(userVM: UserVM()), showMenuSheet: $showMenuView, isWide: false)
     }
 }
