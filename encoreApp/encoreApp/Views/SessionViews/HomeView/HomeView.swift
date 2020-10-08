@@ -43,7 +43,7 @@ struct HomeView: View {
                     // Text("\(geo.frame(in: .global).minY)").offset(y: -geo.frame(in: .global).minY + self.offset)
                     Text("")
                         .onAppear {self.offset = geo.frame(in: .global).minY}
-                    if (geo.frame(in: .global).minY > -150) {
+                    if (geo.frame(in: .global).minY > -150 && !songListVM.songs.isEmpty) {
                         VStack {
                             Spacer().frame(height: 20)
                             HStack {
@@ -93,7 +93,7 @@ struct HomeView: View {
                 VStack(alignment: .center) {
                     Spacer()
                     Text("tap + to add songs to session.")
-                        .font(.system(size: 18, weight: .semibold))
+                        .font(.system(size: 19, weight: .semibold))
                         .foregroundColor(Color("purpleblue"))
                     Spacer()
                 }
