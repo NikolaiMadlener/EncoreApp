@@ -152,7 +152,6 @@ struct MenuView: View {
             }.frame(width: geo.size.width,
                     height: geo.size.height,
                     alignment: .center)
-            
         }.background(
             Color.black.opacity(0.5)
                 .edgesIgnoringSafeArea(.all)
