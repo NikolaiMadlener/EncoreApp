@@ -206,7 +206,27 @@ struct MenuView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
             }
+            
+            if #available(iOS 14.0, *) {
+                do {
+                   let encoder = JSONEncoder()
+                   if let encoded = try? encoder.encode(["", "", ""]) {
+                       let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
+                       container?.set(encoded, forKey: "sharedUser")
+                   }
+                    if let encoded = try? encoder.encode([""]) {
+                        let container = UserDefaults(suiteName:"group.com.bitkitApps.encore")
+                        container?.set(encoded, forKey: "sharedSongList")
+                    }
+                   
+                     WidgetCenter.shared.reloadAllTimelines()
+
+                     } catch {
+                       print("Unable to encode WidgetDay: \(error.localizedDescription)")
+                  }
+            }
             self.currentlyInSession = false
+            
         }
         task.resume()
     }
