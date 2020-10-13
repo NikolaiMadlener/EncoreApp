@@ -38,7 +38,7 @@ struct CurrentSongView: View {
 //                .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
 //                .blendMode(.multiply)
             Text("\(self.playerStateVM.song.name)")
-                .font(.system(size: 20, weight: .bold))
+                .font(.system(size: 20, weight: .semibold))
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
              

@@ -46,8 +46,9 @@ struct MenuView: View {
                     
                     Spacer()
                     
-                    leaveButton
+                    
                 }.modifier(BlueCardModifier())
+                leaveButton
             }
             
             .sheet(isPresented: self.$showShareSheet) {
@@ -74,9 +75,10 @@ struct MenuView: View {
         Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session.")
             .overlay(
                 Rectangle()
-                    .foregroundColor(Color("purpleblue"))
-                    .frame(height: 3)
-                    .offset(y: 4), alignment: .bottom)
+                    .foregroundColor(Color("purpleblue").opacity(0.8))
+                    .frame(height: 2)
+                    .cornerRadius(50)
+                    .offset(y: 2), alignment: .bottom)
             .font(.system(size: 25, weight: .semibold))
             .padding(.bottom, 10)
     }
@@ -100,32 +102,35 @@ struct MenuView: View {
     var shareLinkButton: some View {
         Button(action: { self.showShareSheet.toggle() }) {
             ZStack {
-                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
+                    .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                 HStack {
                     Text("Share Invite Link")
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        //.font(.system(size: 15))
                         .font(.headline)
                         .padding(.leading)
                     Spacer()
                     Image(systemName: "square.and.arrow.up")
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.system(size: 20))
+                        .font(.system(size: 20, weight: .medium))
                         .padding(.trailing)
                 }
-            }.padding(.horizontal, 25)
+            }.padding(.horizontal, 20)
         }
     }
     
     var membersList: some View {
-        VStack {
-            Text("Leaderboard")
-                .font(.system(size: 25, weight: .semibold))
-                .foregroundColor(Color.white)
-                .padding(.top)
+        VStack(spacing: 4) {
+            HStack {
+                Spacer()
+                Text("Leaderboard")
+                    .font(.system(size: 25, weight: .semibold))
+                    .foregroundColor(Color.white)
+                    .padding(.top, 10)
+                Spacer()
+            }
             ScrollView {
                 VStack {
-                    Spacer().frame(height: 10)
                     ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score } ), id: \.self) { member in
                         HStack {
                             if member.username == self.userVM.username {

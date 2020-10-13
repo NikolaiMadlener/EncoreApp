@@ -42,7 +42,7 @@ struct SuggestSongCell: View {
     private var songView: some View {
         VStack(alignment: .leading) {
             Text(self.song.name)
-                .font(.system(size: 18, weight: .bold))
+                .font(.system(size: 18, weight: .semibold))
             Text(self.song.artists[0].name)
                 .font(.system(size: 16, weight: .regular))
         }
