@@ -35,18 +35,21 @@ struct MenuView: View {
             VStack(spacing: 0) {
                 self.topBar.padding()
                 
-                qrCode
+                sessionTitle
                 
-                Text("Let your friends scan the QR code \nor share the Session-Link to let them join.").font(.footnote).multilineTextAlignment(.center).padding(.bottom)
+                qrCode
                 
                 shareLinkButton
                 
-                membersList
-                
-                Spacer()
-                
-                leaveButton
+                VStack {
+                    membersList
+                    
+                    Spacer()
+                    
+                    leaveButton
+                }.modifier(BlueCardModifier())
             }
+            
             .sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
@@ -67,6 +70,13 @@ struct MenuView: View {
         }
     }
     
+    var sessionTitle: some View {
+        Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session.")
+            .font(.system(size: 25, weight: .semibold))
+            .underline(color: Color("purpleblue"))
+            .padding(.bottom, 10)
+    }
+    
     var qrCode: some View {
         Button(action: {
             withAnimation { self.showPopupQRCode.toggle() }
@@ -80,6 +90,7 @@ struct MenuView: View {
                     self.currentlyInSession = false
                   }))
         }
+        .padding(.bottom, 10)
     }
     
     var shareLinkButton: some View {
@@ -87,9 +98,10 @@ struct MenuView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                 HStack {
-                    Text("Share Session-Link")
+                    Text("Share Invite Link")
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.system(size: 15))
+                        //.font(.system(size: 15))
+                        .font(.headline)
                         .padding(.leading)
                     Spacer()
                     Image(systemName: "square.and.arrow.up")
@@ -102,28 +114,29 @@ struct MenuView: View {
     }
     
     var membersList: some View {
-        ScrollView {
-            VStack {
-                Spacer().frame(height: 10)
-                ForEach(self.userListVM.members, id: \.self) { member in
-                    HStack {
-                        if member.is_admin {
-                            Text("\(member.username)").bold()
-                        } else {
-                            Text("\(member.username)")
-                        }
-                        Spacer()
-                        if member.is_admin {
-                            Image(systemName: "music.house")
-                        }
-                        else if member.username == self.userVM.username {
-                            Text("You").bold()
-                        }
+        VStack {
+            Text("Leaderboard")
+                .font(.system(size: 25, weight: .semibold))
+                .foregroundColor(Color.white)
+                .padding(.top)
+            ScrollView {
+                VStack {
+                    Spacer().frame(height: 10)
+                    ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score } ), id: \.self) { member in
+                        HStack {
+                            if member.username == self.userVM.username {
+                                Text("\(member.username)").bold()
+                            } else {
+                                Text("\(member.username)")
+                            }
+                            Spacer()
+                            Text("\(member.score)").bold()
+                        }.foregroundColor(Color.white)
+                        Divider()
                     }
-                    Divider()
-                }
-                Spacer().frame(height: 10)
-            }.padding(.horizontal, 30)
+                    Spacer().frame(height: 10)
+                }.padding(.horizontal, 30)
+            }
         }
     }
     
