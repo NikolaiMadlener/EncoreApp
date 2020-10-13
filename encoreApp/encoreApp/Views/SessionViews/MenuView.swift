@@ -72,8 +72,12 @@ struct MenuView: View {
     
     var sessionTitle: some View {
         Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session.")
+            .overlay(
+                Rectangle()
+                    .foregroundColor(Color("purpleblue"))
+                    .frame(height: 3)
+                    .offset(y: 4), alignment: .bottom)
             .font(.system(size: 25, weight: .semibold))
-            .underline(color: Color("purpleblue"))
             .padding(.bottom, 10)
     }
     
