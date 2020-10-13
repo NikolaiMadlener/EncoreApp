@@ -42,7 +42,6 @@ struct SongListCell: View {
     
     private var albumView: some View {
         URLImage(URL(string: self.song.cover_url)!, placeholder: { _ in
-                // Replace placeholder image with text
                 self.currentImage.opacity(0.0)
         }, content: {
                $0.image

@@ -16,7 +16,6 @@ struct SuggestSongView: View {
     @State private var searchText : String = ""
     @State var showSessionExpiredAlert = false
     @Binding var currentlyInSession: Bool
-    //@State var songs: [Song] = []
     typealias JSONStandard = [String : AnyObject]
     
     init(searchResultListVM: SearchResultListVM, userVM: UserVM, songListVM: SongListVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>) {
