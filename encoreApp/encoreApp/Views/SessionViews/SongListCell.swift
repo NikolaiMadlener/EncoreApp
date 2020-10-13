@@ -55,8 +55,10 @@ struct SongListCell: View {
     
     private var songView: some View {
         VStack(alignment: .leading) {
-            Text(self.song.name).bold()
+            Text(self.song.name)
+                .font(.system(size: 18, weight: .bold))
             Text(self.song.artists[0])
+                .font(.system(size: 16, weight: .regular))
         }
     }
     
