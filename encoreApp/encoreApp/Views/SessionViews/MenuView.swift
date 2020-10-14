@@ -23,7 +23,7 @@ struct MenuView: View {
     
     init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
-        self.userListVM = UserListVM(userVM: userVM)
+        self.userListVM = UserListVM(userVM: userVM, sessionID: nil)
         self.playerStateVM = playerStateVM
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
@@ -72,12 +72,12 @@ struct MenuView: View {
     }
     
     var sessionTitle: some View {
-        Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session.")
+        Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session")
             .overlay(
                 Rectangle()
-                    .foregroundColor(Color("purpleblue").opacity(0.8))
+                    .foregroundColor(Color("purpleblue"))
                     .frame(height: 2)
-                    .cornerRadius(50)
+                    .cornerRadius(100)
                     .offset(y: 2), alignment: .bottom)
             .font(.system(size: 25, weight: .semibold))
             .padding(.bottom, 10)
@@ -124,7 +124,7 @@ struct MenuView: View {
             HStack {
                 Spacer()
                 Text("Leaderboard")
-                    .font(.system(size: 25, weight: .semibold))
+                    .font(.system(size: 22, weight: .semibold))
                     .foregroundColor(Color.white)
                     .padding(.top, 10)
                 Spacer()

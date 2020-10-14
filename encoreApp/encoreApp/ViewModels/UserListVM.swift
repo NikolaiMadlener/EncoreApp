@@ -15,10 +15,10 @@ class UserListVM: ObservableObject {
     var userVM: UserVM
     var eventSource: EventSource
     
-    init(userVM: UserVM) {
+    init(userVM: UserVM, sessionID: String?) {
         self.userVM = userVM
         
-        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)/"+"\(userVM.sessionID)")!
+        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)/"+"\(sessionID ?? userVM.sessionID)")!
         eventSource = EventSource(url: serverURL)
         
         eventSource.connect()

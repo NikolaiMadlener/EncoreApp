@@ -13,7 +13,7 @@ struct BlueCardModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             //.frame(width: UIScreen.main.bounds.width * 0.9)
-            .background(Color("purpleblue").opacity(0.8))
+            .background(Color("purpleblue").opacity(1))
             .cornerRadius(20)
             .padding(.vertical)
             .padding(.horizontal, 20)
