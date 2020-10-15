@@ -92,15 +92,25 @@ struct LoginView: View {
                             }
                             .disabled(username.count < 1)
                             .fullScreenCover(isPresented: self.$showScannerSheet) {
-                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)}
-                            
-                            
+                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
+                            }
                         } else {
-                            // Fallback on earlier versions
+                            Button(action: {
+                                    if self.checkUsernameInvalid(username: self.username) {
+                                        self.invalidUsername = true
+                                    } else {
+                                        self.showScannerSheet = true
+                                        self.invalidUsername = false
+                                    }}) {
+                                Text("Join Session")
+                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                            }
+                            .disabled(username.count < 1)
+                            .sheet(isPresented: self.$showScannerSheet) {
+                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
+                            }
                         }
                         
-                        
-
                         LabeledDivider(label: "or")
                         VStack {
                             ZStack {
