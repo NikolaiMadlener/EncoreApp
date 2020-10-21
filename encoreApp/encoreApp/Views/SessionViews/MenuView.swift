@@ -33,7 +33,7 @@ struct MenuView: View {
         GeometryReader { geo in
             
             VStack(spacing: 0) {
-                self.topBar.padding()
+                topBar
                 
                 sessionTitle
                 
@@ -43,11 +43,9 @@ struct MenuView: View {
                 
                 VStack {
                     membersList
-                    
                     Spacer()
-                    
-                    
                 }.modifier(BlueCardModifier())
+                
                 leaveButton
             }
             
@@ -68,7 +66,7 @@ struct MenuView: View {
             RoundedRectangle(cornerRadius: 6)
                 .fill(Color.secondary)
                 .frame(width: 60, height: 4)
-        }
+        }.padding()
     }
     
     var sessionTitle: some View {
@@ -79,7 +77,7 @@ struct MenuView: View {
                     .frame(height: 2)
                     .cornerRadius(100)
                     .offset(y: 2), alignment: .bottom)
-            .font(.system(size: 25, weight: .semibold))
+            .font(.system(size: 25, weight: .bold))
             .padding(.bottom, 10)
     }
     
@@ -120,27 +118,31 @@ struct MenuView: View {
     }
     
     var membersList: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 0) {
             HStack {
                 Spacer()
                 Text("Leaderboard")
                     .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(Color.white)
-                    .padding(.top, 10)
+                    .foregroundColor(Color("purpleblue"))
+                    .padding(10)
                 Spacer()
             }
             ScrollView {
                 VStack {
-                    ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score } ), id: \.self) { member in
+                    ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
                         HStack {
+                            Text("\((self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1)")
+                                .font(.system(size: 17, weight: .light))
                             if member.username == self.userVM.username {
-                                Text("\(member.username)").bold()
+                                Text("\(member.username)").font(.system(size: 17, weight: .semibold))
                             } else {
-                                Text("\(member.username)")
+                                Text("\(member.username)").font(.system(size: 17, weight: .medium))
                             }
                             Spacer()
-                            Text("\(member.score)").bold()
-                        }.foregroundColor(Color.white)
+                            Text("\(member.score)").font(.system(size: 17, weight: .semibold))
+                            Image(systemName: "heart")
+                                .font(.system(size: 15, weight: .semibold))
+                        }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                         Divider()
                     }
                     Spacer().frame(height: 10)

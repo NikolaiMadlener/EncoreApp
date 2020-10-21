@@ -64,6 +64,13 @@ struct LoginView: View {
                     Text("encore.")
                         .font(.largeTitle)
                         .bold()
+                        .overlay(
+                            Rectangle()
+                                .foregroundColor(Color("purpleblue"))
+                                .frame(height: 2)
+                                .cornerRadius(100)
+                                .offset(y: 2), alignment: .bottom)
+                        
                     Spacer().frame(height: 40)
                     TextField("Enter your Name", text: self.$username)
                         .padding(15)

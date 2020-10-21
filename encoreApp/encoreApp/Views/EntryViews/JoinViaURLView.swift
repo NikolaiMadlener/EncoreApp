@@ -73,7 +73,6 @@ struct JoinViaURLView: View {
                           message: Text("The Internet connection appears to be offline."),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
             }
-            
         }
     }
     
