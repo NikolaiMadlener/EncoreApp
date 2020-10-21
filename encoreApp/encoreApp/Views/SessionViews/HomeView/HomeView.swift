@@ -43,7 +43,7 @@ struct HomeView: View {
                     // Text("\(geo.frame(in: .global).minY)").offset(y: -geo.frame(in: .global).minY + self.offset)
                     Text("")
                         .onAppear {self.offset = geo.frame(in: .global).minY}
-                    if (geo.frame(in: .global).minY > -150 && !songListVM.songs.isEmpty) {
+                    if (geo.frame(in: .global).minY > -220 && playerStateVM.song.name != "empty_song") {
                         VStack {
                             Spacer().frame(height: 20)
                             HStack {
@@ -55,19 +55,21 @@ struct HomeView: View {
                             Spacer()
                         }
                     }
-                    VStack(spacing: 0) {
-                        Spacer().frame(height: 300)
+                    
+                        
+                    VStack(alignment: .leading, spacing: 0) {
+                        Spacer().frame(height: 320)
                         ForEach(self.songListVM.songs, id: \.self) { song in
                             SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
                                 .frame(height: 80)
                             Divider()
                                 .padding(.horizontal)
                         }
-                        Spacer().frame(height: 50)
+                        Spacer().frame(height: 100)
                     }.animation(.easeInOut(duration: 0.3))
                     
                     // for hiding Song Queue Layer above Song Title Layer
-                    if (geo.frame(in: .global).minY <= -150) {
+                    if (geo.frame(in: .global).minY <= -220) {
                         VStack {
                             Rectangle()
                                 .frame(height: 60)
@@ -77,7 +79,7 @@ struct HomeView: View {
                     }
                     
                     //Layer 2: Song Title Layer
-                    if (geo.frame(in: .global).minY <= -150) {
+                    if (geo.frame(in: .global).minY <= -220) {
                         VStack {
                             SongTitleBarView(playerStateVM: self.playerStateVM)
                                 .onAppear(perform: hapticEvent)
