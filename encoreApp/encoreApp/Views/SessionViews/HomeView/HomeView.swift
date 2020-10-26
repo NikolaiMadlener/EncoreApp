@@ -73,7 +73,7 @@ struct HomeView: View {
                         VStack {
                             Rectangle()
                                 .frame(height: 60)
-                                .foregroundColor(self.colorScheme == .dark ? Color(.black) : Color(.white))
+                                .foregroundColor(self.colorScheme == .dark ? Color("superdarkgray") : Color(.white))
                             Spacer()
                         }.edgesIgnoringSafeArea(.top).offset(y: -geo.frame(in: .global).minY)
                     }
@@ -106,7 +106,9 @@ struct HomeView: View {
         }//.onAppear{ self.playerStateVM.viewDidLoad() }
             // triggers updates on every second
             .onAppear{ self.playerStateVM.playerPause() }
+        
     }
+    
     
     //MARK: Layer 3: Menu Layer
     private var menu_layer: some View {

@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct AppContentView: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM = UserVM()
     @State var currentlyInSession = false
     @State var showJoinSheet: Bool = false
@@ -17,6 +18,9 @@ struct AppContentView: View {
     
     var body: some View {
         return Group {
+            ZStack {
+                self.colorScheme == .dark ? Color("superdarkgray").edgesIgnoringSafeArea(.vertical) : Color.white.edgesIgnoringSafeArea(.vertical)
+                
                 if currentlyInSession {
                     HomeView(userVM: userVM, currentlyInSession: $currentlyInSession)
                 }
@@ -26,6 +30,8 @@ struct AppContentView: View {
                             JoinViaURLView(userVM: self.userVM, sessionID: self.sessionID, currentlyInSession: self.$currentlyInSession)
                     }
                 }
+            }
+                
         }.onAppear{ self.showJoinSheet = self.joinedViaURL }
     }
 }
