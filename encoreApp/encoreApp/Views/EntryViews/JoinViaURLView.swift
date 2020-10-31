@@ -10,7 +10,7 @@ import SwiftUI
 
 struct JoinViaURLView: View {
     @ObservedObject var userVM: UserVM
-    
+    @ObservedObject var userListVM: UserListVM
     var sessionID: String
     @State var username = ""
     @State var secret: String = ""
@@ -20,10 +20,18 @@ struct JoinViaURLView: View {
     @State var showActivityIndicator = false
     @State var showUsernameExistsAlert = false
     @State var showNetworkErrorAlert = false
+   
+    init(userVM: UserVM, sessionID: String, currentlyInSession: Binding<Bool>) {
+        self.userVM = userVM
+        self.userListVM = UserListVM(userVM: userVM, sessionID: sessionID)
+        self.sessionID = sessionID
+        self._currentlyInSession = currentlyInSession
+    }
     
     var body: some View {
         VStack {
-            Spacer().frame(height: 200)
+            sessionTitle
+            Spacer().frame(height: 40)
             //Text(sessionID)
             TextField("Enter your Name", text: self.$username)
             .padding(15)
@@ -37,7 +45,7 @@ struct JoinViaURLView: View {
                     .foregroundColor(.red)
                     .padding(.horizontal, 25)
             }
-            Spacer()
+            Spacer().frame(height: 20)
             Button(action: { self.joinSession(username: self.username) }) {
                 ZStack {
                     if !showActivityIndicator {
@@ -49,8 +57,8 @@ struct JoinViaURLView: View {
                 }
                      .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
             }.padding(.bottom)
-                .disabled(username.count < 1)
-                .alert(isPresented: $showWrongIDAlert) {
+            .disabled(username.count < 1)
+            .alert(isPresented: $showWrongIDAlert) {
                     Alert(title: Text("Session doesn't exist"),
                           message: Text(""),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
@@ -65,8 +73,19 @@ struct JoinViaURLView: View {
                           message: Text("The Internet connection appears to be offline."),
                           dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
             }
-            
         }
+    }
+    
+    var sessionTitle: some View {
+        Text("encore.")
+            .overlay(
+                Rectangle()
+                    .foregroundColor(Color("purpleblue"))
+                    .frame(height: 2)
+                    .cornerRadius(100)
+                    .offset(y: 2), alignment: .bottom)
+            .font(.system(size: 30, weight: .bold))
+            .padding(.bottom, 10)
     }
     
     func joinSession(username: String) {

@@ -10,6 +10,7 @@ import SwiftUI
 import CodeScanner
 
 struct ScannerSheetView: View {
+    @Environment(\.presentationMode) var presentationMode
     @ObservedObject var userVM: UserVM
     @Binding var currentlyInSession: Bool
     @Binding var showScannerSheet: Bool
@@ -44,22 +45,22 @@ struct ScannerSheetView: View {
             )
             
             VStack {
-                Button(action: { self.showScannerSheet = false }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.white)
-                        .font(.largeTitle)
-                        .padding()
-                }
-                Spacer()
                 Text("Scan the session's QR code to join")
-                    .font(.system(size: 14))
-                    .padding(5)
+                    .padding(10)
+                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(Color.white)
                     .background(Color("purpleblue"))
-                    .cornerRadius(25)
-                    .padding()
+                    .cornerRadius(10)
+                    .padding(.top, 40)
+                Spacer()
+                Button(action: { self.showScannerSheet = false }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(Color("purpleblue"))
+                        .font(.system(size: 50, weight: .semibold))
+                        .padding()
+                }
             }
-        }
+        }.edgesIgnoringSafeArea(.all)
     }
     
     func joinSession(username: String) {

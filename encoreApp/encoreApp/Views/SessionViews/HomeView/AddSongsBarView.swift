@@ -30,7 +30,7 @@ struct AddSongsBarView: View {
                 skipButton
             }.padding(10)
             .padding(.horizontal, 10)
-            .background(self.colorScheme == .dark ? Color("superdarkgray") : Color(.white))
+            .background(self.colorScheme == .dark ? Color("darkgray") : Color(.white))
             .cornerRadius(25)
             .shadow(radius: 10)
         } else {

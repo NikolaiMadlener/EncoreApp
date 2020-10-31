@@ -23,7 +23,7 @@ struct MenuView: View {
     
     init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
         self.userVM = userVM
-        self.userListVM = UserListVM(userVM: userVM)
+        self.userListVM = UserListVM(userVM: userVM, sessionID: nil)
         self.playerStateVM = playerStateVM
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
@@ -33,20 +33,22 @@ struct MenuView: View {
         GeometryReader { geo in
             
             VStack(spacing: 0) {
-                self.topBar.padding()
+                topBar
+                
+                sessionTitle
                 
                 qrCode
                 
-                Text("Let your friends scan the QR code \nor share the Session-Link to let them join.").font(.footnote).multilineTextAlignment(.center).padding(.bottom)
-                
                 shareLinkButton
                 
-                membersList
-                
-                Spacer()
+                VStack {
+                    membersList
+                    Spacer()
+                }.modifier(BlueCardModifier())
                 
                 leaveButton
             }
+            
             .sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
@@ -64,7 +66,19 @@ struct MenuView: View {
             RoundedRectangle(cornerRadius: 6)
                 .fill(Color.secondary)
                 .frame(width: 60, height: 4)
-        }
+        }.padding()
+    }
+    
+    var sessionTitle: some View {
+        Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session")
+            .overlay(
+                Rectangle()
+                    .foregroundColor(Color("purpleblue"))
+                    .frame(height: 2)
+                    .cornerRadius(100)
+                    .offset(y: 2), alignment: .bottom)
+            .font(.system(size: 25, weight: .bold))
+            .padding(.bottom, 10)
     }
     
     var qrCode: some View {
@@ -80,50 +94,60 @@ struct MenuView: View {
                     self.currentlyInSession = false
                   }))
         }
+        .padding(.bottom, 10)
     }
     
     var shareLinkButton: some View {
         Button(action: { self.showShareSheet.toggle() }) {
             ZStack {
-                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50).foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
+                    .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
                 HStack {
-                    Text("Share Session-Link")
+                    Text("Share Invite Link")
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.system(size: 15))
+                        .font(.headline)
                         .padding(.leading)
                     Spacer()
                     Image(systemName: "square.and.arrow.up")
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.system(size: 20))
+                        .font(.system(size: 20, weight: .medium))
                         .padding(.trailing)
                 }
-            }.padding(.horizontal, 25)
+            }.padding(.horizontal, 20)
         }
     }
     
     var membersList: some View {
-        ScrollView {
-            VStack {
-                Spacer().frame(height: 10)
-                ForEach(self.userListVM.members, id: \.self) { member in
-                    HStack {
-                        if member.is_admin {
-                            Text("\(member.username)").bold()
-                        } else {
-                            Text("\(member.username)")
-                        }
-                        Spacer()
-                        if member.is_admin {
-                            Image(systemName: "music.house")
-                        }
-                        else if member.username == self.userVM.username {
-                            Text("You").bold()
-                        }
+        VStack(spacing: 0) {
+            HStack {
+                Spacer()
+                Text("Leaderboard")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundColor(Color("purpleblue"))
+                    .padding(10)
+                Spacer()
+            }
+            ScrollView {
+                VStack {
+                    ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
+                        HStack {
+                            Text("\((self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1)")
+                                .font(.system(size: 17, weight: .light))
+                            if member.username == self.userVM.username {
+                                Text("\(member.username)").font(.system(size: 17, weight: .semibold))
+                            } else {
+                                Text("\(member.username)").font(.system(size: 17, weight: .medium))
+                            }
+                            Spacer()
+                            Text("\(member.score)").font(.system(size: 17, weight: .semibold))
+                            Image(systemName: "heart")
+                                .font(.system(size: 15, weight: .semibold))
+                        }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                        Divider()
                     }
-                    Divider()
-                }
-                Spacer().frame(height: 10)
-            }.padding(.horizontal, 30)
+                    Spacer().frame(height: 10)
+                }.padding(.horizontal, 30)
+            }
         }
     }
     
@@ -152,7 +176,6 @@ struct MenuView: View {
             }.frame(width: geo.size.width,
                     height: geo.size.height,
                     alignment: .center)
-            
         }.background(
             Color.black.opacity(0.5)
                 .edgesIgnoringSafeArea(.all)

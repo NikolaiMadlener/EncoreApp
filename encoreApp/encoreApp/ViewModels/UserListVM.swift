@@ -15,7 +15,7 @@ class UserListVM: ObservableObject {
     var userVM: UserVM
     var eventSource: EventSource
     
-    init(userVM: UserVM) {
+    init(userVM: UserVM, sessionID: String?) {
         self.userVM = userVM
         
         serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)/"+"\(userVM.sessionID)")!
@@ -30,7 +30,7 @@ class UserListVM: ObservableObject {
         }
         
         eventSource.addEventListener("sse:user_list_change") { [weak self] id, event, dataString in
-            print("eventListener Data:" + "\(dataString)")
+            print("eventListener Data userlist:" + "\(dataString)")
             // Convert HTTP Response Data to a String
             if let dataString = dataString {
                 let data: Data? = dataString.data(using: .utf8)

@@ -10,6 +10,7 @@ import SwiftUI
 import CoreImage.CIFilterBuiltins
 
 struct PopupQRCodeView: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @State var showShareSheet: Bool = false
     @Binding var showPopupQRCode: Bool
@@ -20,15 +21,14 @@ struct PopupQRCodeView: View {
         VStack {
             Text("Invite your friends")
                 .font(.system(size: 25, weight: .bold))
-                .foregroundColor(Color.black)
+                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 .padding(.top)
             QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
             saveQRCodeButton
             shareQRCodeButton
             cancelButton
-        }
-        .background(Color.white)
-        .cornerRadius(10)
+        }.background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
+        .cornerRadius(20)
         .frame(width: UIScreen.main.bounds.width * 0.73, height: UIScreen.main.bounds.height * 0.85)
         .sheet(isPresented: self.$showShareSheet) {
             ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)

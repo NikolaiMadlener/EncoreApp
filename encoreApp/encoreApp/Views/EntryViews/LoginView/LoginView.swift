@@ -64,6 +64,13 @@ struct LoginView: View {
                     Text("encore.")
                         .font(.largeTitle)
                         .bold()
+                        .overlay(
+                            Rectangle()
+                                .foregroundColor(Color("purpleblue"))
+                                .frame(height: 2)
+                                .cornerRadius(100)
+                                .offset(y: 2), alignment: .bottom)
+                        
                     Spacer().frame(height: 40)
                     TextField("Enter your Name", text: self.$username)
                         .padding(15)
@@ -79,20 +86,38 @@ struct LoginView: View {
                     }
                     Spacer().frame(height: 20)
                     Group {
-                        Button(action: { if self.checkUsernameInvalid(username: self.username) {
-                            self.invalidUsername = true
+                        if #available(iOS 14.0, *) {
+                            Button(action: {
+                                    if self.checkUsernameInvalid(username: self.username) {
+                                        self.invalidUsername = true
+                                    } else {
+                                        self.showScannerSheet = true
+                                        self.invalidUsername = false
+                                    }}) {
+                                Text("Join Session")
+                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                            }
+                            .disabled(username.count < 1)
+                            .fullScreenCover(isPresented: self.$showScannerSheet) {
+                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
+                            }
                         } else {
-                            self.showScannerSheet = true
-                            self.invalidUsername = false
-                        }}) {
-                            Text("Join Session")
-                                .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-                        }.disabled(username.count < 1)
-                        .sheet(isPresented: self.$showScannerSheet) {
-                            ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert,
-                                             showNetworkErrorAlert:
-                                                self.$showNetworkErrorAlert)
+                            Button(action: {
+                                    if self.checkUsernameInvalid(username: self.username) {
+                                        self.invalidUsername = true
+                                    } else {
+                                        self.showScannerSheet = true
+                                        self.invalidUsername = false
+                                    }}) {
+                                Text("Join Session")
+                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                            }
+                            .disabled(username.count < 1)
+                            .sheet(isPresented: self.$showScannerSheet) {
+                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
+                            }
                         }
+                        
                         LabeledDivider(label: "or")
                         VStack {
                             ZStack {

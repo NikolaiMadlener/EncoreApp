@@ -16,7 +16,6 @@ struct SuggestSongView: View {
     @State private var searchText : String = ""
     @State var showSessionExpiredAlert = false
     @Binding var currentlyInSession: Bool
-    //@State var songs: [Song] = []
     typealias JSONStandard = [String : AnyObject]
     
     init(searchResultListVM: SearchResultListVM, userVM: UserVM, songListVM: SongListVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>) {
@@ -126,7 +125,7 @@ struct SuggestSongView: View {
 struct AddSongView_Previews: PreviewProvider {
     static var userVM = UserVM()
     static var searchResultListVM = SearchResultListVM(userVM: userVM)
-    static var userListVM = UserListVM(userVM: userVM)
+    static var userListVM = UserListVM(userVM: userVM, sessionID: nil)
     @State static var currentlyInSession = true
     static var previews: some View {
         SuggestSongView(searchResultListVM: searchResultListVM, userVM: userVM, songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: userVM), currentlyInSession: $currentlyInSession)

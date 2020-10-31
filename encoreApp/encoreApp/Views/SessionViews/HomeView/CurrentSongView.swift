@@ -38,12 +38,18 @@ struct CurrentSongView: View {
 //                .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
 //                .blendMode(.multiply)
             Text("\(self.playerStateVM.song.name)")
-                .font(.system(size: 22, weight: .bold))
+                .font(.system(size: 20, weight: .semibold))
                 .multilineTextAlignment(.center)
-                .lineLimit(2)
+                .lineLimit(1)
              
             Text("\(self.playerStateVM.song.artists[0])")
-                .font(.system(size: 18, weight: .semibold))
+                .font(.system(size: 18, weight: .regular))
+            
+            Text("suggested by \(self.playerStateVM.song.suggested_by)")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(Color("purpleblue"))
+                .padding(.top, 1)
+            
         }.frame(width: UIScreen.main.bounds.width * 0.8)
     }
 }

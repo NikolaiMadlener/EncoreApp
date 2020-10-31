@@ -20,6 +20,6 @@ struct ButtonHeavyModifier: ViewModifier {
             .background(isDisabled ? Color("buttonDisabledGray") : backgroundColor)
             .foregroundColor(isDisabled ? Color("lightgray") : foregroundColor)
             .cornerRadius(15)
-            .padding(.horizontal, 25)
+            .padding(.horizontal, 20)
     }
 }

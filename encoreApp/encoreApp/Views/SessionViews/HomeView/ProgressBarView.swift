@@ -16,6 +16,7 @@ struct ProgressBarView: View {
     var width: CGFloat { isWide ? UIScreen.main.bounds.width : UIScreen.main.bounds.width * 0.8 }
     var updateFrequency_ms: CGFloat = 100
     let timer = Timer.publish(every: 0.1, on: .current, in: .common).autoconnect()
+    let gradient = Gradient(colors: [Color("darkBlue"), Color("lightBlue")])
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -24,7 +25,7 @@ struct ProgressBarView: View {
                 .frame(width: width, height: 4.0)
                 .cornerRadius(isWide ? 0 : 5)
             Rectangle()
-                .foregroundColor(Color("purpleblue"))
+                .fill(LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing))
                 .frame(width: width * (playerStateVM.songTimestamp_ms / CGFloat(playerStateVM.song.duration_ms)), height: 4.0)
                 .animation(.easeOut(duration: 0.6))
                 .cornerRadius(isWide ? 0 : 5)
