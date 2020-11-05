@@ -203,7 +203,6 @@
 				8FB1058824AB5589007C15A1 /* HomeView */,
 				8F27498224A60C440084FC99 /* SuggestSongView */,
 				235EB4D02480F6CC007A720D /* MenuView.swift */,
-				2319067B247DBDB600DA550B /* SongListCell.swift */,
 				23117C5124895F6B0023B680 /* ActivityViewController.swift */,
 				233D2AD5249381C600994038 /* QRCodeView.swift */,
 				8FB738DD252884C800DC5BDF /* PopupQRView.swift */,
@@ -295,6 +294,7 @@
 				8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */,
 				2361911C24B45F790096D806 /* SongTitleBarView.swift */,
 				8F589F5E24B6178F00BA5E60 /* CurrentSongCompactView.swift */,
+				2319067B247DBDB600DA550B /* SongListCell.swift */,
 			);
 			path = HomeView;
 			sourceTree = "<group>";
