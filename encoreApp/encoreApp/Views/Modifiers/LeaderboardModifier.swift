@@ -9,16 +9,15 @@
 import Foundation
 import SwiftUI
 
-struct BlueCardModifier: ViewModifier {
+struct LeaderboardModifier: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
     
     func body(content: Content) -> some View {
         content
-            .background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
+            .background(self.colorScheme == .dark ? Color("mediumdarkgray") : Color.white)
             .cornerRadius(20)
             .padding(.vertical)
             .padding(.horizontal, 20)
             .shadow(radius: 7)
-            .edgesIgnoringSafeArea([.bottom])
     }
 }

@@ -37,18 +37,15 @@ struct MenuView: View {
                 
                 sessionTitle
                 
-                qrCode
-                
-                shareLinkButton
-                
                 VStack {
                     membersList
                     Spacer()
-                }.modifier(BlueCardModifier())
+                }.modifier(LeaderboardModifier())
+                
+                shareLinkButton
                 
                 leaveButton
             }
-            
             .sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
@@ -77,8 +74,12 @@ struct MenuView: View {
                     .frame(height: 2)
                     .cornerRadius(100)
                     .offset(y: 2), alignment: .bottom)
+
             .font(.system(size: 25, weight: .bold))
+            .frame(maxWidth: .infinity)
+            .foregroundColor(Color.white)
             .padding(.bottom, 10)
+            .padding(.horizontal, 20)
     }
     
     var qrCode: some View {
@@ -98,20 +99,14 @@ struct MenuView: View {
     }
     
     var shareLinkButton: some View {
-        Button(action: { self.showShareSheet.toggle() }) {
+        Button(action: { withAnimation { self.showPopupQRCode.toggle() } }) {
             ZStack {
                 RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
-                    .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
+                    .foregroundColor(self.colorScheme == .dark ? Color("purpleblue") : Color("lightgray"))
                 HStack {
-                    Text("Share Invite Link")
+                    Text("Invite Friends")
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                         .font(.headline)
-                        .padding(.leading)
-                    Spacer()
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.system(size: 20, weight: .medium))
-                        .padding(.trailing)
                 }
             }.padding(.horizontal, 20)
         }
@@ -123,7 +118,7 @@ struct MenuView: View {
                 Spacer()
                 Text("Leaderboard")
                     .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(Color("purpleblue"))
+                    .foregroundColor(Color.white)
                     .padding(10)
                 Spacer()
             }
@@ -139,13 +134,15 @@ struct MenuView: View {
                                 Text("\(member.username)").font(.system(size: 17, weight: .medium))
                             }
                             Spacer()
-                            Text("\(member.score)").font(.system(size: 17, weight: .semibold))
-                            Image(systemName: "heart")
-                                .font(.system(size: 15, weight: .semibold))
+                            Text("\(member.score)")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundColor(Color("purpleblue"))
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: 17, weight: .regular))
+                                .foregroundColor(Color("purpleblue"))
                         }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                         Divider()
                     }
-                    Spacer().frame(height: 10)
                 }.padding(.horizontal, 30)
             }
         }
@@ -154,8 +151,9 @@ struct MenuView: View {
     var leaveButton: some View {
         Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
             Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
-                .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
-        }.padding(.bottom)
+                .font(.headline)
+                .foregroundColor(Color.red)
+        }.padding(20)
         .alert(isPresented: self.$showAlert) {
             Alert(title: Text("Delete Session"),
                   message: Text("By deleting the current session all members will be kicked."),
@@ -177,7 +175,7 @@ struct MenuView: View {
                     height: geo.size.height,
                     alignment: .center)
         }.background(
-            Color.black.opacity(0.5)
+            Color.black.opacity(0.8)
                 .edgesIgnoringSafeArea(.all)
                 .onTapGesture {
                     self.showPopupQRCode.toggle()

@@ -19,17 +19,17 @@ struct PopupQRCodeView: View {
     
     var body: some View {
         VStack {
-            Text("Invite your friends")
+            Text("Scan this QR Code")
                 .font(.system(size: 25, weight: .bold))
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 .padding(.top)
             QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
-            saveQRCodeButton
+            LabeledDivider(label: "or")
             shareQRCodeButton
             cancelButton
         }.background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
         .cornerRadius(20)
-        .frame(width: UIScreen.main.bounds.width * 0.73, height: UIScreen.main.bounds.height * 0.85)
+        .frame(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.8)
         .sheet(isPresented: self.$showShareSheet) {
             ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
         }
@@ -50,7 +50,7 @@ struct PopupQRCodeView: View {
         }) {
             Text("Share Invite Link")
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-        }.padding()
+        }.padding(10)
     }
     
     var cancelButton: some View {

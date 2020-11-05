@@ -30,7 +30,7 @@ struct AddSongsBarView: View {
                 skipButton
             }.padding(10)
             .padding(.horizontal, 10)
-            .background(self.colorScheme == .dark ? Color("darkgray") : Color(.white))
+            .background(self.colorScheme == .dark ? Color("mediumdarkgray") : Color(.white))
             .cornerRadius(25)
             .shadow(radius: 10)
         } else {
@@ -41,7 +41,7 @@ struct AddSongsBarView: View {
     var addButton: some View {
         Button(action: { self.showAddSongSheet = true }) {
             ZStack {
-                Rectangle().frame(width: 55, height: 55).foregroundColor(Color.clear)
+                Rectangle().frame(width: 52, height: 52).foregroundColor(Color.white).cornerRadius(20)
                 Image(systemName: "plus.app.fill")
                     .font(.system(size: 60, weight: .light))
                     .foregroundColor(Color("purpleblue"))

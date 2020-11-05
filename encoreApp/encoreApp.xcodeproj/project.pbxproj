@@ -51,7 +51,7 @@
 		8F9AF39A24C4A18200FCEFD0 /* ButtonLightModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9AF39924C4A18200FCEFD0 /* ButtonLightModifier.swift */; };
 		8F9AF39C24C4CE3200FCEFD0 /* ScannerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */; };
 		8FA39C2C2535DE52009460F9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA39C2B2535DE52009460F9 /* RoundedCorner.swift */; };
-		8FA39C2F2535E446009460F9 /* BlueCardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA39C2E2535E446009460F9 /* BlueCardModifier.swift */; };
+		8FA39C2F2535E446009460F9 /* LeaderboardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA39C2E2535E446009460F9 /* LeaderboardModifier.swift */; };
 		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
 		8FB1058C24AB56DF007C15A1 /* AddSongsBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */; };
 		8FB738DE252884C800DC5BDF /* PopupQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB738DD252884C800DC5BDF /* PopupQRView.swift */; };
@@ -109,7 +109,7 @@
 		8F9AF39924C4A18200FCEFD0 /* ButtonLightModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLightModifier.swift; sourceTree = "<group>"; };
 		8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSheetView.swift; sourceTree = "<group>"; };
 		8FA39C2B2535DE52009460F9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
-		8FA39C2E2535E446009460F9 /* BlueCardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlueCardModifier.swift; sourceTree = "<group>"; };
+		8FA39C2E2535E446009460F9 /* LeaderboardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardModifier.swift; sourceTree = "<group>"; };
 		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSongsBarView.swift; sourceTree = "<group>"; };
 		8FB738DD252884C800DC5BDF /* PopupQRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupQRView.swift; sourceTree = "<group>"; };
@@ -260,7 +260,7 @@
 				8F0CAC3024A2001100531BB0 /* ButtonHeavyModifier.swift */,
 				8F9AF39924C4A18200FCEFD0 /* ButtonLightModifier.swift */,
 				8FA39C2B2535DE52009460F9 /* RoundedCorner.swift */,
-				8FA39C2E2535E446009460F9 /* BlueCardModifier.swift */,
+				8FA39C2E2535E446009460F9 /* LeaderboardModifier.swift */,
 				8FBF544E254F571500F4B806 /* LoginAlertsModifier.swift */,
 			);
 			path = Modifiers;
@@ -291,9 +291,9 @@
 			children = (
 				23190673247DB53600DA550B /* HomeView.swift */,
 				8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */,
-				2361911C24B45F790096D806 /* SongTitleBarView.swift */,
 				8FB1058B24AB56DF007C15A1 /* AddSongsBarView.swift */,
 				8FDEBF7B24AD2D240090B5F2 /* ProgressBarView.swift */,
+				2361911C24B45F790096D806 /* SongTitleBarView.swift */,
 				8F589F5E24B6178F00BA5E60 /* CurrentSongCompactView.swift */,
 			);
 			path = HomeView;
@@ -472,7 +472,7 @@
 				231CDA2F249E0B9700632B8C /* ImageLoader.swift in Sources */,
 				231CDA28249D3CA600632B8C /* SuggestSongView.swift in Sources */,
 				8F6ADE8924C3716100D8F1F8 /* LabeledDivider.swift in Sources */,
-				8FA39C2F2535E446009460F9 /* BlueCardModifier.swift in Sources */,
+				8FA39C2F2535E446009460F9 /* LeaderboardModifier.swift in Sources */,
 				23190664247DA25F00DA550B /* LoginView.swift in Sources */,
 				8F27498424A60C880084FC99 /* SuggestSongCell.swift in Sources */,
 				235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */,
