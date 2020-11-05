@@ -65,12 +65,12 @@ struct SuggestSongView: View {
     }
     
     var topBar: some View {
-             ZStack {
-                 RoundedRectangle(cornerRadius: 6)
-                     .fill(Color.secondary)
-                     .frame(width: 60, height: 4)
-             }
-         }
+        ZStack {
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color.secondary)
+                .frame(width: 60, height: 4)
+        }
+    }
     
     func getMembers(username: String) {
         
