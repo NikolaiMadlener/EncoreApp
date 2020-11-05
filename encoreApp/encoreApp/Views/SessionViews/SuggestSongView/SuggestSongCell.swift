@@ -72,7 +72,6 @@ struct SuggestSongCell: View {
                 Image(systemName: "plus.square.fill")
                     .font(.system(size: 35, weight: .light))
                     .foregroundColor(Color("purpleblue"))
-                    
             }
         }
     }

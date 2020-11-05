@@ -41,8 +41,8 @@ struct AddSongsBarView: View {
     var addButton: some View {
         Button(action: { self.showAddSongSheet = true }) {
             ZStack {
-                Circle().frame(width: 55, height: 55).foregroundColor(Color.white)
-                Image(systemName: "plus.circle.fill")
+                Rectangle().frame(width: 55, height: 55).foregroundColor(Color.clear)
+                Image(systemName: "plus.app.fill")
                     .font(.system(size: 60, weight: .light))
                     .foregroundColor(Color("purpleblue"))
             }
