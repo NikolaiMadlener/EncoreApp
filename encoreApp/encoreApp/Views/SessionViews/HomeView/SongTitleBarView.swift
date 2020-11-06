@@ -33,6 +33,7 @@ struct SongTitleBarView: View {
                         Text("\(self.playerStateVM.song.artists[0])")
                             .font(.system(size: 10, weight: .semibold))
                             .frame(maxWidth: 200, maxHeight: 15, alignment: .leading)
+                            .foregroundColor(self.colorScheme == .dark ? Color("fontLightGray") : Color.black)
                     }
                     Spacer()
                 }

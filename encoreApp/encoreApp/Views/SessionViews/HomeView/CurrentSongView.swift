@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct CurrentSongView: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var playerStateVM: PlayerStateVM
     var albumWidth: CGFloat
 //    var uiColorTopLeft: UIColor
@@ -44,6 +45,7 @@ struct CurrentSongView: View {
              
             Text("\(self.playerStateVM.song.artists[0])")
                 .font(.system(size: 18, weight: .regular))
+                .foregroundColor(self.colorScheme == .dark ? Color("fontLightGray") : Color.black)
             
             Text("suggested by \(self.playerStateVM.song.suggested_by)")
                 .font(.system(size: 14, weight: .semibold))

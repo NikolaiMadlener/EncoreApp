@@ -11,6 +11,7 @@ import URLImage
 import CoreHaptics
 
 struct SongListCell: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @State var voteState: VoteState = VoteState.NEUTRAL
     @State var currentImage: Image = Image("albumPlaceholder")
@@ -61,6 +62,7 @@ struct SongListCell: View {
                 .font(.system(size: 18, weight: .semibold))
             Text(self.song.artists[0])
                 .font(.system(size: 16, weight: .regular))
+                .foregroundColor(self.colorScheme == .dark ? Color("fontLightGray") : Color.black)
         }
     }
     
@@ -139,7 +141,7 @@ struct SongListCell: View {
 
         do {
             // create one continuous buzz that fades out
-            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.7)
+            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.8)
             let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.3)
 
             let start = CHHapticParameterCurve.ControlPoint(relativeTime: 0, value: 1)

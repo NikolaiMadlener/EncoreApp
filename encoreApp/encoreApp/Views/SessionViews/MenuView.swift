@@ -77,7 +77,7 @@ struct MenuView: View {
 
             .font(.system(size: 25, weight: .bold))
             .frame(maxWidth: .infinity)
-            .foregroundColor(Color.white)
+            .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
             .padding(.bottom, 10)
             .padding(.horizontal, 20)
     }
@@ -96,20 +96,6 @@ struct MenuView: View {
                   }))
         }
         .padding(.bottom, 10)
-    }
-    
-    var shareLinkButton: some View {
-        Button(action: { withAnimation { self.showPopupQRCode.toggle() } }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
-                    .foregroundColor(self.colorScheme == .dark ? Color("purpleblue") : Color("lightgray"))
-                HStack {
-                    Text("Invite Friends")
-                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.headline)
-                }
-            }.padding(.horizontal, 20)
-        }
     }
     
     var membersList: some View {
@@ -145,6 +131,20 @@ struct MenuView: View {
                     }
                 }.padding(.horizontal, 30)
             }
+        }
+    }
+    
+    var shareLinkButton: some View {
+        Button(action: { withAnimation { self.showPopupQRCode.toggle() } }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
+                    .foregroundColor(Color("purpleblue"))
+                HStack {
+                    Text("Invite Friends")
+                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                        .font(.headline)
+                }
+            }.padding(.horizontal, 20)
         }
     }
     
