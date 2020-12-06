@@ -94,6 +94,9 @@ struct HomeView: View {
             if songListVM.songs.isEmpty {
                 VStack(alignment: .center) {
                     Spacer()
+                    if playerStateVM.song.name != "empty_song" {
+                        Spacer()
+                    }
                     Text("tap + to add songs to session.")
                         .font(.system(size: 19, weight: .semibold))
                         .foregroundColor(Color("purpleblue"))
