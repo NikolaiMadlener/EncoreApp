@@ -13,6 +13,8 @@ struct AppContentView: View {
     @ObservedObject var userVM = UserVM()
     @State var currentlyInSession = false
     @State var showJoinSheet: Bool = false
+    @ObservedObject var pageViewModel = PageViewModel()
+    @State var showMenuSheet = false
     var joinedViaURL: Bool
     var sessionID: String
     
@@ -22,7 +24,12 @@ struct AppContentView: View {
                 self.colorScheme == .dark ? Color("superdarkgray").edgesIgnoringSafeArea(.vertical) : Color.white.edgesIgnoringSafeArea(.vertical)
                 
                 if currentlyInSession {
-                    HomeView(userVM: userVM, currentlyInSession: $currentlyInSession)
+                    TabView(selection: $pageViewModel.selectTabIndex) {
+                        HomeView(userVM: userVM, currentlyInSession: $currentlyInSession, pageViewModel: pageViewModel)
+                            .tag(0)
+                        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet, pageViewModel: pageViewModel)
+                            .tag(1)
+                    }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
                 else {
                     LoginView(userVM: userVM, currentlyInSession: $currentlyInSession)
@@ -36,9 +43,13 @@ struct AppContentView: View {
     }
 }
 
+class PageViewModel: ObservableObject {
+    @Published var selectTabIndex = 0
+}
+
 struct AppContentView_Previews: PreviewProvider {
 
     static var previews: some View {
-        AppContentView(joinedViaURL: false, sessionID: "")
+        AppContentView(userVM: UserVM(), joinedViaURL: false, sessionID: "")
     }
 }

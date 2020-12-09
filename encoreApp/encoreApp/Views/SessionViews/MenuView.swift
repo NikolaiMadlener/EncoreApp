@@ -12,7 +12,7 @@ struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
-    @ObservedObject var playerStateVM: PlayerStateVM
+    @ObservedObject var pageViewModel: PageViewModel
     
     @Binding var showMenuSheet: Bool
     @Binding var currentlyInSession: Bool
@@ -21,21 +21,25 @@ struct MenuView: View {
     @State var showShareSheet: Bool = false
     @State var showPopupQRCode: Bool = false
     
-    init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>, pageViewModel: PageViewModel) {
         self.userVM = userVM
         self.userListVM = UserListVM(userVM: userVM, sessionID: nil)
-        self.playerStateVM = playerStateVM
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
+        self.pageViewModel = pageViewModel
     }
     
     var body: some View {
         GeometryReader { geo in
             
             VStack(spacing: 0) {
-                topBar
-                
-                sessionTitle
+                ZStack {
+                    HStack {
+                        homeButton
+                        Spacer()
+                    }
+                    sessionTitle
+                }
                 
                 VStack {
                     membersList
@@ -66,6 +70,19 @@ struct MenuView: View {
         }.padding()
     }
     
+    var homeButton: some View {
+        Button(action: {
+            withAnimation { self.pageViewModel.selectTabIndex = 0 }
+        }) {
+            Image(systemName: "arrow.left")
+                .font(.system(size: 23, weight: .semibold))
+                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                .padding(.vertical, 19)
+                .padding(.leading, 20)
+        }.buttonStyle(PlainButtonStyle())
+        //list.number, list.bullet.below.rectangle, arrow.left.circle, arrowtriangle.left.circle, music.house.fill
+    }
+    
     var sessionTitle: some View {
         Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session")
             .overlay(
@@ -78,7 +95,7 @@ struct MenuView: View {
             .font(.system(size: 25, weight: .bold))
             .frame(maxWidth: .infinity)
             .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-            .padding(.bottom, 10)
+            .padding(.vertical, 10)
             .padding(.horizontal, 20)
     }
     
@@ -158,7 +175,6 @@ struct MenuView: View {
             Alert(title: Text("Delete Session"),
                   message: Text("By deleting the current session all members will be kicked."),
                   primaryButton: .destructive(Text("Delete"), action: {
-                    self.playerStateVM.playerPause()
                     self.deleteSession(username: self.userVM.username)
                   }),
                   secondaryButton: .cancel(Text("Cancel"), action: {
@@ -316,6 +332,6 @@ struct MenuView_Previews: PreviewProvider {
     @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, playerStateVM: playerStateVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
+        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet, pageViewModel: PageViewModel())
     }
 }

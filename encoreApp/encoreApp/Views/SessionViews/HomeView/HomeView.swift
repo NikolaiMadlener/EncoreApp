@@ -17,6 +17,7 @@ struct HomeView: View {
     @ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
     @ObservedObject var searchResultListVM: SearchResultListVM
+    @ObservedObject var pageViewModel: PageViewModel
     
     @State var showMenuSheet = false
     @State var showAddSongSheet = false
@@ -26,21 +27,22 @@ struct HomeView: View {
     @State var value: Float = 0.8
     @State var offset = CGFloat()
     @State private var engine: CHHapticEngine?
+    @State var showSongTitleBar = false
     
     
-    init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>, pageViewModel: PageViewModel) {
         self.userVM = userVM
         self._currentlyInSession = currentlyInSession
         self.songListVM = SongListVM(userVM: userVM)
-        self.playerStateVM = PlayerStateVM(userVM: userVM)
         self.searchResultListVM = SearchResultListVM(userVM: userVM)
+        self.playerStateVM = PlayerStateVM(userVM: userVM)
+        self.pageViewModel = pageViewModel
     }
     
     var body: some View {
         ZStack {
             ScrollView {
                 GeometryReader { geo in
-                    // Text("\(geo.frame(in: .global).minY)").offset(y: -geo.frame(in: .global).minY + self.offset)
                     Text("")
                         .onAppear {self.offset = geo.frame(in: .global).minY}
                     if (geo.frame(in: .global).minY > -220 && playerStateVM.song.name != "empty_song") {
@@ -55,7 +57,6 @@ struct HomeView: View {
                             Spacer()
                         }
                     }
-                    
                         
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer().frame(height: 320)
@@ -68,27 +69,25 @@ struct HomeView: View {
                         Spacer().frame(height: 100)
                     }.animation(.easeInOut(duration: 0.3))
                     
-                    // for hiding Song Queue Layer above Song Title Layer
+                    //Control Visablilty of SongTitleBarView
                     if (geo.frame(in: .global).minY <= -220) {
-                        VStack {
-                            Rectangle()
-                                .frame(height: 60)
-                                .foregroundColor(self.colorScheme == .dark ? Color("superdarkgray") : Color(.white))
-                            Spacer()
-                        }.edgesIgnoringSafeArea(.top).offset(y: -geo.frame(in: .global).minY)
-                    }
-                    
-                    //Layer 2: Song Title Layer
-                    if (geo.frame(in: .global).minY <= -220) {
-                        VStack {
-                            SongTitleBarView(playerStateVM: self.playerStateVM)
-                                .onAppear(perform: hapticEvent)
-                                .onDisappear(perform: hapticEvent)
-                            Spacer()
-                        }.offset(y: -geo.frame(in: .global).minY + self.offset)
+                        Text("")
+                            .onAppear {self.showSongTitleBar = true}
+                    } else {
+                        Text("")
+                            .onAppear {self.showSongTitleBar = false}
                     }
                 }
                 .frame(height: (CGFloat(self.songListVM.songs.count * 77 + 380)))
+            }
+            
+            if showSongTitleBar {
+                VStack {
+                    SongTitleBarView(playerStateVM: self.playerStateVM)
+                        .onAppear(perform: hapticEvent)
+                        .onDisappear(perform: hapticEvent)
+                    Spacer()
+                }
             }
             
             if songListVM.songs.isEmpty {
@@ -118,13 +117,19 @@ struct HomeView: View {
         VStack {
             HStack {
                 Spacer()
-                Button(action: { self.showMenuSheet = true }) {
-                    Image(systemName: "ellipsis")
-                        .font(Font.system(.title))
+                Button(action: {
+                    withAnimation {
+                        self.pageViewModel.selectTabIndex = 1
+                    }
+                }) {
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 23, weight: .semibold))
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .padding(25)
+                        .padding(.vertical, 19)
+                        .padding(.trailing, 20)
+                    
                 }.sheet(isPresented: self.$showMenuSheet) {
-                    MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet, pageViewModel: pageViewModel)
                 }
             }
 
@@ -180,8 +185,8 @@ struct HomeView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .light)
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .dark)
+            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession, pageViewModel: PageViewModel()) .environment(\.colorScheme, .light)
+            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession, pageViewModel: PageViewModel()) .environment(\.colorScheme, .dark)
         }
     }
 }

@@ -14,7 +14,6 @@ struct SongTitleBarView: View {
     
     var body: some View {
         ZStack {
-            
             Rectangle()
                 .frame(height: 50)
                 .cornerRadius(10)
@@ -38,7 +37,8 @@ struct SongTitleBarView: View {
                     Spacer()
                 }
             }.padding(.horizontal, 10)
-        }.padding(5)
+        }.padding(.top, 3)
+        .padding(.horizontal, 5)
     }
 }
 
