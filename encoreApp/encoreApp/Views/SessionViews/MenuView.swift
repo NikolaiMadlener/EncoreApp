@@ -41,10 +41,7 @@ struct MenuView: View {
                     sessionTitle
                 }
                 
-                VStack {
-                    membersList
-                    Spacer()
-                }.modifier(LeaderboardModifier())
+                membersList
                 
                 shareLinkButton
                 
@@ -80,22 +77,14 @@ struct MenuView: View {
                 .padding(.vertical, 19)
                 .padding(.leading, 20)
         }.buttonStyle(PlainButtonStyle())
-        //list.number, list.bullet.below.rectangle, arrow.left.circle, arrowtriangle.left.circle, music.house.fill
     }
     
     var sessionTitle: some View {
-        Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session")
-            .overlay(
-                Rectangle()
-                    .foregroundColor(Color("purpleblue"))
-                    .frame(height: 2)
-                    .cornerRadius(100)
-                    .offset(y: 2), alignment: .bottom)
-
+        Text("Members")
             .font(.system(size: 25, weight: .bold))
             .frame(maxWidth: .infinity)
             .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-            .padding(.vertical, 10)
+            .padding(.vertical, 20)
             .padding(.horizontal, 20)
     }
     
@@ -117,36 +106,11 @@ struct MenuView: View {
     
     var membersList: some View {
         VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                Text("Leaderboard")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(Color.white)
-                    .padding(10)
-                Spacer()
-            }
             ScrollView {
-                VStack {
-                    ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
-                        HStack {
-                            Text("\((self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1)")
-                                .font(.system(size: 17, weight: .light))
-                            if member.username == self.userVM.username {
-                                Text("\(member.username)").font(.system(size: 17, weight: .semibold))
-                            } else {
-                                Text("\(member.username)").font(.system(size: 17, weight: .medium))
-                            }
-                            Spacer()
-                            Text("\(member.score)")
-                                .font(.system(size: 17, weight: .semibold))
-                                .foregroundColor(Color("purpleblue"))
-                            Image(systemName: "heart.fill")
-                                .font(.system(size: 17, weight: .regular))
-                                .foregroundColor(Color("purpleblue"))
-                        }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        Divider()
-                    }
-                }.padding(.horizontal, 30)
+                ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
+                    MemberCell(userVM: userVM, rank: (self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1, member: member)
+                }
+                
             }
         }
     }
