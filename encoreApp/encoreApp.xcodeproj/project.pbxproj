@@ -46,6 +46,7 @@
 		8F2EF43A24A2ADEE000EC1B7 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */; };
 		8F2EF43C24A34B74000EC1B7 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */; };
 		8F589F5F24B6178F00BA5E60 /* CurrentSongCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F589F5E24B6178F00BA5E60 /* CurrentSongCompactView.swift */; };
+		8F62B7AD258FA45800CF9434 /* SongListCellModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F62B7AC258FA45800CF9434 /* SongListCellModifier.swift */; };
 		8F6ADE8924C3716100D8F1F8 /* LabeledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */; };
 		8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE231249E679C006674E8 /* SearchBar.swift */; };
 		8F8FE234249FBB0B006674E8 /* AuthenticationWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */; };
@@ -105,6 +106,7 @@
 		8F2EF43924A2ADEE000EC1B7 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		8F2EF43B24A34B74000EC1B7 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8F589F5E24B6178F00BA5E60 /* CurrentSongCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongCompactView.swift; sourceTree = "<group>"; };
+		8F62B7AC258FA45800CF9434 /* SongListCellModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongListCellModifier.swift; sourceTree = "<group>"; };
 		8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledDivider.swift; sourceTree = "<group>"; };
 		8F8FE231249E679C006674E8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWebView.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				8FA39C2B2535DE52009460F9 /* RoundedCorner.swift */,
 				8FA39C2E2535E446009460F9 /* LeaderboardModifier.swift */,
 				8FBF544E254F571500F4B806 /* LoginAlertsModifier.swift */,
+				8F62B7AC258FA45800CF9434 /* SongListCellModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				8F1879C7258EAD3F00150905 /* MemberCell.swift in Sources */,
 				8FA39C2C2535DE52009460F9 /* RoundedCorner.swift in Sources */,
 				234B8D952483A4BF00C0F7F3 /* UserVM.swift in Sources */,
+				8F62B7AD258FA45800CF9434 /* SongListCellModifier.swift in Sources */,
 				23190674247DB53600DA550B /* HomeView.swift in Sources */,
 				2361911D24B45F790096D806 /* SongTitleBarView.swift in Sources */,
 				23117C5224895F6B0023B680 /* ActivityViewController.swift in Sources */,

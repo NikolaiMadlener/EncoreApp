@@ -25,13 +25,7 @@ struct SongListCell: View {
             Spacer()
             voteView
         }
-        .padding(.vertical, 10)
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .background(Color("mediumdarkgray"))
-        .foregroundColor(Color.white)
-        .cornerRadius(15)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 5)
+        .modifier(SongListCellModifier())
         .onAppear {
             if self.song.upvoters.contains(self.userVM.username) {
                 self.voteState = .UPVOTE

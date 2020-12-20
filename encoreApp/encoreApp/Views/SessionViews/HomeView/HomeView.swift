@@ -59,9 +59,15 @@ struct HomeView: View {
                         
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer().frame(height: 320)
+                        if !songListVM.songs.isEmpty {
+                            Text("up next.")
+                                .font(.system(size: 25, weight: .semibold))
+                                .foregroundColor(Color("fontLightGray"))
+                                .padding(.leading, 8)
+                                .padding(.bottom, 5)
+                        }
                         ForEach(self.songListVM.songs, id: \.self) { song in
                             SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
-
                         }
                         
                     }.animation(.easeInOut(duration: 0.3))
@@ -75,7 +81,7 @@ struct HomeView: View {
                             .onAppear {self.showSongTitleBar = false}
                     }
                 }
-                .frame(height: (CGFloat(self.songListVM.songs.count * 100)))
+                .frame(height: (CGFloat(self.songListVM.songs.count * 90 + 350)))
             }
             
             if showSongTitleBar {
