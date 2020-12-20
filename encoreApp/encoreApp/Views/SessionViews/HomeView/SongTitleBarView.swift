@@ -16,7 +16,7 @@ struct SongTitleBarView: View {
             Rectangle()
                 .frame(height: 50)
                 .cornerRadius(10)
-                .foregroundColor(Color("mediumdarkgray"))
+                .foregroundColor(Color("purpleblue"))
                 .shadow(radius: 10)
             VStack {
                 HStack {
@@ -32,7 +32,7 @@ struct SongTitleBarView: View {
                         Text("\(self.playerStateVM.song.artists[0])")
                             .font(.system(size: 10, weight: .semibold))
                             .frame(maxWidth: 200, maxHeight: 15, alignment: .leading)
-                            .foregroundColor(Color("fontLightGray"))
+                            .foregroundColor(Color.white)
                     }
                     Spacer()
                 }

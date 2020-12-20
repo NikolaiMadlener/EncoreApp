@@ -44,8 +44,8 @@ struct MenuView: View {
                 HStack {
                     shareLinkButton
                     leaveButton
-                }.padding(.vertical, 10)
-                
+                }.padding(.top, 10)
+                .padding(.bottom, 15)
             }
             
             .sheet(isPresented: self.$showShareSheet) {
@@ -82,7 +82,7 @@ struct MenuView: View {
     }
     
     var sessionTitle: some View {
-        Text("Members")
+        Text("members.")
             .font(.system(size: 25, weight: .bold))
             .frame(maxWidth: .infinity)
             .foregroundColor(Color.white)

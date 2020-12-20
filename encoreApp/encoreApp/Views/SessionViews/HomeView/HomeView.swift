@@ -61,11 +61,9 @@ struct HomeView: View {
                         Spacer().frame(height: 320)
                         ForEach(self.songListVM.songs, id: \.self) { song in
                             SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
-                                .frame(height: 80)
-                            Divider()
-                                .padding(.horizontal)
+
                         }
-                        Spacer().frame(height: 100)
+                        
                     }.animation(.easeInOut(duration: 0.3))
                     
                     //Control Visablilty of SongTitleBarView
@@ -77,7 +75,7 @@ struct HomeView: View {
                             .onAppear {self.showSongTitleBar = false}
                     }
                 }
-                .frame(height: (CGFloat(self.songListVM.songs.count * 77 + 380)))
+                .frame(height: (CGFloat(self.songListVM.songs.count * 100)))
             }
             
             if showSongTitleBar {
