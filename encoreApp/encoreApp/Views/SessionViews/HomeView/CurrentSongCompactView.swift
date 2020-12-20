@@ -11,7 +11,6 @@ import SwiftUI
 import URLImage
 
 struct CurrentSongCompactView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var playerStateVM: PlayerStateVM
     @State var currentImage: Image = Image("albumPlaceholder")
     
@@ -21,7 +20,7 @@ struct CurrentSongCompactView: View {
                 Rectangle()
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.13)
                     .foregroundColor(Color.clear)
-                    .background(self.colorScheme == .dark ? Color(.black) : Color(.white))
+                    .background(Color.black)
                 ZStack(alignment: .leading) {
                     //ProgressBarView(playerStateVM: playerStateVM, isWide: true)
                 }
@@ -31,8 +30,10 @@ struct CurrentSongCompactView: View {
                 VStack(alignment: .leading) {
                     Text("\(self.playerStateVM.song.name)")
                         .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(Color.white)
                     Text("\(self.playerStateVM.song.artists[0])")
                         .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color("fontLightGray"))
                 }
                 Spacer()
             }.padding(.horizontal)

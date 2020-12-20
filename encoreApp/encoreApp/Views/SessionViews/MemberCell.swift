@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct MemberCell: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @State var rank: Int
     @State var pointColor: Color = .white
@@ -55,9 +54,6 @@ struct MemberCell: View {
 
 struct MemberCell_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            MemberCell(userVM: UserVM(), rank: 3, member: UserListElement(username: "Felix", is_admin: false, score: 2, spotify_synchronized: false)).environment(\.colorScheme, .dark)
-                
-        }
+        MemberCell(userVM: UserVM(), rank: 3, member: UserListElement(username: "Felix", is_admin: false, score: 2, spotify_synchronized: false))
     }
 }

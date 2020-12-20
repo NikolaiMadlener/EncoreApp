@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct AddSongsBarView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var userVM: UserVM
     @ObservedObject var searchResultListVM: SearchResultListVM
@@ -30,7 +29,7 @@ struct AddSongsBarView: View {
                 skipButton
             }.padding(10)
             .padding(.horizontal, 10)
-            .background(self.colorScheme == .dark ? Color("mediumdarkgray") : Color(.white))
+            .background(Color("mediumdarkgray"))
             .cornerRadius(25)
             .shadow(radius: 10)
         } else {
@@ -65,7 +64,7 @@ struct AddSongsBarView: View {
             ZStack {
                 Image(systemName: self.isPlay ? "pause" : "play")
                     .font(.system(size: 30, weight: .semibold))
-                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                    .foregroundColor(Color.white)
             }
         }
     }
@@ -74,7 +73,7 @@ struct AddSongsBarView: View {
         Button(action: { self.playerSkipNext() }) {
             Image(systemName: "forward.end")
                 .font(.system(size: 30, weight: .semibold))
-                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(Color.white)
         }
     }
     

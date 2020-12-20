@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct MenuView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
     @ObservedObject var pageViewModel: PageViewModel
@@ -76,7 +75,7 @@ struct MenuView: View {
         }) {
             Image(systemName: "arrow.left")
                 .font(.system(size: 23, weight: .semibold))
-                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(Color.white)
                 .padding(.vertical, 19)
                 .padding(.leading, 20)
         }.buttonStyle(PlainButtonStyle())
@@ -86,7 +85,7 @@ struct MenuView: View {
         Text("Members")
             .font(.system(size: 25, weight: .bold))
             .frame(maxWidth: .infinity)
-            .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+            .foregroundColor(Color.white)
             .padding(.vertical, 20)
             .padding(.horizontal, 20)
     }
@@ -138,7 +137,7 @@ struct MenuView: View {
                 HStack {
                     Image(systemName: "person.crop.circle.badge.plus")
                     Text("Invite Friends")
-                }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                }.foregroundColor(Color.white)
                 .font(.headline)
             }.padding(.leading, 10)
             .padding(.trailing, 5)
@@ -153,7 +152,7 @@ struct MenuView: View {
                 HStack {
                     Image(systemName: self.userVM.isAdmin ? "trash.fill" : "chevron.left.circle")
                     Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
-                }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                }.foregroundColor(Color.white)
                 .font(.headline)
             }.padding(.leading, 5)
             .padding(.trailing, 10)

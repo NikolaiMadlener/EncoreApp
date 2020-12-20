@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct SongTitleBarView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var playerStateVM: PlayerStateVM
     
     var body: some View {
@@ -17,7 +16,7 @@ struct SongTitleBarView: View {
             Rectangle()
                 .frame(height: 50)
                 .cornerRadius(10)
-                .foregroundColor(self.colorScheme == .dark ? Color("mediumdarkgray") : Color(.white))
+                .foregroundColor(Color("mediumdarkgray"))
                 .shadow(radius: 10)
             VStack {
                 HStack {
@@ -29,10 +28,11 @@ struct SongTitleBarView: View {
                         Text("\(self.playerStateVM.song.name)")
                             .font(.system(size: 15, weight: .bold))
                             .frame(maxWidth: 250, maxHeight: 15, alignment: .leading)
+                            .foregroundColor(Color.white)
                         Text("\(self.playerStateVM.song.artists[0])")
                             .font(.system(size: 10, weight: .semibold))
                             .frame(maxWidth: 200, maxHeight: 15, alignment: .leading)
-                            .foregroundColor(self.colorScheme == .dark ? Color("fontLightGray") : Color.black)
+                            .foregroundColor(Color("fontLightGray"))
                     }
                     Spacer()
                 }

@@ -38,7 +38,7 @@ struct LoginView: View {
             if #available(iOS 14.0, *) {
                 VStack {
                     Spacer()
-                    Image("vinyl")
+                    Image("entryBackground")
                         .resizable()
                         .scaledToFit()
                         .offset(x:0,y:70)
@@ -47,7 +47,7 @@ struct LoginView: View {
             } else {
                 VStack {
                     Spacer()
-                    Image("vinyl")
+                    Image("entryBackground")
                         .resizable()
                         .scaledToFit()
                         .offset(x:0,y:70)
@@ -60,6 +60,7 @@ struct LoginView: View {
     var title: some View {
         Text("encore.")
             .font(.largeTitle)
+            .foregroundColor(.white)
             .bold()
             .overlay(
                 Rectangle()
@@ -153,6 +154,7 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                Color("superdarkgray").edgesIgnoringSafeArea(.all)
                 background
                 VStack {
                     title

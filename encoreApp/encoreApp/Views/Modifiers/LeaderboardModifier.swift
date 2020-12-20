@@ -10,11 +10,10 @@ import Foundation
 import SwiftUI
 
 struct LeaderboardModifier: ViewModifier {
-    @Environment(\.colorScheme) var colorScheme
     
     func body(content: Content) -> some View {
         content
-            .background(self.colorScheme == .dark ? Color("mediumdarkgray") : Color.white)
+            .background(Color("mediumdarkgray"))
             .cornerRadius(20)
             .padding(.vertical)
             .padding(.horizontal, 20)

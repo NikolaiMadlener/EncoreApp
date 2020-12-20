@@ -11,7 +11,6 @@ import URLImage
 import CoreHaptics
 
 struct HomeView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var userVM: UserVM
@@ -124,7 +123,7 @@ struct HomeView: View {
                 }) {
                     Image(systemName: "arrow.right")
                         .font(.system(size: 23, weight: .semibold))
-                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                        .foregroundColor(Color.white)
                         .padding(.vertical, 19)
                         .padding(.trailing, 20)
                     
@@ -184,10 +183,7 @@ struct HomeView_Previews: PreviewProvider {
     static var userVM = UserVM()
     
     static var previews: some View {
-        Group {
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession, pageViewModel: PageViewModel()) .environment(\.colorScheme, .light)
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession, pageViewModel: PageViewModel()) .environment(\.colorScheme, .dark)
-        }
+        HomeView(userVM: userVM, currentlyInSession: $currentlyInSession, pageViewModel: PageViewModel())
     }
 }
 

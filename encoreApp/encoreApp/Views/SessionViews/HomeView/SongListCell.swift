@@ -11,7 +11,6 @@ import URLImage
 import CoreHaptics
 
 struct SongListCell: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @State var voteState: VoteState = VoteState.NEUTRAL
     @State var currentImage: Image = Image("albumPlaceholder")
@@ -60,9 +59,10 @@ struct SongListCell: View {
         VStack(alignment: .leading) {
             Text(self.song.name)
                 .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(Color.white)
             Text(self.song.artists[0])
                 .font(.system(size: 16, weight: .regular))
-                .foregroundColor(self.colorScheme == .dark ? Color("fontLightGray") : Color.black)
+                .foregroundColor(Color("fontLightGray"))
         }
     }
     

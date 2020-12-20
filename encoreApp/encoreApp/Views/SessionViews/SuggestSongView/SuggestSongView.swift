@@ -59,7 +59,8 @@ struct SuggestSongView: View {
             }
             
             
-        }.onAppear {
+        }.background(Color("superdarkgray"))
+        .onAppear {
             self.getMembers(username: self.userVM.username)
         }
     }

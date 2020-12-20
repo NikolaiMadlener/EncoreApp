@@ -11,7 +11,6 @@ import URLImage
 import CoreHaptics
 
 struct SuggestSongCell: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var searchResultListVM: SearchResultListVM
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var playerStateVM: PlayerStateVM
@@ -47,7 +46,7 @@ struct SuggestSongCell: View {
                 .font(.system(size: 18, weight: .semibold))
             Text(self.song.artists[0].name)
                 .font(.system(size: 16, weight: .regular))
-                .foregroundColor(self.colorScheme == .dark ? Color("fontLightGray") : Color.black)
+                .foregroundColor(Color("fontLightGray"))
         }
     }
     

@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct AppContentView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM = UserVM()
     @State var currentlyInSession = false
     @State var showJoinSheet: Bool = false
@@ -21,7 +20,7 @@ struct AppContentView: View {
     var body: some View {
         return Group {
             ZStack {
-                self.colorScheme == .dark ? Color("superdarkgray").edgesIgnoringSafeArea(.vertical) : Color.white.edgesIgnoringSafeArea(.vertical)
+                Color("superdarkgray").edgesIgnoringSafeArea(.vertical)
                 
                 if currentlyInSession {
                     TabView(selection: $pageViewModel.selectTabIndex) {

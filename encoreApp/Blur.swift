@@ -9,12 +9,11 @@
 import SwiftUI
 
 struct Blur: UIViewRepresentable {
-    @Environment(\.colorScheme) var colorScheme
     
     var style: UIBlurEffect.Style
 
-    init(colorScheme: ColorScheme) {
-        self.style = (colorScheme == .dark ? .systemThinMaterialDark : .systemThinMaterialLight)
+    init() {
+        self.style = (.systemThinMaterialDark)
     }
     
     func makeUIView(context: Context) -> UIVisualEffectView {

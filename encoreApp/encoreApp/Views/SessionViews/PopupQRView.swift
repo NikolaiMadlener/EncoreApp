@@ -10,7 +10,6 @@ import SwiftUI
 import CoreImage.CIFilterBuiltins
 
 struct PopupQRCodeView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @State var showShareSheet: Bool = false
     @Binding var showPopupQRCode: Bool
@@ -21,13 +20,13 @@ struct PopupQRCodeView: View {
         VStack {
             Text("Scan this QR Code")
                 .font(.system(size: 25, weight: .bold))
-                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(Color.white)
                 .padding(.top)
             QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
             LabeledDivider(label: "or")
             shareQRCodeButton
             cancelButton
-        }.background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
+        }.background(Color("superdarkgray"))
         .cornerRadius(20)
         .frame(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.8)
         .sheet(isPresented: self.$showShareSheet) {
