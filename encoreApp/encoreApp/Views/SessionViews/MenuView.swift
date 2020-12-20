@@ -31,7 +31,6 @@ struct MenuView: View {
     
     var body: some View {
         GeometryReader { geo in
-            
             VStack(spacing: 0) {
                 ZStack {
                     HStack {
@@ -43,10 +42,13 @@ struct MenuView: View {
                 
                 membersList
                 
-                shareLinkButton
+                HStack {
+                    shareLinkButton
+                    leaveButton
+                }.padding(.vertical, 10)
                 
-                leaveButton
             }
+            
             .sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
@@ -57,6 +59,7 @@ struct MenuView: View {
                 popupQRView
             }
         }
+        
     }
     
     var topBar: some View {
@@ -106,11 +109,23 @@ struct MenuView: View {
     
     var membersList: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
-                    MemberCell(userVM: userVM, rank: (self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1, member: member)
+            GeometryReader { gp in
+                ZStack {
+                    ScrollView {
+                        ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
+                            MemberCell(userVM: userVM, rank: (self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1, member: member)
+                        }
+                    }
+                    //fade out gradient
+                    Rectangle()
+                        .fill(
+                            LinearGradient(gradient: Gradient(stops: [
+                                .init(color: Color("superdarkgray").opacity(0.01), location: 0),
+                                .init(color: Color("superdarkgray"), location: 1)
+                            ]), startPoint: .top, endPoint: .bottom)
+                        ).frame(height: 0.06 * gp.size.height)
+                        .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-                
             }
         }
     }
@@ -121,20 +136,28 @@ struct MenuView: View {
                 RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
                     .foregroundColor(Color("purpleblue"))
                 HStack {
+                    Image(systemName: "person.crop.circle.badge.plus")
                     Text("Invite Friends")
-                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.headline)
-                }
-            }.padding(.horizontal, 20)
+                }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                .font(.headline)
+            }.padding(.leading, 10)
+            .padding(.trailing, 5)
         }
     }
     
     var leaveButton: some View {
         Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
-            Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
+            ZStack {
+                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
+                    .foregroundColor(Color.red)
+                HStack {
+                    Image(systemName: self.userVM.isAdmin ? "trash.fill" : "chevron.left.circle")
+                    Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
+                }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 .font(.headline)
-                .foregroundColor(Color.red)
-        }.padding(20)
+            }.padding(.leading, 5)
+            .padding(.trailing, 10)
+        }
         .alert(isPresented: self.$showAlert) {
             Alert(title: Text("Delete Session"),
                   message: Text("By deleting the current session all members will be kicked."),

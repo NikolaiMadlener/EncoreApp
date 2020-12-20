@@ -29,21 +29,21 @@ struct MemberCell: View {
     var body: some View {
         HStack {
             Text("\(rank)")
-                .font(.system(size: 17, weight: .light))
+                .font(.system(size: 18, weight: .light))
             if member.username == self.userVM.username {
-                Text("\(member.username)").font(.system(size: 17, weight: .semibold))
+                Text("\(member.username)").font(.system(size: 18, weight: .semibold))
             } else {
-                Text("\(member.username)").font(.system(size: 17, weight: .medium))
+                Text("\(member.username)").font(.system(size: 18, weight: .medium))
             }
             Spacer()
             Text("\(member.score)")
-                .font(.system(size: 17, weight: .semibold))
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(findPointColor())
             Image(systemName: "heart.fill")
-                .font(.system(size: 17, weight: .regular))
+                .font(.system(size: 18, weight: .regular))
                 .foregroundColor(findPointColor())
         }
-        .padding(.vertical, 15)
+        .padding(.vertical, 20)
         .padding(.horizontal, 20)
         .frame(minWidth: 0, maxWidth: .infinity)
         .background(Color("mediumdarkgray"))
@@ -53,7 +53,7 @@ struct MemberCell: View {
     }
 }
 
-struct MenuViewCell_Previews: PreviewProvider {
+struct MemberCell_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             MemberCell(userVM: UserVM(), rank: 3, member: UserListElement(username: "Felix", is_admin: false, score: 2, spotify_synchronized: false)).environment(\.colorScheme, .dark)
