@@ -16,7 +16,7 @@ struct SongTitleBarView: View {
             Rectangle()
                 .frame(height: 50)
                 .cornerRadius(10)
-                .foregroundColor(Color("purpleblue"))
+                .foregroundColor(Color("superdarkgray"))
                 .shadow(radius: 10)
             VStack {
                 HStack {

@@ -112,8 +112,8 @@ struct MenuView: View {
                 ZStack {
                     ScrollView {
                         ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
-                            MemberCell(userVM: userVM, rank: (self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1, member: member)
-                        }
+                            MemberCell(userVM: userVM, rank: (self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1, member: member, isAdmin: member.is_admin)
+                        }.animation(.easeInOut(duration: 0.3))
                     }
                     //fade out gradient
                     Rectangle()

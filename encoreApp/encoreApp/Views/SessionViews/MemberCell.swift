@@ -13,6 +13,7 @@ struct MemberCell: View {
     @State var rank: Int
     @State var pointColor: Color = .white
     var member: UserListElement
+    var isAdmin: Bool
     
     func findPointColor() -> Color {
         switch member.score {
@@ -24,15 +25,21 @@ struct MemberCell: View {
             return Color.green
         }
     }
-    
+
     var body: some View {
         HStack {
             Text("\(rank)")
                 .font(.system(size: 18, weight: .light))
-            if member.username == self.userVM.username {
+            
                 Text("\(member.username)").font(.system(size: 18, weight: .semibold))
-            } else {
-                Text("\(member.username)").font(.system(size: 18, weight: .medium))
+            if member.username == self.userVM.username {
+                Text("you.")
+                    .foregroundColor(Color("purpleblue"))
+                    .font(.system(size: 18, weight: .semibold))
+            } else if isAdmin {
+                Text("admin.")
+                    .foregroundColor(Color("orange2"))
+                    .font(.system(size: 18, weight: .semibold))
             }
             Spacer()
             Text("\(member.score)")
@@ -54,6 +61,6 @@ struct MemberCell: View {
 
 struct MemberCell_Previews: PreviewProvider {
     static var previews: some View {
-        MemberCell(userVM: UserVM(), rank: 3, member: UserListElement(username: "Felix", is_admin: false, score: 2, spotify_synchronized: false))
+        MemberCell(userVM: UserVM(), rank: 3, member: UserListElement(username: "Felix", is_admin: false, score: 2, spotify_synchronized: false), isAdmin: true)
     }
 }
