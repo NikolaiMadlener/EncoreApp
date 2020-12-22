@@ -50,8 +50,12 @@
 		8F6ADE8924C3716100D8F1F8 /* LabeledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */; };
 		8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE231249E679C006674E8 /* SearchBar.swift */; };
 		8F8FE234249FBB0B006674E8 /* AuthenticationWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */; };
+		8F93429E259259BB000BA13C /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F93429D259259BB000BA13C /* ScannerView.swift */; };
+		8F9342A2259259CF000BA13C /* ScannerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9342A1259259CF000BA13C /* ScannerViewModel.swift */; };
+		8F9342A5259259F8000BA13C /* QrCodeCameraDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9342A4259259F8000BA13C /* QrCodeCameraDelegate.swift */; };
+		8F9342A825925A0C000BA13C /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9342A725925A0C000BA13C /* CameraPreview.swift */; };
+		8F9342AB25925A38000BA13C /* QrCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9342AA25925A38000BA13C /* QrCodeScannerView.swift */; };
 		8F9AF39A24C4A18200FCEFD0 /* ButtonLightModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9AF39924C4A18200FCEFD0 /* ButtonLightModifier.swift */; };
-		8F9AF39C24C4CE3200FCEFD0 /* ScannerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */; };
 		8FA39C2C2535DE52009460F9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA39C2B2535DE52009460F9 /* RoundedCorner.swift */; };
 		8FA39C2F2535E446009460F9 /* LeaderboardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA39C2E2535E446009460F9 /* LeaderboardModifier.swift */; };
 		8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */; };
@@ -110,8 +114,12 @@
 		8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledDivider.swift; sourceTree = "<group>"; };
 		8F8FE231249E679C006674E8 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		8F8FE233249FBB0B006674E8 /* AuthenticationWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationWebView.swift; sourceTree = "<group>"; };
+		8F93429D259259BB000BA13C /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
+		8F9342A1259259CF000BA13C /* ScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewModel.swift; sourceTree = "<group>"; };
+		8F9342A4259259F8000BA13C /* QrCodeCameraDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrCodeCameraDelegate.swift; sourceTree = "<group>"; };
+		8F9342A725925A0C000BA13C /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		8F9342AA25925A38000BA13C /* QrCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrCodeScannerView.swift; sourceTree = "<group>"; };
 		8F9AF39924C4A18200FCEFD0 /* ButtonLightModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLightModifier.swift; sourceTree = "<group>"; };
-		8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerSheetView.swift; sourceTree = "<group>"; };
 		8FA39C2B2535DE52009460F9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		8FA39C2E2535E446009460F9 /* LeaderboardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardModifier.swift; sourceTree = "<group>"; };
 		8FB1058924AB55A3007C15A1 /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
@@ -282,11 +290,23 @@
 			path = SuggestSongView;
 			sourceTree = "<group>";
 		};
+		8F93429C25925963000BA13C /* ScannerViews */ = {
+			isa = PBXGroup;
+			children = (
+				8F93429D259259BB000BA13C /* ScannerView.swift */,
+				8F9342A1259259CF000BA13C /* ScannerViewModel.swift */,
+				8F9342A4259259F8000BA13C /* QrCodeCameraDelegate.swift */,
+				8F9342A725925A0C000BA13C /* CameraPreview.swift */,
+				8F9342AA25925A38000BA13C /* QrCodeScannerView.swift */,
+			);
+			path = ScannerViews;
+			sourceTree = "<group>";
+		};
 		8F9AF39824C4A05200FCEFD0 /* LoginView */ = {
 			isa = PBXGroup;
 			children = (
+				8F93429C25925963000BA13C /* ScannerViews */,
 				23190663247DA25F00DA550B /* LoginView.swift */,
-				8F9AF39B24C4CE3200FCEFD0 /* ScannerSheetView.swift */,
 			);
 			path = LoginView;
 			sourceTree = "<group>";
@@ -444,10 +464,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FB1058A24AB55A3007C15A1 /* CurrentSongView.swift in Sources */,
-				8F9AF39C24C4CE3200FCEFD0 /* ScannerSheetView.swift in Sources */,
+				8F9342A825925A0C000BA13C /* CameraPreview.swift in Sources */,
 				2319067C247DBDB600DA550B /* SongListCell.swift in Sources */,
 				231CDA24249D3A8800632B8C /* MusicController.swift in Sources */,
 				23190660247DA25F00DA550B /* AppDelegate.swift in Sources */,
+				8F9342A2259259CF000BA13C /* ScannerViewModel.swift in Sources */,
 				8F27498624A610000084FC99 /* SpotifySearchPayload.swift in Sources */,
 				8F9AF39A24C4A18200FCEFD0 /* ButtonLightModifier.swift in Sources */,
 				23190678247DB92600DA550B /* Mockmodel.swift in Sources */,
@@ -460,6 +481,7 @@
 				2361911B24B3B93D0096D806 /* ActivityIndicator.swift in Sources */,
 				8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */,
 				8F2EF43A24A2ADEE000EC1B7 /* AuthenticationViewModel.swift in Sources */,
+				8F9342A5259259F8000BA13C /* QrCodeCameraDelegate.swift in Sources */,
 				8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */,
 				8F0CAC3124A2001100531BB0 /* ButtonHeavyModifier.swift in Sources */,
 				8F589F5F24B6178F00BA5E60 /* CurrentSongCompactView.swift in Sources */,
@@ -476,6 +498,7 @@
 				231CDA22249D397F00632B8C /* PlayerStateVM.swift in Sources */,
 				235EB4D12480F6CC007A720D /* MenuView.swift in Sources */,
 				8FB1058C24AB56DF007C15A1 /* AddSongsBarView.swift in Sources */,
+				8F93429E259259BB000BA13C /* ScannerView.swift in Sources */,
 				23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */,
 				231CDA2F249E0B9700632B8C /* ImageLoader.swift in Sources */,
 				231CDA28249D3CA600632B8C /* SuggestSongView.swift in Sources */,
@@ -485,6 +508,7 @@
 				8F27498424A60C880084FC99 /* SuggestSongCell.swift in Sources */,
 				235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */,
 				231B16C52489A1700006E78B /* JoinViaURLView.swift in Sources */,
+				8F9342AB25925A38000BA13C /* QrCodeScannerView.swift in Sources */,
 				233D2ACE2491990100994038 /* UserListVM.swift in Sources */,
 				8FBF544F254F571500F4B806 /* LoginAlertsModifier.swift in Sources */,
 				23190676247DB75800DA550B /* Song.swift in Sources */,

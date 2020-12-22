@@ -18,7 +18,7 @@ struct PopupQRCodeView: View {
     
     var body: some View {
         VStack {
-            Text("Scan this QR Code")
+            Text("scan this qr code.")
                 .font(.system(size: 25, weight: .bold))
                 .foregroundColor(Color.white)
                 .padding(.top)
@@ -58,7 +58,7 @@ struct PopupQRCodeView: View {
         }) {
             Text("Cancel")
                 .font(.headline)
-                .foregroundColor(Color("purpleblue"))
+                .foregroundColor(Color("fontLightGray"))
                 .padding(.bottom)
         }
     }

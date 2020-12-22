@@ -9,6 +9,8 @@
 import SwiftUI
 import SafariServices
 
+
+
 struct LoginView: View {
     
     // MARK: Stored Instance Properties
@@ -26,10 +28,10 @@ struct LoginView: View {
     @State var sessionCreated: Bool? = false
     @State var deviceID = ""
     @State var showActivityIndicator = false
-    @State var showServerErrorAlert = false
-    @State var showWrongIDAlert = false
-    @State var showUsernameExistsAlert = false
-    @State var showNetworkErrorAlert = false
+    @State var showAlert = false
+    @State var activeAlert: ActiveAlert = .server
+    
+    
     
     
     // MARK: Computed Instance Properties
@@ -84,38 +86,19 @@ struct LoginView: View {
     }
     
     var joinButton: some View {
-        Group {
-            if #available(iOS 14.0, *) {
-                Button(action: {
-                        if self.checkUsernameInvalid(username: self.username) {
-                            self.invalidUsername = true
-                        } else {
-                            self.showScannerSheet = true
-                            self.invalidUsername = false
-                        }}) {
-                    Text("Join Session")
-                        .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-                }
-                .disabled(username.count < 1)
-                .fullScreenCover(isPresented: self.$showScannerSheet) {
-                    ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
-                }
-            } else {
-                Button(action: {
-                        if self.checkUsernameInvalid(username: self.username) {
-                            self.invalidUsername = true
-                        } else {
-                            self.showScannerSheet = true
-                            self.invalidUsername = false
-                        }}) {
-                    Text("Join Session")
-                        .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-                }
-                .disabled(username.count < 1)
-                .sheet(isPresented: self.$showScannerSheet) {
-                    ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
-                }
-            }
+        Button(action: {
+                if self.checkUsernameInvalid(username: self.username) {
+                    self.invalidUsername = true
+                } else {
+                    self.showScannerSheet = true
+                    self.invalidUsername = false
+                }}) {
+            Text("Join Session")
+                .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+        }
+        .disabled(username.count < 1)
+        .fullScreenCover(isPresented: self.$showScannerSheet) {
+            ScannerView(viewModel: ScannerViewModel(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showAlert: self.$showAlert, activeAlert: self.$activeAlert))
         }
     }
     
@@ -142,6 +125,7 @@ struct LoginView: View {
             }) {
                 AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
             }
+            
         }
     }
     
@@ -158,7 +142,7 @@ struct LoginView: View {
                     createButton
                     Spacer()
                 }
-                .modifier(LoginAlertsModifier(showServerErrorAlert: $showServerErrorAlert, showWrongIDAlert: $showWrongIDAlert, showUsernameExistsAlert: $showUsernameExistsAlert, showNetworkErrorAlert: $showNetworkErrorAlert))
+                .modifier(LoginAlertsModifier(showAlert: self.$showAlert, activeAlert: self.$activeAlert))
             }
         }
     }
@@ -199,7 +183,8 @@ struct LoginView: View {
                 print("Error took place \(error)")
                 print(error.localizedDescription)
                 if error.localizedDescription == "The Internet connection appears to be offline." {
-                    self.showNetworkErrorAlert = true
+                    self.showAlert = true
+                    self.activeAlert = .network
                 }
                 self.showActivityIndicator = false
                 return
@@ -221,7 +206,9 @@ struct LoginView: View {
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
-                    self.showServerErrorAlert = true
+                    self.showAlert = true
+                    self.activeAlert = .server
+                    self.showAlert = true
                     self.showActivityIndicator = false
                 }
                 

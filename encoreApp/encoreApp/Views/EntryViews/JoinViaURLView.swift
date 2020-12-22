@@ -114,8 +114,9 @@ struct JoinViaURLView: View {
             
             // Check for Error
             if let error = error {
-                print("Error took place \(error)")
-                if error.localizedDescription == "The Internet connection appears to be offline." {
+                print("Error took placee \(error)")
+                print("locDes: \(error.localizedDescription)")
+                if error.localizedDescription == "A data connection is not currently allowed." {
                     self.showNetworkErrorAlert = true
                 }
                 self.showActivityIndicator = false
@@ -179,9 +180,15 @@ struct JoinViaURLView: View {
         request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
             // Check for Error
             if let error = error {
-                print("Error took place \(error)")
+                print("Error took placeee \(error)")
+                print("locDes: \(error.localizedDescription)")
+                if error.localizedDescription == "A data connection is not currently allowed." {
+                    self.showNetworkErrorAlert = true
+                }
+                self.showActivityIndicator = false
                 return
             }
             

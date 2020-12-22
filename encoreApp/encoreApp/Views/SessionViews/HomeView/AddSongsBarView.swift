@@ -34,6 +34,7 @@ struct AddSongsBarView: View {
             .shadow(radius: 20)
         } else {
             addButton
+                .shadow(radius: 15)
         }
     }
     
