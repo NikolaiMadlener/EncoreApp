@@ -8,7 +8,6 @@
 
 import SwiftUI
 import URLImage
-import CoreHaptics
 
 struct SuggestSongCell: View {
     @ObservedObject var searchResultListVM: SearchResultListVM
@@ -16,7 +15,6 @@ struct SuggestSongCell: View {
     @ObservedObject var playerStateVM: PlayerStateVM
     @State var currentImage: Image = Image("albumPlaceholder")
     @State var addingInProcess = false
-    @State private var engine: CHHapticEngine?
     var song: SpotifySearchPayload.Tracks.Item
     
     var body: some View {

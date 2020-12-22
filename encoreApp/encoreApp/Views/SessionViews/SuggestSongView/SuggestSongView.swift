@@ -29,6 +29,10 @@ struct SuggestSongView: View {
     var body: some View {
         VStack(spacing: 0) {
             topBar.padding(.vertical)
+            Text("add songs.")
+                .font(.system(size: 25, weight: .bold))
+                .foregroundColor(Color.white)
+                .padding(.vertical, 7)
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search")
             if searchResultListVM.items.isEmpty {
                 VStack(alignment: .center) {

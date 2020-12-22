@@ -8,7 +8,6 @@
 
 import SwiftUI
 import URLImage
-import CoreHaptics
 
 struct HomeView: View {
     @ObservedObject var musicController: MusicController = .shared
@@ -25,7 +24,6 @@ struct HomeView: View {
     @State var isPlay = true
     @State var value: Float = 0.8
     @State var offset = CGFloat()
-    @State private var engine: CHHapticEngine?
     @State var showSongTitleBar = false
     
     
@@ -61,7 +59,7 @@ struct HomeView: View {
                         Spacer().frame(height: 320)
                         if !songListVM.songs.isEmpty {
                             Text("up next.")
-                                .font(.system(size: 25, weight: .semibold))
+                                .font(.system(size: 25, weight: .bold))
                                 .foregroundColor(Color("fontLightGray"))
                                 .padding(.leading, 8)
                                 .padding(.bottom, 5)
@@ -75,20 +73,30 @@ struct HomeView: View {
                     //Control Visablilty of SongTitleBarView
                     if (geo.frame(in: .global).minY <= -220) {
                         Text("")
-                            .onAppear {self.showSongTitleBar = true}
+                            .onAppear {
+                                //withAnimation {
+                                    self.showSongTitleBar = true
+                                //}
+                            }
                     } else {
                         Text("")
-                            .onAppear {self.showSongTitleBar = false}
+                            .onAppear {
+                                //withAnimation {
+                                    self.showSongTitleBar = false
+                                //}
+                            }
                     }
                 }
                 .frame(height: (CGFloat(self.songListVM.songs.count * 90 + 350)))
             }
             
-            if showSongTitleBar {
-                VStack {
+            VStack {
+                if showSongTitleBar {
                     SongTitleBarView(playerStateVM: self.playerStateVM)
-                    Spacer()
+                        .transition(.move(edge: .top))
+                        .animation(.default)
                 }
+                Spacer()
             }
             
             if songListVM.songs.isEmpty {
@@ -128,18 +136,16 @@ struct HomeView: View {
                         .foregroundColor(Color.white)
                         .padding(.vertical, 19)
                         .padding(.trailing, 20)
-                    
                 }.sheet(isPresented: self.$showMenuSheet) {
                     MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet, pageViewModel: pageViewModel)
                 }
             }
-
             Spacer()
             HStack {
                 Spacer()
                 AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
                 Spacer()
-            }.padding(.bottom)
+            }.padding(.bottom, 10)
         }
     }
 }

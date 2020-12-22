@@ -23,15 +23,15 @@ struct AddSongsBarView: View {
         if self.userVM.isAdmin {
             HStack {
                 playPauseButton
-                Spacer().frame(width: 50)
+                Spacer().frame(width: 30)
                 addButton
-                Spacer().frame(width: 50)
+                Spacer().frame(width: 30)
                 skipButton
-            }.padding(10)
+            }.padding(8)
             .padding(.horizontal, 10)
             .background(Color("mediumdarkgray"))
             .cornerRadius(25)
-            .shadow(radius: 10)
+            .shadow(radius: 20)
         } else {
             addButton
         }
@@ -40,11 +40,12 @@ struct AddSongsBarView: View {
     var addButton: some View {
         Button(action: { self.showAddSongSheet = true }) {
             ZStack {
-                Circle().frame(width: 55, height: 55).foregroundColor(Color.white).cornerRadius(20)
+                Circle().frame(width: 59, height: 59).foregroundColor(Color("purpleblue")).cornerRadius(20)
                 Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 60, weight: .light))
-                    .foregroundColor(Color("purpleblue"))
+                    .font(.system(size: 60, weight: .regular))
+                    .foregroundColor(Color.white)
             }
+            
         }.sheet(isPresented: self.$showAddSongSheet) {
             SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession)
         }

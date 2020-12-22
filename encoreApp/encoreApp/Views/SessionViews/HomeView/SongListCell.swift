@@ -8,13 +8,11 @@
 
 import SwiftUI
 import URLImage
-import CoreHaptics
 
 struct SongListCell: View {
     @ObservedObject var userVM: UserVM
     @State var voteState: VoteState = VoteState.NEUTRAL
     @State var currentImage: Image = Image("albumPlaceholder")
-    @State private var engine: CHHapticEngine?
     var song: Song
     var rank: Int
     
@@ -84,7 +82,6 @@ struct SongListCell: View {
     
     private var upvoteButton: some View {
         Button(action: {
-            hapticEvent()
             switch self.voteState {
             case .NEUTRAL:
                 self.upvote()
@@ -103,7 +100,6 @@ struct SongListCell: View {
     
     private var downvoteButton: some View {
         Button(action: {
-            hapticEvent()
             switch self.voteState {
             case .NEUTRAL:
                 self.downvote()
@@ -118,51 +114,6 @@ struct SongListCell: View {
                 .foregroundColor(voteState == VoteState.DOWNVOTE ? voteState.color : Color("fontLightGray"))
                 .rotationEffect(.degrees(-180))
                 .padding(.top, 3)
-        }
-    }
-    
-    func prepareHaptics() {
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-
-        do {
-            self.engine = try CHHapticEngine()
-            try engine?.start()
-        } catch {
-            print("There was an error creating the engine: \(error.localizedDescription)")
-        }
-    }
-    
-    func hapticEvent() {
-        
-        prepareHaptics()
-        
-        // make sure that the device supports haptics
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-
-        var events = [CHHapticEvent]()
-        var curves = [CHHapticParameterCurve]()
-
-        do {
-            // create one continuous buzz that fades out
-            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.8)
-            let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.3)
-
-            let start = CHHapticParameterCurve.ControlPoint(relativeTime: 0, value: 1)
-            let end = CHHapticParameterCurve.ControlPoint(relativeTime: 0.2, value: 0)
-
-            let parameter = CHHapticParameterCurve(parameterID: .hapticIntensityControl, controlPoints: [start, end], relativeTime: 0)
-            let event = CHHapticEvent(eventType: .hapticContinuous, parameters: [sharpness, intensity], relativeTime: 0, duration: 0.2)
-            events.append(event)
-            curves.append(parameter)
-        }
-
-        do {
-            let pattern = try CHHapticPattern(events: events, parameterCurves: curves)
-
-            let player = try engine?.makePlayer(with: pattern)
-            try player?.start(atTime: 0)
-        } catch {
-            print(error.localizedDescription)
         }
     }
     

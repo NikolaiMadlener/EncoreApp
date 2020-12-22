@@ -76,7 +76,6 @@ struct MenuView: View {
             Image(systemName: "arrow.left")
                 .font(.system(size: 23, weight: .semibold))
                 .foregroundColor(Color.white)
-                .padding(.vertical, 19)
                 .padding(.leading, 20)
         }.buttonStyle(PlainButtonStyle())
     }

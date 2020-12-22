@@ -14,10 +14,10 @@ struct SongTitleBarView: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .frame(height: 50)
+                .frame(height: 53)
                 .cornerRadius(10)
-                .foregroundColor(Color("superdarkgray"))
-                .shadow(radius: 10)
+                .foregroundColor(Color("mediumdarkgray"))
+                .shadow(radius: 15)
             VStack {
                 HStack {
                     Image(uiImage: self.playerStateVM.albumCover)
@@ -26,11 +26,11 @@ struct SongTitleBarView: View {
                         .cornerRadius(5)
                     VStack(alignment: .leading) {
                         Text("\(self.playerStateVM.song.name)")
-                            .font(.system(size: 15, weight: .bold))
+                            .font(.system(size: 16, weight: .bold))
                             .frame(maxWidth: 250, maxHeight: 15, alignment: .leading)
-                            .foregroundColor(Color.white)
+                            .foregroundColor(Color("purpleblue"))
                         Text("\(self.playerStateVM.song.artists[0])")
-                            .font(.system(size: 10, weight: .semibold))
+                            .font(.system(size: 11, weight: .semibold))
                             .frame(maxWidth: 200, maxHeight: 15, alignment: .leading)
                             .foregroundColor(Color.white)
                     }
@@ -45,8 +45,8 @@ struct SongTitleBarView: View {
 struct SongTitleBarView_Previews: PreviewProvider {
     @ObservedObject static var playerStateVM = PlayerStateVM(userVM: UserVM())
     static var previews: some View {
-        self.playerStateVM.song.name = "abc"
-        self.playerStateVM.song.artists = ["defdefdefdefdefdefdefdefdefdefdefdefdef"]
+        self.playerStateVM.song.name = "Alright"
+        self.playerStateVM.song.artists = ["Kendrick Lamar"]
         return
             SongTitleBarView(playerStateVM: playerStateVM).previewLayout(.sizeThatFits)
     }
