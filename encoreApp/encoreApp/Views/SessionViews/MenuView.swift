@@ -26,6 +26,7 @@ struct MenuView: View {
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
         self.pageViewModel = pageViewModel
+        self.getMembers(username: self.userVM.username)
     }
     
     var body: some View {
@@ -51,7 +52,8 @@ struct MenuView: View {
             .sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
-                self.getMembers(username: self.userVM.username)
+                
+                print("GET MEMBERS")
             }
             
             if self.showPopupQRCode {

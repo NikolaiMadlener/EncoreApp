@@ -64,7 +64,7 @@ struct AddSongsBarView: View {
             self.playerStateVM.isPlaying ? self.playerPause() : self.playerPlay()
         }) {
             ZStack {
-                Image(systemName: self.isPlay ? "pause" : "play")
+                Image(systemName: self.playerStateVM.isPlaying ? "pause" : "play")
                     .font(.system(size: 30, weight: .semibold))
                     .foregroundColor(Color.white)
             }
