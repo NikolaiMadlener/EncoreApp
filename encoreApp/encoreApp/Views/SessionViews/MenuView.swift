@@ -53,7 +53,7 @@ struct MenuView: View {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
                 
-                print("GET MEMBERS")
+                print("Refresh Menuview")
             }
             
             if self.showPopupQRCode {
@@ -187,7 +187,7 @@ struct MenuView: View {
     }
     
     func getMembers(username: String) {
-        
+        print("GET MEMBERS")
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
             print("Invalid URL")
             return

@@ -136,8 +136,6 @@ struct HomeView: View {
                         .foregroundColor(Color.white)
                         .padding(.vertical, 19)
                         .padding(.trailing, 20)
-                }.sheet(isPresented: self.$showMenuSheet) {
-                    MenuView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet, pageViewModel: pageViewModel)
                 }
             }
             Spacer()
