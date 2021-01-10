@@ -12,7 +12,7 @@ struct SongTitleBarView: View {
     @ObservedObject var playerStateVM: PlayerStateVM
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .leading) {
             Rectangle()
                 .frame(height: 53)
                 .cornerRadius(10)
@@ -27,14 +27,13 @@ struct SongTitleBarView: View {
                     VStack(alignment: .leading) {
                         Text("\(self.playerStateVM.song.name)")
                             .font(.system(size: 16, weight: .bold))
-                            .frame(maxWidth: 250, maxHeight: 15, alignment: .leading)
+                            .frame(maxHeight: 15, alignment: .leading)
                             .foregroundColor(Color("purpleblue"))
                         Text("\(self.playerStateVM.song.artists[0])")
                             .font(.system(size: 11, weight: .semibold))
-                            .frame(maxWidth: 200, maxHeight: 15, alignment: .leading)
+                            .frame(maxHeight: 15, alignment: .leading)
                             .foregroundColor(Color.white)
                     }
-                    Spacer()
                 }
             }.padding(.horizontal, 10)
         }.padding(.top, 3)

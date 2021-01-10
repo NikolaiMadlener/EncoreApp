@@ -19,11 +19,12 @@ struct SongListCell: View {
     var body: some View {
         HStack {
             albumView
+            
             songView
             Spacer()
             voteView
         }
-        .modifier(SongListCellModifier())
+        .modifier(SongListCellModifier(voteState: $voteState))
         .onAppear {
             if self.song.upvoters.contains(self.userVM.username) {
                 self.voteState = .UPVOTE
@@ -54,6 +55,14 @@ struct SongListCell: View {
             .padding(.horizontal, 10)
     }
     
+    private var imagePlaceholder: some View {
+        Rectangle()
+            .frame(width: 55, height: 55)
+            .foregroundColor(.blue)
+            .cornerRadius(5)
+            .padding(.horizontal, 10)
+    }
+    
     private var songView: some View {
         VStack(alignment: .leading) {
             Text(self.song.name)
@@ -63,7 +72,6 @@ struct SongListCell: View {
             Text(self.song.artists[0])
                 .font(.system(size: 16, weight: .regular))
                 .foregroundColor(Color("fontLightGray"))
-                
         }
     }
     

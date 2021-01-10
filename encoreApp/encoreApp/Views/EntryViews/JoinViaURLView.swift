@@ -78,12 +78,6 @@ struct JoinViaURLView: View {
     
     var sessionTitle: some View {
         Text("encore.")
-            .overlay(
-                Rectangle()
-                    .foregroundColor(Color("purpleblue"))
-                    .frame(height: 2)
-                    .cornerRadius(100)
-                    .offset(y: 2), alignment: .bottom)
             .font(.system(size: 30, weight: .bold))
             .padding(.bottom, 10)
     }

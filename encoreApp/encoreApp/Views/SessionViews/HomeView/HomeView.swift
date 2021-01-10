@@ -90,6 +90,8 @@ struct HomeView: View {
                 .frame(height: (CGFloat(self.songListVM.songs.count * 90 + 350)))
             }
             
+            self.menu_layer
+            
             VStack {
                 if showSongTitleBar {
                     SongTitleBarView(playerStateVM: self.playerStateVM)
@@ -111,9 +113,6 @@ struct HomeView: View {
                     Spacer()
                 }
             }
-            
-            //Layer 3: Menu Layer
-            self.menu_layer
         }//.onAppear{ self.playerStateVM.viewDidLoad() }
             // triggers updates on every second
             .onAppear{ self.playerStateVM.playerPause() }
