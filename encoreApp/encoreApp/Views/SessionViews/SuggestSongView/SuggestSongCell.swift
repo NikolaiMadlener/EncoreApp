@@ -14,7 +14,7 @@ struct SuggestSongCell: View {
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var playerStateVM: PlayerStateVM
     @State var currentImage: Image = Image("albumPlaceholder")
-    @State var addingInProcess = false
+    @State var addingInProcess = true
     var song: SpotifySearchPayload.Tracks.Item
     
     var body: some View {
@@ -54,22 +54,28 @@ struct SuggestSongCell: View {
             self.addingInProcess = true
         }) {
             if songListVM.songs.map({ $0.id }).contains(song.id) || playerStateVM.song.id == song.id {
-                Image(systemName: "checkmark.square")
-                    .font(.system(size: 35, weight: .light))
-                    .foregroundColor(Color("purpleblue"))
-            } else if self.addingInProcess {
                 ZStack {
-                    Image(systemName: "square")
+                    Rectangle().frame(width: 20, height: 20).foregroundColor(Color.white)
+                    Image(systemName: "checkmark.square.fill")
                         .font(.system(size: 35, weight: .light))
                         .foregroundColor(Color("purpleblue"))
+                }
+            } else if self.addingInProcess {
+                ZStack {
+                    Image(systemName: "square.fill")
+                        .font(.system(size: 35, weight: .light))
+                        .foregroundColor(Color.white)
                     Image(systemName: "ellipsis")
                         .font(.system(size: 20, weight: .light))
                         .foregroundColor(Color("purpleblue"))
                 }
             } else {
-                Image(systemName: "plus.square.fill")
-                    .font(.system(size: 35, weight: .light))
-                    .foregroundColor(Color("purpleblue"))
+                ZStack {
+                    Rectangle().frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
+                    Image(systemName: "plus.square.fill")
+                        .font(.system(size: 35, weight: .light))
+                        .foregroundColor(Color.white)
+                }
             }
         }
     }
