@@ -74,16 +74,12 @@ struct HomeView: View {
                     if (geo.frame(in: .global).minY <= -220) {
                         Text("")
                             .onAppear {
-                                //withAnimation {
-                                    self.showSongTitleBar = true
-                                //}
+                                self.showSongTitleBar = true
                             }
                     } else {
                         Text("")
                             .onAppear {
-                                //withAnimation {
-                                    self.showSongTitleBar = false
-                                //}
+                                self.showSongTitleBar = false
                             }
                     }
                 }

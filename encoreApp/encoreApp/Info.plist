@@ -4,10 +4,6 @@
 <dict>
 	<key></key>
 	<string></string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>encore wants to save your session QR Code to Photos</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>encore wants to save your session QR Code to Photos</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -42,7 +38,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>encore uses the camera to let you scan a session&apos;s QR code for joining.</string>
+	<string>encore uses the camera to let you scan a session's QR code for joining.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>encore wants to save your session QR Code to Photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>encore wants to save your session QR Code to Photos</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

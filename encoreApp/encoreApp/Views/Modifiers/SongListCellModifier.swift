@@ -17,11 +17,7 @@ struct SongListCellModifier: ViewModifier {
             .frame(minWidth: 0, maxWidth: .infinity)
             .background(Color("mediumdarkgray"))
             .cornerRadius(15)
-            .foregroundColor(voteState.color)
-//            .overlay(
-//                RoundedRectangle(cornerRadius: 15)
-//                    .stroke(voteState.color, lineWidth: 3)
-//            )
+            .foregroundColor(Color.white)
             .padding(.horizontal, 8)
             .padding(.vertical, 5)
     }

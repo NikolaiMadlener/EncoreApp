@@ -56,6 +56,7 @@ struct MemberCell: View {
         .foregroundColor(Color.white)
         .cornerRadius(15)
         .padding(.horizontal, 20)
+        .padding(.vertical, 1)
     }
 }
 

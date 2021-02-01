@@ -19,7 +19,6 @@ struct SongListCell: View {
     var body: some View {
         HStack {
             albumView
-            
             songView
             Spacer()
             voteView

@@ -14,7 +14,7 @@ struct SuggestSongCell: View {
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var playerStateVM: PlayerStateVM
     @State var currentImage: Image = Image("albumPlaceholder")
-    @State var addingInProcess = true
+    @State var addingInProcess = false
     var song: SpotifySearchPayload.Tracks.Item
     
     var body: some View {

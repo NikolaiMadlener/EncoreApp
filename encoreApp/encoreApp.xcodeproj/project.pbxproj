@@ -674,7 +674,7 @@
 					"\"IKEventSource\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitkitApps.encore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.encorecompany.encore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "encoreApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -708,7 +708,7 @@
 					"\"IKEventSource\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitkitApps.encore;
+				PRODUCT_BUNDLE_IDENTIFIER = com.encorecompany.encore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "encoreApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

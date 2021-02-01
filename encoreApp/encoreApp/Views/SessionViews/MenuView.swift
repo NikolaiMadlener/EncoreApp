@@ -48,14 +48,11 @@ struct MenuView: View {
                 }.padding(.top, 10)
                 .padding(.bottom, 15)
             }
-            
             .sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
-                
                 print("Refresh Menuview")
             }
-            
             if self.showPopupQRCode {
                 popupQRView
             }
