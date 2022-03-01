@@ -9,18 +9,24 @@
 import Foundation
 
 class SearchResultListVM: ObservableObject {
-    var userVM: UserVM
     @Published var items: [SpotifySearchPayload.Tracks.Item] = []
     var authToken = ""
     var auth_url = ""
     typealias JSONStandard = [String : AnyObject]
+    var username: String
+    var secret: String
+    var sessionID: String
+    var clientToken: String
     
-    init(userVM: UserVM) {
-        self.userVM = userVM
+    init(username: String, secret: String, sessionID: String, clientToken: String) {
+        self.username = username
+        self.secret = secret
+        self.sessionID = sessionID
+        self.clientToken = clientToken
     }
     
     func getAuthToken() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/authToken") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/authToken") else {
             print("Invalid URL")
             return
             
@@ -28,8 +34,8 @@ class SearchResultListVM: ObservableObject {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(secret, forHTTPHeaderField: "Authorization")
+        request.addValue(sessionID, forHTTPHeaderField: "Session")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             // Check for Error
@@ -54,15 +60,15 @@ class SearchResultListVM: ObservableObject {
     }
     
     func suggestSong(songID: String) {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/suggest/"+"\(songID)") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/suggest/"+"\(songID)") else {
             print("Invalid URL")
             return
             
         }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(secret, forHTTPHeaderField: "Authorization")
+        request.addValue(sessionID, forHTTPHeaderField: "Session")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             // Check for Error
@@ -86,7 +92,7 @@ class SearchResultListVM: ObservableObject {
     }
     
     func searchSong(query: String) {
-        print("CLIENTTOKEN\(userVM.clientToken)")
+        print("CLIENTTOKEN\(clientToken)")
         guard var components = URLComponents(string: "https://api.spotify.com/v1/search") else {
             print("Invalid URL")
             return
@@ -98,7 +104,7 @@ class SearchResultListVM: ObservableObject {
         ]
         var request = URLRequest(url: components.url!)
         request.httpMethod = "GET"
-        request.addValue("Bearer "+userVM.clientToken, forHTTPHeaderField: "Authorization")
+        request.addValue("Bearer " + clientToken, forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             // Check for Error

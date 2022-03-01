@@ -56,6 +56,6 @@ struct CurrentSongCompactView: View {
 
 struct CurrentSongCompactView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentSongCompactView(playerStateVM: PlayerStateVM(userVM: UserVM()))
+        CurrentSongCompactView(playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""))
     }
 }

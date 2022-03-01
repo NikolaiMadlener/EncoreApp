@@ -1,15 +1,14 @@
 //
-//  User.swift
+//  UserVM.swift
 //  encoreApp
 //
-//  Created by Nikolai Madlener on 31.05.20.
-//  Copyright © 2020 NikolaiEtienne. All rights reserved.
+//  Created by Nikolai Madlener on 28.02.22.
+//  Copyright © 2022 NikolaiEtienne. All rights reserved.
 //
 
 import Foundation
 
 public class UserVM: ObservableObject {
-    static let shared = UserVM()
     
     @Published var username: String
     @Published var isAdmin: Bool

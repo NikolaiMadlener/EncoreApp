@@ -10,22 +10,20 @@ import SwiftUI
 
 struct MenuView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var userVM: UserVM
+    @EnvironmentObject var appState: AppState
+    
     @ObservedObject var userListVM: UserListVM
     @ObservedObject var playerStateVM: PlayerStateVM
     
     @Binding var showMenuSheet: Bool
-    @Binding var currentlyInSession: Bool
     @State var showAlert = false
     @State var showSessionExpiredAlert = false
     @State var showShareSheet: Bool = false
     @State var showPopupQRCode: Bool = false
     
-    init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
-        self.userVM = userVM
-        self.userListVM = UserListVM(userVM: userVM, sessionID: nil)
+    init(username: String, sessionID: String, playerStateVM: PlayerStateVM, showMenuSheet: Binding<Bool>) {
+        self.userListVM = UserListVM(username: username, sessionID: sessionID)
         self.playerStateVM = playerStateVM
-        self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
     }
     
@@ -50,9 +48,9 @@ struct MenuView: View {
             }
             
             .sheet(isPresented: self.$showShareSheet) {
-                ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
+                ActivityViewController(activityItems: ["encoreApp://\(self.appState.session.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
-                self.getMembers(username: self.userVM.username)
+                self.getMembers(username: self.appState.user.username)
             }
             
             if self.showPopupQRCode {
@@ -85,13 +83,13 @@ struct MenuView: View {
         Button(action: {
             withAnimation { self.showPopupQRCode.toggle() }
         }) {
-            QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 150).padding(10)
+            QRCodeView(url: "encoreApp://\(self.appState.session.sessionID)", size: 150).padding(10)
         }.buttonStyle(PlainButtonStyle())
         .alert(isPresented: self.$showSessionExpiredAlert) {
             Alert(title: Text("Session expired"),
                   message: Text("The Host has ended the Session."),
                   dismissButton: .destructive(Text("Leave"), action: {
-                    self.currentlyInSession = false
+                self.appState.session.currentlyInSession = false
                   }))
         }
         .padding(.bottom, 10)
@@ -133,7 +131,7 @@ struct MenuView: View {
                         HStack {
                             Text("\((self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1)")
                                 .font(.system(size: 17, weight: .light))
-                            if member.username == self.userVM.username {
+                            if member.username == self.appState.user.username {
                                 Text("\(member.username)").font(.system(size: 17, weight: .semibold))
                             } else {
                                 Text("\(member.username)").font(.system(size: 17, weight: .medium))
@@ -152,8 +150,8 @@ struct MenuView: View {
     }
     
     var leaveButton: some View {
-        Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
-            Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
+        Button(action: { self.appState.user.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.appState.user.username)) }) {
+            Text(self.appState.user.isAdmin ? "Delete Session" : "Leave Session")
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
         }.padding(.bottom)
         .alert(isPresented: self.$showAlert) {
@@ -161,7 +159,7 @@ struct MenuView: View {
                   message: Text("By deleting the current session all members will be kicked."),
                   primaryButton: .destructive(Text("Delete"), action: {
                     self.playerStateVM.playerPause()
-                    self.deleteSession(username: self.userVM.username)
+                self.deleteSession(username: self.appState.user.username)
                   }),
                   secondaryButton: .cancel(Text("Cancel"), action: {
                     self.showAlert = false
@@ -172,7 +170,7 @@ struct MenuView: View {
     var popupQRView: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
-                PopupQRCodeView(userVM: self.userVM, showPopupQRCode: self.$showPopupQRCode)
+                PopupQRCodeView(showPopupQRCode: self.$showPopupQRCode)
             }.frame(width: geo.size.width,
                     height: geo.size.height,
                     alignment: .center)
@@ -193,12 +191,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.userVM.secret)
-        print("sessionID: " + self.userVM.sessionID)
+        print("secret: " + self.appState.session.secret)
+        print("sessionID: " + self.appState.session.sessionID)
         
         request.httpMethod = "GET"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.appState.session.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.appState.session.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -242,12 +240,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + userVM.secret)
-        print("sessionID: " + userVM.sessionID)
+        print("secret: " + appState.session.secret)
+        print("sessionID: " + appState.session.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(appState.session.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(appState.session.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -267,7 +265,10 @@ struct MenuView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
             }
-            self.currentlyInSession = false
+            DispatchQueue.main.async {
+                self.appState.session.currentlyInSession = false
+            }
+            
         }
         task.resume()
     }
@@ -280,12 +281,12 @@ struct MenuView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + userVM.secret)
-        print("sessionID: " + userVM.sessionID)
+        print("secret: " + appState.session.secret)
+        print("sessionID: " + appState.session.sessionID)
         
         request.httpMethod = "DELETE"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(appState.session.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(appState.session.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -305,19 +306,20 @@ struct MenuView: View {
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string leave:\n \(dataString)")
             }
-            self.currentlyInSession = false
+            
+            DispatchQueue.main.async {
+                self.appState.session.currentlyInSession = false
+            }
         }
         task.resume()
     }
 }
 
 struct MenuView_Previews: PreviewProvider {
-    static var userVM = UserVM()
-    static var playerStateVM = PlayerStateVM(userVM: userVM)
-    @State static var currentlyInSession = false
+    static var playerStateVM = PlayerStateVM(username: "", sessionID: "", secret: "")
     @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, playerStateVM: playerStateVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
+        MenuView(username: "", sessionID: "", playerStateVM: playerStateVM, showMenuSheet: $showMenuSheet)
     }
 }

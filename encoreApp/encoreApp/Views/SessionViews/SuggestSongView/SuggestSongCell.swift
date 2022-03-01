@@ -78,9 +78,9 @@ struct SuggestSongCell: View {
 
 
 struct SuggestSongCell_Previews: PreviewProvider {
-    static var searchResultListVM = SearchResultListVM(userVM: UserVM())
+    static var searchResultListVM = SearchResultListVM(username: "", secret: "", sessionID: "", clientToken: "")
     static var song = Mockmodel.getSongPayload()
     static var previews: some View {
-        SuggestSongCell(searchResultListVM: searchResultListVM, songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: UserVM()), song: song)
+        SuggestSongCell(searchResultListVM: searchResultListVM, songListVM: SongListVM(username: "", sessionID: ""), playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""), song: song)
     }
 }

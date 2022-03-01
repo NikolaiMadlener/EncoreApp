@@ -12,7 +12,7 @@ import SwiftUI
 import WebKit
 
 struct AuthenticationWebView: UIViewRepresentable {
-    @ObservedObject var webVM: WebVM
+    @ObservedObject var viewModel: ViewModel
     @Binding var showAuthSheet: Bool
     @Binding var showActivityIndicator: Bool
 
@@ -20,7 +20,7 @@ struct AuthenticationWebView: UIViewRepresentable {
 
     func makeUIView(context: UIViewRepresentableContext<AuthenticationWebView>) -> WKWebView {
         self.webView.navigationDelegate = context.coordinator
-        if let url = URL(string: webVM.link) {
+        if let url = URL(string: viewModel.link) {
             self.webView.load(URLRequest(url: url))
         
         }
@@ -29,7 +29,7 @@ struct AuthenticationWebView: UIViewRepresentable {
 
     func updateUIView(_ uiView: WKWebView, context: UIViewRepresentableContext<AuthenticationWebView>) {
         
-        if webVM.link == "encore-fm.com" {
+        if viewModel.link == "encore-fm.com" {
             self.showAuthSheet = false
             self.showActivityIndicator = false
         }
@@ -38,20 +38,23 @@ struct AuthenticationWebView: UIViewRepresentable {
     }
 
     class Coordinator: NSObject, WKNavigationDelegate {
-        private var webVM: WebVM
+        private var viewModel: ViewModel
         
-        init(_ webVM: WebVM) {
-            self.webVM = webVM
+        init(_ viewModel: ViewModel) {
+            self.viewModel = viewModel
         }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            self.webVM.didFinishLoading = true
-            
+            DispatchQueue.main.async {
+                self.viewModel.didFinishLoading = true
+            }
         }
          func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             if let host = navigationAction.request.url?.host {
                 if host.contains("encore-fm.com") {
-                    webVM.link = host
+                    DispatchQueue.main.async {
+                        self.viewModel.link = host
+                    }
                     decisionHandler(.allow)
                     
                     return
@@ -62,17 +65,7 @@ struct AuthenticationWebView: UIViewRepresentable {
     }
 
     func makeCoordinator() -> AuthenticationWebView.Coordinator {
-        Coordinator(webVM)
-    }
-}
-
-
-class WebVM: ObservableObject {
-    @Published var link: String
-    @Published var didFinishLoading: Bool = false
-
-    init (link: String) {
-        self.link = link
+        Coordinator(viewModel)
     }
 }
 

@@ -9,27 +9,25 @@
 import SwiftUI
 
 struct SuggestSongView: View {
+    @EnvironmentObject var appState: AppState
+    
     @ObservedObject var searchResultListVM: SearchResultListVM
-    @ObservedObject var userVM: UserVM
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var playerStateVM: PlayerStateVM
     @State private var searchText : String = ""
     @State var showSessionExpiredAlert = false
-    @Binding var currentlyInSession: Bool
     typealias JSONStandard = [String : AnyObject]
     
-    init(searchResultListVM: SearchResultListVM, userVM: UserVM, songListVM: SongListVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>) {
+    init(searchResultListVM: SearchResultListVM, songListVM: SongListVM, playerStateVM: PlayerStateVM) {
         self.searchResultListVM = searchResultListVM
-        self.userVM = userVM
         self.songListVM = songListVM
         self.playerStateVM = playerStateVM
-        self._currentlyInSession = currentlyInSession
     }
     
     var body: some View {
         VStack(spacing: 0) {
             topBar.padding(.vertical)
-            SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search")
+            SearchBar(searchResultListVM: searchResultListVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search")
             if searchResultListVM.items.isEmpty {
                 VStack(alignment: .center) {
                     Spacer()
@@ -53,14 +51,14 @@ struct SuggestSongView: View {
                     Alert(title: Text("Session expired"),
                           message: Text("The host has ended the session."),
                           dismissButton: .destructive(Text("Leave"), action: {
-                            self.currentlyInSession = false
+                        self.appState.session.currentlyInSession = false
                           }))
                 }.edgesIgnoringSafeArea(.all)
             }
             
             
         }.onAppear {
-            self.getMembers(username: self.userVM.username)
+            self.getMembers(username: self.appState.user.username)
         }
     }
     
@@ -80,12 +78,12 @@ struct SuggestSongView: View {
         }
         var request = URLRequest(url: url)
         
-        print("secret: " + self.userVM.secret)
-        print("sessionID: " + self.userVM.sessionID)
+        print("secret: " + self.appState.session.secret)
+        print("sessionID: " + self.appState.session.sessionID)
         
         request.httpMethod = "GET"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.appState.session.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.appState.session.sessionID, forHTTPHeaderField: "Session")
         
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
@@ -123,11 +121,10 @@ struct SuggestSongView: View {
 }
 
 struct AddSongView_Previews: PreviewProvider {
-    static var userVM = UserVM()
-    static var searchResultListVM = SearchResultListVM(userVM: userVM)
-    static var userListVM = UserListVM(userVM: userVM, sessionID: nil)
-    @State static var currentlyInSession = true
+    static var searchResultListVM = SearchResultListVM(username: "", secret: "", sessionID: "", clientToken: "")
+    static var userListVM = UserListVM(username: "", sessionID: "")
+
     static var previews: some View {
-        SuggestSongView(searchResultListVM: searchResultListVM, userVM: userVM, songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: userVM), currentlyInSession: $currentlyInSession)
+        SuggestSongView(searchResultListVM: searchResultListVM, songListVM: SongListVM(username: "", sessionID: ""), playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""))
     }
 }

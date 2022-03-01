@@ -56,6 +56,6 @@ struct CurrentSongView: View {
 
 struct CurrentSongView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentSongView(playerStateVM: PlayerStateVM(userVM: UserVM()))
+        CurrentSongView(playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""))
     }
 }

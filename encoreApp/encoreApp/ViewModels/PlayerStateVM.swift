@@ -20,9 +20,11 @@ class PlayerStateVM: ObservableObject {
     @Published var albumCover: UIImage = UIImage(imageLiteralResourceName: "IconPlaceholder")
     @Published var songTimestamp_ms: CGFloat = 0
     var serverURL: URL
-    var userVM: UserVM
     var eventSource: EventSource
     var timer = Timer()
+    var username: String
+    var secret: String
+    var sessionID: String
     
     
     var appRemote: SPTAppRemote? {
@@ -41,15 +43,17 @@ class PlayerStateVM: ObservableObject {
         }
     }
     
-    init(userVM: UserVM) {
+    init(username: String, sessionID: String, secret: String) {
+        self.username = username
+        self.sessionID = sessionID
+        self.secret = secret
         print("INIT PlayerStateVM")
         var emptySong = Song(id: "0", name: "empty_song", artists: [""], duration_ms: 1, cover_url: "https://musicnotesbox.com/media/catalog/product/7/3/73993_image.png", album_name: "", preview_url: "", suggested_by: "", score: 0, time_added: "", upvoters: [], downvoters: [])
         song = emptySong
         progress = 0
         isPlaying = false
-        self.userVM = userVM
         
-        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)"+"/\(userVM.sessionID)")!
+        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(username)"+"/\(sessionID)")!
         eventSource = EventSource(url: serverURL)
         
         eventSource.connect()
@@ -135,7 +139,7 @@ class PlayerStateVM: ObservableObject {
     }
     
     func getPlayerState() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/state") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/player/state") else {
             print("Invalid URL")
             return
             
@@ -143,8 +147,8 @@ class PlayerStateVM: ObservableObject {
         var request = URLRequest(url: url)
         
         request.httpMethod = "GET"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -193,7 +197,7 @@ class PlayerStateVM: ObservableObject {
     }
     
     func playerPlay() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/player/play") else {
             print("Invalid URL")
             return
             
@@ -201,8 +205,8 @@ class PlayerStateVM: ObservableObject {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -237,7 +241,7 @@ class PlayerStateVM: ObservableObject {
     }
     
     func playerPause() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/player/pause") else {
             print("Invalid URL")
             return
             
@@ -245,8 +249,8 @@ class PlayerStateVM: ObservableObject {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";

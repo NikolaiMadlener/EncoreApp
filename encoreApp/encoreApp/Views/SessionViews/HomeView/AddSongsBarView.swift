@@ -10,18 +10,18 @@ import SwiftUI
 
 struct AddSongsBarView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appState: AppState
+    
     @ObservedObject var musicController: MusicController = .shared
-    @ObservedObject var userVM: UserVM
     @ObservedObject var searchResultListVM: SearchResultListVM
     @ObservedObject var songListVM: SongListVM
     @ObservedObject var playerStateVM: PlayerStateVM
     @Binding var isPlay: Bool
     @Binding var showAddSongSheet:Bool
-    @Binding var currentlyInSession: Bool
     
     @ViewBuilder
     var body: some View {
-        if self.userVM.isAdmin {
+        if self.appState.user.isAdmin {
             HStack {
                 playPauseButton
                 Spacer().frame(width: 50)
@@ -47,7 +47,7 @@ struct AddSongsBarView: View {
                     .foregroundColor(Color("purpleblue"))
             }
         }.sheet(isPresented: self.$showAddSongSheet) {
-            SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession)
+            SuggestSongView(searchResultListVM: self.searchResultListVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM)
         }
     }
     
@@ -79,7 +79,7 @@ struct AddSongsBarView: View {
     }
     
     func playerPlay() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/play") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(appState.user.username)"+"/player/play") else {
             print("Invalid URL")
             return
             
@@ -87,8 +87,8 @@ struct AddSongsBarView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(self.userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(self.userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(self.appState.session.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(self.appState.session.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -123,7 +123,7 @@ struct AddSongsBarView: View {
     }
     
     func playerPause() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/pause") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(appState.user.username)"+"/player/pause") else {
             print("Invalid URL")
             return
             
@@ -131,8 +131,8 @@ struct AddSongsBarView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(appState.session.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(appState.session.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -167,7 +167,7 @@ struct AddSongsBarView: View {
     }
     
     func playerSkipNext() {
-        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/player/skip") else {
+        guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(appState.user.username)"+"/player/skip") else {
             print("Invalid URL")
             return
             
@@ -175,8 +175,8 @@ struct AddSongsBarView: View {
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
-        request.addValue(userVM.secret, forHTTPHeaderField: "Authorization")
-        request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
+        request.addValue(appState.session.secret, forHTTPHeaderField: "Authorization")
+        request.addValue(appState.session.sessionID, forHTTPHeaderField: "Session")
         
         // HTTP Request Parameters which will be sent in HTTP Request Body
         //let postString = "userId=300&title=My urgent task&completed=false";
@@ -214,10 +214,8 @@ struct AddSongsBarView: View {
 struct AddSongsBarView_Previews: PreviewProvider {
     @State static var isPlay = false
     @State static var showAddSongSheet = false
-    @State static var currentlyInSession = true
     
     static var previews: some View {
-        AddSongsBarView(userVM: UserVM(),
-                        searchResultListVM: SearchResultListVM(userVM: UserVM()), songListVM: SongListVM(userVM: UserVM()), playerStateVM: PlayerStateVM(userVM: UserVM()), isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
+        AddSongsBarView(searchResultListVM: SearchResultListVM(username: "", secret: "", sessionID: "", clientToken: ""), songListVM: SongListVM(username: "", sessionID: ""), playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""), isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
     }
 }

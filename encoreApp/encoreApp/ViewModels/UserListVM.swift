@@ -12,13 +12,11 @@ import IKEventSource
 class UserListVM: ObservableObject {
     @Published var members: [UserListElement] = []
     var serverURL: URL
-    var userVM: UserVM
     var eventSource: EventSource
     
-    init(userVM: UserVM, sessionID: String?) {
-        self.userVM = userVM
+    init(username: String, sessionID: String) {
         
-        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)/"+"\(userVM.sessionID)")!
+        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(username)/"+"\(sessionID)")!
         eventSource = EventSource(url: serverURL)
         
         eventSource.connect()

@@ -59,7 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
         }
         
         // Create the SwiftUI view that provides the window contents.
-        let contentView = AppContentView(joinedViaURL: joinedViaURL, sessionID: sessionID)
+//        let user: User = User()
+        let contentView = AppContentView(joinedViaURL: joinedViaURL, sessionID: sessionID).environmentObject(AppState.shared)
         
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -105,8 +106,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
                 sessionID = url.absoluteString.substring(from: urlString.index(urlString.startIndex, offsetBy: 12))
                 print(sessionID)
             }
-            
-            let contentView = AppContentView(joinedViaURL: true, sessionID: sessionID)
+//            let user: User = User()
+            let contentView = AppContentView(joinedViaURL: true, sessionID: sessionID).environmentObject(AppState.shared)
             // Use a UIHostingController as window root view controller.
             if let windowScene = scene as? UIWindowScene {
                 let window = UIWindow(windowScene: windowScene)

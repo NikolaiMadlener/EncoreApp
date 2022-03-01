@@ -12,15 +12,13 @@ import IKEventSource
 class SongListVM: ObservableObject {
     @Published var songs: [Song] = []
     var serverURL: URL
-    var userVM: UserVM
+
     var eventSource: EventSource
     var lastEventId: String?
     
-    init(userVM: UserVM) {
-        print("INIT SONGLISTVM")
-        self.userVM = userVM
+    init(username: String, sessionID: String) {
         
-        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(userVM.username)"+"/\(userVM.sessionID)")!
+        serverURL = URL(string: "https://api.encore-fm.com/events/"+"\(username)"+"/\(sessionID)")!
         eventSource = EventSource(url: serverURL)
         
         eventSource.connect()
@@ -42,8 +40,6 @@ class SongListVM: ObservableObject {
                         DispatchQueue.main.async {
                             self?.songs = decodedData
                             print("UPDATE SongList SSE")
-                            print(self?.songs)
-                            print()
                         }
                     } catch {
                         print("Error SSE playlist change")

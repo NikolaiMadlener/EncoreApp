@@ -42,7 +42,7 @@ struct SongTitleBarView: View {
 }
 
 struct SongTitleBarView_Previews: PreviewProvider {
-    @ObservedObject static var playerStateVM = PlayerStateVM(userVM: UserVM())
+    @ObservedObject static var playerStateVM = PlayerStateVM(username: "", sessionID: "", secret: "")
     static var previews: some View {
         self.playerStateVM.song.name = "abc"
         self.playerStateVM.song.artists = ["defdefdefdefdefdefdefdefdefdefdefdefdef"]

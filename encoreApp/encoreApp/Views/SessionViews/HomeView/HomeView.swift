@@ -12,15 +12,16 @@ import CoreHaptics
 
 struct HomeView: View {
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var appState: AppState
+    
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var songListVM: SongListVM
-    @ObservedObject var userVM: UserVM
+    //@ObservedObject var userVM: UserVM
     @ObservedObject var playerStateVM: PlayerStateVM
     @ObservedObject var searchResultListVM: SearchResultListVM
     
     @State var showMenuSheet = false
     @State var showAddSongSheet = false
-    @Binding var currentlyInSession: Bool
     //@State var current_title_offset: CGFloat = 0
     @State var isPlay = true
     @State var value: Float = 0.8
@@ -28,12 +29,13 @@ struct HomeView: View {
     @State private var engine: CHHapticEngine?
     
     
-    init(userVM: UserVM, currentlyInSession: Binding<Bool>) {
-        self.userVM = userVM
-        self._currentlyInSession = currentlyInSession
-        self.songListVM = SongListVM(userVM: userVM)
-        self.playerStateVM = PlayerStateVM(userVM: userVM)
-        self.searchResultListVM = SearchResultListVM(userVM: userVM)
+    init(appState: AppState) {
+        self.songListVM = SongListVM(username: appState.user.username, sessionID: appState.session.sessionID)
+        self.playerStateVM = PlayerStateVM(username: appState.user.username, sessionID: appState.session.sessionID, secret: appState.session.secret)
+        self.searchResultListVM = SearchResultListVM(username: appState.user.username,
+                                                     secret: appState.session.secret,
+                                                     sessionID: appState.session.sessionID,
+                                                     clientToken: appState.session.clientToken)
     }
     
     var body: some View {
@@ -60,7 +62,7 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 0) {
                         Spacer().frame(height: 320)
                         ForEach(self.songListVM.songs, id: \.self) { song in
-                            SongListCell(userVM: self.userVM, song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
+                            SongListCell(song: song, rank: (self.songListVM.songs.firstIndex(of: song) ?? -1) + 1)
                                 .frame(height: 80)
                             Divider()
                                 .padding(.horizontal)
@@ -121,14 +123,17 @@ struct HomeView: View {
                         .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                         .padding(25)
                 }.sheet(isPresented: self.$showMenuSheet) {
-                    MenuView(userVM: self.userVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession, showMenuSheet: self.$showMenuSheet)
+                    MenuView(username: appState.user.username,
+                             sessionID: appState.session.sessionID,
+                             playerStateVM: self.playerStateVM,
+                             showMenuSheet: self.$showMenuSheet)
                 }
             }
 
             Spacer()
             HStack {
                 Spacer()
-                AddSongsBarView(userVM: userVM, searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet, currentlyInSession: $currentlyInSession)
+                AddSongsBarView(searchResultListVM: searchResultListVM, songListVM: songListVM, playerStateVM: playerStateVM, isPlay: $isPlay, showAddSongSheet: $showAddSongSheet)
                 Spacer()
             }.padding(.bottom)
         }
@@ -171,53 +176,12 @@ struct HomeView: View {
 }
 
 struct HomeView_Previews: PreviewProvider {
-    
-    @State static var currentlyInSession = true
-    static var userVM = UserVM()
+    static var appState = AppState()
     
     static var previews: some View {
         Group {
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .light)
-            HomeView(userVM: userVM, currentlyInSession: $currentlyInSession) .environment(\.colorScheme, .dark)
+            HomeView(appState: appState) .environment(\.colorScheme, .light)
+            HomeView(appState: appState) .environment(\.colorScheme, .dark)
         }
     }
 }
-
-extension UIImage {
-    func getPixelColor(pos: CGPoint) -> UIColor {
-        
-        let pixelData = self.cgImage!.dataProvider!.data
-        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
-        
-        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
-        
-        let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
-        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
-        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
-        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
-        
-        return UIColor(red: r, green: g, blue: b, alpha: a)
-    }
-}
-
-extension TimeInterval {
-    var minuteSecondMS: String {
-        return String(format:"%d:%02d", minute, second)
-    }
-    var minute: Int {
-        return Int((self/60).truncatingRemainder(dividingBy: 60))
-    }
-    var second: Int {
-        return Int(truncatingRemainder(dividingBy: 60))
-    }
-    var millisecond: Int {
-        return Int((self*1000).truncatingRemainder(dividingBy: 1000))
-    }
-}
-
-extension Int {
-    var msToSeconds: Double {
-        return Double(self) / 1000
-    }
-}
-

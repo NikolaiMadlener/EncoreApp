@@ -11,7 +11,8 @@ import CoreImage.CIFilterBuiltins
 
 struct PopupQRCodeView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var userVM: UserVM
+    @EnvironmentObject var appState: AppState
+    
     @State var showShareSheet: Bool = false
     @Binding var showPopupQRCode: Bool
     let filter = CIFilter.qrCodeGenerator()
@@ -23,7 +24,7 @@ struct PopupQRCodeView: View {
                 .font(.system(size: 25, weight: .bold))
                 .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
                 .padding(.top)
-            QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
+            QRCodeView(url: "encoreApp://\(self.appState.session.sessionID)", size: 180).padding(10)
             saveQRCodeButton
             shareQRCodeButton
             cancelButton
@@ -31,13 +32,13 @@ struct PopupQRCodeView: View {
         .cornerRadius(20)
         .frame(width: UIScreen.main.bounds.width * 0.73, height: UIScreen.main.bounds.height * 0.85)
         .sheet(isPresented: self.$showShareSheet) {
-            ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
+            ActivityViewController(activityItems: ["encoreApp://\(self.appState.session.sessionID)"] as [Any], applicationActivities: nil)
         }
     }
     
     var saveQRCodeButton: some View {
         Button(action: {
-            UIImageWriteToSavedPhotosAlbum(self.generateQRCodeImage("encoreApp://\(self.userVM.sessionID)"), nil, nil, nil)
+            UIImageWriteToSavedPhotosAlbum(self.generateQRCodeImage("encoreApp://\(self.appState.session.sessionID)"), nil, nil, nil)
         }) {
             Text("Save QR Code")
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
@@ -80,6 +81,6 @@ struct PopupQRCodeView: View {
 struct PopupQRCodeView_Previews: PreviewProvider {
     @State static var show = false
     static var previews: some View {
-        PopupQRCodeView(userVM: UserVM(), showPopupQRCode: $show)
+        PopupQRCodeView(showPopupQRCode: $show)
     }
 }

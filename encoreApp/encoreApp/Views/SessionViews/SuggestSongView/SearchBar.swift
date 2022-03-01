@@ -11,21 +11,20 @@ import SwiftUI
 import UIKit
 
 struct SearchBar: UIViewRepresentable {
+    @EnvironmentObject var appState: AppState
+    
     @ObservedObject var searchResultListVM: SearchResultListVM
-    @ObservedObject var userVM: UserVM
     @Binding var text: String
     @Binding var songs: [SpotifySearchPayload.Tracks.Item]
     var placeholder: String
     
     class Coordinator: NSObject, UISearchBarDelegate {
         @ObservedObject var searchResultListVM: SearchResultListVM
-        @ObservedObject var userVM: UserVM
         @Binding var text: String
         @Binding var songs: [SpotifySearchPayload.Tracks.Item]
         
-        init(searchResultListVM: SearchResultListVM, userVM: UserVM, text: Binding<String>, songs: Binding<[SpotifySearchPayload.Tracks.Item]>) {
+        init(searchResultListVM: SearchResultListVM, text: Binding<String>, songs: Binding<[SpotifySearchPayload.Tracks.Item]>) {
             self.searchResultListVM = searchResultListVM
-            self.userVM = userVM
             _text = text
             _songs = songs
         }
@@ -39,7 +38,7 @@ struct SearchBar: UIViewRepresentable {
     }
     
     func makeCoordinator() -> SearchBar.Coordinator {
-        return Coordinator(searchResultListVM: searchResultListVM, userVM: userVM, text: $text, songs: $songs)
+        return Coordinator(searchResultListVM: searchResultListVM, text: $text, songs: $songs)
     }
     
     func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {

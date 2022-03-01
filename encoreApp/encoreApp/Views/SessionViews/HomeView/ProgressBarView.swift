@@ -43,6 +43,6 @@ struct ProgressBarView_Previews: PreviewProvider {
     static var duration_ms: Int = 50000
     @State static var showMenuView = false
     static var previews: some View {
-        ProgressBarView(playerStateVM: PlayerStateVM(userVM: UserVM()), showMenuSheet: $showMenuView, isWide: false)
+        ProgressBarView(playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""), showMenuSheet: $showMenuView, isWide: false)
     }
 }
