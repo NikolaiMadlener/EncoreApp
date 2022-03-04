@@ -9,25 +9,11 @@
 import SwiftUI
 
 struct CurrentSongView: View {
-    @ObservedObject var playerStateVM: PlayerStateVM
-    var albumWidth: CGFloat
-//    var uiColorTopLeft: UIColor
-//    var uiColorBottomRight: UIColor
-//    var uiColorBottomLeft: UIColor
-//    var uiColorTopRight: UIColor
-    
-    init(playerStateVM: PlayerStateVM) {
-        self.playerStateVM = playerStateVM
-        self.albumWidth = playerStateVM.albumCover.size.width
-//        self.uiColorTopLeft = playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2, y: albumWidth * 0.2))
-//        self.uiColorBottomRight = playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.8))
-//        self.uiColorBottomLeft = playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.2,y: albumWidth * 0.8))
-//        self.uiColorTopRight = playerStateVM.albumCover.getPixelColor(pos: CGPoint(x: albumWidth * 0.8, y: albumWidth * 0.2))
-    }
+    @StateObject var viewModel: ViewModel
     
     var body: some View {
         VStack {
-            Image(uiImage: self.playerStateVM.albumCover)
+            Image(uiImage: self.viewModel.albumCover)
                 .resizable()
                 .frame(width: 180, height: 180)
                 .cornerRadius(10)
@@ -37,15 +23,15 @@ struct CurrentSongView: View {
 //                .shadow(color: Color(uiColorBottomLeft).opacity(0.1), radius: 8, x: -10, y: 10)
 //                .shadow(color: Color(uiColorBottomRight).opacity(0.1), radius: 8, x: 10, y: 10)
 //                .blendMode(.multiply)
-            Text("\(self.playerStateVM.song.name)")
+            Text("\(self.viewModel.song.name)")
                 .font(.system(size: 20, weight: .semibold))
                 .multilineTextAlignment(.center)
                 .lineLimit(1)
              
-            Text("\(self.playerStateVM.song.artists[0])")
+            Text("\(self.viewModel.song.artists[0])")
                 .font(.system(size: 18, weight: .regular))
             
-            Text("suggested by \(self.playerStateVM.song.suggested_by)")
+            Text("suggested by \(self.viewModel.song.suggested_by)")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(Color("purpleblue"))
                 .padding(.top, 1)
@@ -56,6 +42,6 @@ struct CurrentSongView: View {
 
 struct CurrentSongView_Previews: PreviewProvider {
     static var previews: some View {
-        CurrentSongView(playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""))
+        CurrentSongView(viewModel: .init())
     }
 }

@@ -10,36 +10,30 @@ import SwiftUI
 
 struct AppContentView: View {
     @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var appState: AppState
-    
-    @State var showJoinSheet: Bool = false
-    
-    var joinedViaURL: Bool
-    var sessionID: String
+    @StateObject var viewModel: ViewModel
     
     var body: some View {
         return Group {
             ZStack {
                 self.colorScheme == .dark ? Color("superdarkgray").edgesIgnoringSafeArea(.vertical) : Color.white.edgesIgnoringSafeArea(.vertical)
                 
-                if appState.session.currentlyInSession {
-                    HomeView(appState: appState)
+                if viewModel.currentlyInSession {
+                    HomeView(viewModel: .init())
                 }
                 else {
                     LoginView(viewModel: .init())
-                        .sheet(isPresented: self.$showJoinSheet) {
-                            JoinViaURLView(viewModel: .init(), username: "", sessionID: self.sessionID)
+                        .sheet(isPresented: self.$viewModel.showJoinSheet) {
+                            JoinViaURLView(viewModel: .init(), sessionID: self.viewModel.sessionID)
                         }
                 }
             }
-        }.onAppear{ self.showJoinSheet = self.joinedViaURL }
-        
+        }.onAppear{ self.viewModel.showJoinSheet = self.viewModel.joinedViaURL }
     }
 }
 
 struct AppContentView_Previews: PreviewProvider {
     
     static var previews: some View {
-        AppContentView(joinedViaURL: false, sessionID: "")
+        AppContentView(viewModel: .init(joinedViaURL: false, sessionID: ""))
     }
 }

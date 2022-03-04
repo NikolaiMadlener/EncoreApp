@@ -8,14 +8,18 @@
 
 import Foundation
 
-@MainActor public class AppState: ObservableObject {
-    static let shared = AppState()
-    
-    @Published var user: User
-    @Published var session: Session
+struct AppState {
+    var user: User
+    var session: Session
+    var player: Player
+    var members: [UserListElement]
+    var songs: [Song]
     
     init() {
         user = User()
         session = Session()
+        player = Player()
+        members = []
+        songs = []
     }
 }

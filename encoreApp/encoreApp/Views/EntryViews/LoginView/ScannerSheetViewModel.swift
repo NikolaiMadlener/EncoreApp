@@ -18,15 +18,16 @@ extension ScannerSheetView {
         var sessionID: String = ""
         
         // Misc
+        @Dependency(\.loginService) private var loginService
+        @Dependency(\.appState) private var appState
         init(showScannerSheet: Binding<Bool>) {
             self.showScannerSheet = showScannerSheet
         }
-        @Dependency(\.loginService) private var loginService
         
         // Functions
-        func joinSession(username: String, sessionID: String) async {
+        func joinSession() async {
             do {
-                try await loginService.joinSession(username: username, sessionID: sessionID)
+                try await loginService.joinSession(username: appState[\.user.username], sessionID: self.sessionID)
                 try await loginService.getClientToken()
             }
             catch LoginError.invalidServerResponse {

@@ -24,6 +24,19 @@ class Mockmodel {
         return songList
     }
     
+    static func getMembers() -> [UserListElement] {
+        var memberList = [
+            UserListElement(username: "Niko", is_admin: true, score: 2, spotify_synchronized: true),
+            UserListElement(username: "Niko2", is_admin: false, score: 2, spotify_synchronized: true),
+            UserListElement(username: "Niko3", is_admin: false, score: 2, spotify_synchronized: true),
+            UserListElement(username: "Niko2", is_admin: false, score: 2, spotify_synchronized: true),
+            UserListElement(username: "Niko3", is_admin: false, score: 2, spotify_synchronized: true),
+            UserListElement(username: "Niko2", is_admin: false, score: 2, spotify_synchronized: true),
+            UserListElement(username: "Niko3", is_admin: false, score: 2, spotify_synchronized: true)
+            ]
+        return memberList
+    }
+    
     static func getSongPayload() -> SpotifySearchPayload.Tracks.Item {
         SpotifySearchPayload.Tracks.Item(
                     album: SpotifySearchPayload.Tracks.Item.Album(

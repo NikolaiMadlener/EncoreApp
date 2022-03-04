@@ -9,20 +9,12 @@
 import SwiftUI
 
 struct JoinViaURLView: View {
-    @EnvironmentObject var appState: AppState
-    @ObservedObject var viewModel: ViewModel
-    @ObservedObject var userListVM: UserListVM
+    @StateObject var viewModel: ViewModel
     var sessionID: String
-   
-    init(viewModel: ViewModel, username: String, sessionID: String) {
-        self.userListVM = UserListVM(username: username, sessionID: sessionID)
-        self.sessionID = sessionID
-        self.viewModel = viewModel
-    }
     
     var body: some View {
         VStack {
-            Text("encore.")
+            Text("Join \(viewModel.members.first(where: { $0.is_admin })?.username ?? "Host") Session.")
                 .font(.system(size: 30, weight: .bold))
                 .padding(.bottom, 10)
             Spacer().frame(height: 40)
@@ -41,7 +33,7 @@ struct JoinViaURLView: View {
             Spacer().frame(height: 20)
             Button(action: {
                 Task.init {
-                    await self.viewModel.joinSession(username: self.viewModel.username, sessionID: sessionID)
+                    await self.viewModel.joinSession(sessionID: sessionID)
                 }
             }) {
                 ZStack {
@@ -69,13 +61,15 @@ struct JoinViaURLView: View {
                     Alert(title: Text("Network Error"),
                           message: Text("The Internet connection appears to be offline."),
                           dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
-            }
+                }.onAppear{
+                    viewModel.getMembers(sessionID: sessionID)
+                }
         }
     }
 }
 
 struct JoinViaURLView_Previews: PreviewProvider {
     static var previews: some View {
-        JoinViaURLView(viewModel: .init(), username: "", sessionID: "")
+        JoinViaURLView(viewModel: .init(), sessionID: "")
     }
 }

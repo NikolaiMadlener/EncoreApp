@@ -11,7 +11,7 @@ import SwiftUI
 
 // MARK: - Service
 struct LoginService {
-    var appState = AppState.shared
+    @Dependency(\.appState) private var appState
     
     func checkUsernameInvalid(username: String) -> Bool {
         let range = NSRange(location: 0, length: username.utf16.count)
@@ -50,11 +50,11 @@ struct LoginService {
         }
         
         DispatchQueue.main.async {
-            self.appState.session.sessionID = userInfo["session_id"] as! String
-            self.appState.session.secret = userInfo["secret"] as! String
-            self.appState.session.auth_url = json["auth_url"] as! String
-            self.appState.user.username = username
-            self.appState.user.isAdmin = true
+            self.appState[\.session.sessionID] = userInfo["session_id"] as! String
+            self.appState[\.session.secret] = userInfo["secret"] as! String
+            self.appState[\.session.auth_url] = json["auth_url"] as! String
+            self.appState[\.user.username] = username
+            self.appState[\.user.isAdmin] = true
         }
         return
     }
@@ -91,20 +91,19 @@ struct LoginService {
         }
         
         DispatchQueue.main.async {
-            self.appState.session.sessionID = userInfo["session_id"] as! String
-            self.appState.session.secret = userInfo["secret"] as! String
-            self.appState.session.currentlyInSession = true
-            self.appState.user.username = username
-            self.appState.user.isAdmin = false
+            self.appState[\.session.sessionID] = userInfo["session_id"] as! String
+            self.appState[\.session.secret] = userInfo["secret"] as! String
+            self.appState[\.session.currentlyInSession] = true
+            self.appState[\.user.username] = username
+            self.appState[\.user.isAdmin] = false
         }
         return
     }
     
-    
     func getClientToken() async throws -> Void {
-        let username = await appState.user.username
-        let secret = await appState.session.secret
-        let sessionID = await appState.session.sessionID
+        let username = appState[\.user.username]
+        let secret = appState[\.session.secret]
+        let sessionID = appState[\.session.sessionID]
         
         let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/clientToken")!
         
@@ -126,15 +125,15 @@ struct LoginService {
         }
         
         DispatchQueue.main.async {
-            self.appState.session.clientToken = json["access_token"] as! String
+            self.appState[\.session.clientToken] = json["access_token"] as! String
         }
         return
     }
     
     func getAuthToken() async throws -> Void {
-        let username = await appState.user.username
-        let secret = await appState.session.secret
-        let sessionID = await appState.session.sessionID
+        let username = appState[\.user.username]
+        let secret = appState[\.session.secret]
+        let sessionID = appState[\.session.sessionID]
         
         let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/authToken")!
         
@@ -156,14 +155,14 @@ struct LoginService {
         }
         
         DispatchQueue.main.async {
-            self.appState.session.authToken = json["access_token"] as! String
-            self.appState.session.currentlyInSession = true
+            self.appState[\.session.authToken] = json["access_token"] as! String
+            self.appState[\.session.currentlyInSession] = true
         }
         return
     }
     
     func getDeviceID() async throws -> Void {
-        let authToken = await appState.session.authToken
+        let authToken = appState[\.session.authToken]
         
         let url = URL(string: "https://api.spotify.com/v1/me/player/devices")!
             
@@ -184,15 +183,15 @@ struct LoginService {
         }
         
         DispatchQueue.main.async {
-            self.appState.session.deviceID = json["devices"]?.first(where: {$0.type == "Smartphone"})?.id ?? ""
+            self.appState[\.session.deviceID] = json["devices"]?.first(where: {$0.type == "Smartphone"})?.id ?? ""
         }
         return
     }
     
     func connectWithSpotify() async throws -> Void {
-        let deviceID = await appState.session.deviceID
-        let authToken = await appState.session.authToken
-        let sessionID = await appState.session.sessionID
+        let deviceID = appState[\.session.deviceID]
+        let authToken = appState[\.session.authToken]
+        let sessionID = appState[\.session.sessionID]
         
         let url = URL(string: "https://api.spotify.com/v1/me/player")!
 
@@ -213,17 +212,5 @@ struct LoginService {
             throw LoginError.invalidServerResponse
         }
         return
-    }
-}
-
-// MARK: - Injection
-private struct LoginServiceKey: DependencyKey {
-    static var currentValue: LoginService = LoginService()
-}
-
-extension DependencyValues {
-    var loginService: LoginService {
-        get { Self[LoginServiceKey.self] }
-        set { Self[LoginServiceKey.self] = newValue }
     }
 }

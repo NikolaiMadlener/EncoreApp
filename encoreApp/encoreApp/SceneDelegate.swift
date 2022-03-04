@@ -14,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     var window: UIWindow?
     //var model = Model()
     var accessToken = "accessToken"
-    var musicController = MusicController()
+    //var musicController = MusicController()
     
     var playURI = ""
     
@@ -60,7 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
         
         // Create the SwiftUI view that provides the window contents.
 //        let user: User = User()
-        let contentView = AppContentView(joinedViaURL: joinedViaURL, sessionID: sessionID).environmentObject(AppState.shared)
+        let contentView = AppContentView(viewModel: .init(joinedViaURL: joinedViaURL, sessionID: sessionID))
         
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -106,8 +106,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
                 sessionID = url.absoluteString.substring(from: urlString.index(urlString.startIndex, offsetBy: 12))
                 print(sessionID)
             }
-//            let user: User = User()
-            let contentView = AppContentView(joinedViaURL: true, sessionID: sessionID).environmentObject(AppState.shared)
+
+            let contentView = AppContentView(viewModel: .init(joinedViaURL: true, sessionID: sessionID))
             // Use a UIHostingController as window root view controller.
             if let windowScene = scene as? UIWindowScene {
                 let window = UIWindow(windowScene: windowScene)
@@ -140,7 +140,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     func connect() {
         //self.appRemote.authorizeAndPlayURI(self.playURI)
         
-        musicController.appRemoteConnecting()
+        //musicController.appRemoteConnecting()
         self.appRemote.connect()
     }
     
@@ -159,17 +159,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
 //        musicController.appRemoteConnected()
         
         self.appRemote = appRemote
-        musicController.appRemoteConnected()
+        //musicController.appRemoteConnected()
     }
     
     func appRemote(_ appRemote: SPTAppRemote, didDisconnectWithError error: Error?) {
         print("didDisconnectWithError")
-        musicController.appRemoteDisconnect()
+        //musicController.appRemoteDisconnect()
     }
     
     func appRemote(_ appRemote: SPTAppRemote, didFailConnectionAttemptWithError error: Error?) {
         print("didFailConnectionAttemptWithError")
-        musicController.appRemoteDisconnect()
+        //musicController.appRemoteDisconnect()
     }
     
     func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {

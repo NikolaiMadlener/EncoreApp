@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SongTitleBarView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var playerStateVM: PlayerStateVM
+    @StateObject var viewModel: ViewModel
     
     var body: some View {
         ZStack {
@@ -22,15 +22,15 @@ struct SongTitleBarView: View {
                 .shadow(radius: 10)
             VStack {
                 HStack {
-                    Image(uiImage: self.playerStateVM.albumCover)
+                    Image(uiImage: self.viewModel.albumCover)
                         .resizable()
                         .frame(width: 35, height: 35)
                         .cornerRadius(5)
                     VStack(alignment: .leading) {
-                        Text("\(self.playerStateVM.song.name)")
+                        Text("\(self.viewModel.song.name)")
                             .font(.system(size: 15, weight: .bold))
                             .frame(maxWidth: 250, maxHeight: 15, alignment: .leading)
-                        Text("\(self.playerStateVM.song.artists[0])")
+                        Text("\(self.viewModel.song.artists[0])")
                             .font(.system(size: 10, weight: .semibold))
                             .frame(maxWidth: 200, maxHeight: 15, alignment: .leading)
                     }
@@ -42,11 +42,8 @@ struct SongTitleBarView: View {
 }
 
 struct SongTitleBarView_Previews: PreviewProvider {
-    @ObservedObject static var playerStateVM = PlayerStateVM(username: "", sessionID: "", secret: "")
+    
     static var previews: some View {
-        self.playerStateVM.song.name = "abc"
-        self.playerStateVM.song.artists = ["defdefdefdefdefdefdefdefdefdefdefdefdef"]
-        return
-            SongTitleBarView(playerStateVM: playerStateVM).previewLayout(.sizeThatFits)
+        SongTitleBarView(viewModel: .init()).previewLayout(.sizeThatFits)
     }
 }

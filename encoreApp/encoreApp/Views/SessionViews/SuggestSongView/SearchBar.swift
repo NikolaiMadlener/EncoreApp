@@ -11,34 +11,30 @@ import SwiftUI
 import UIKit
 
 struct SearchBar: UIViewRepresentable {
-    @EnvironmentObject var appState: AppState
-    
-    @ObservedObject var searchResultListVM: SearchResultListVM
+    @StateObject var viewModel: ViewModel
     @Binding var text: String
     @Binding var songs: [SpotifySearchPayload.Tracks.Item]
     var placeholder: String
     
     class Coordinator: NSObject, UISearchBarDelegate {
-        @ObservedObject var searchResultListVM: SearchResultListVM
+        @ObservedObject var viewModel: ViewModel
         @Binding var text: String
         @Binding var songs: [SpotifySearchPayload.Tracks.Item]
         
-        init(searchResultListVM: SearchResultListVM, text: Binding<String>, songs: Binding<[SpotifySearchPayload.Tracks.Item]>) {
-            self.searchResultListVM = searchResultListVM
+        init(viewModel: ViewModel, text: Binding<String>, songs: Binding<[SpotifySearchPayload.Tracks.Item]>) {
+            self.viewModel = viewModel
             _text = text
             _songs = songs
         }
         
         func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
             text = searchText
-            searchResultListVM.searchSong(query: self.text)
+            self.viewModel.searchSong(query: self.text)
         }
-        
-        
     }
     
     func makeCoordinator() -> SearchBar.Coordinator {
-        return Coordinator(searchResultListVM: searchResultListVM, text: $text, songs: $songs)
+        return Coordinator(viewModel: viewModel, text: $text, songs: $songs)
     }
     
     func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {

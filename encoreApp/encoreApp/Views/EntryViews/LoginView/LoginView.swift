@@ -12,7 +12,6 @@ import SafariServices
 // MARK: - View
 struct LoginView: View {
     @StateObject var viewModel: ViewModel
-    @EnvironmentObject var appState: AppState
     
     var body: some View {
         NavigationView {
@@ -79,7 +78,7 @@ struct LoginView: View {
                                     await self.viewModel.authorize()
                                 }
                             }) {
-                                AuthenticationWebView(viewModel: .init(link: appState.session.auth_url),
+                                AuthenticationWebView(viewModel: .init(),
                                                       showAuthSheet: self.$viewModel.showAuthSheet,
                                                       showActivityIndicator: self.$viewModel.showActivityIndicator)
                             }

@@ -11,14 +11,15 @@ import SwiftUI
 
 struct BlueCardModifier: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
+    var color: Color?
     
     func body(content: Content) -> some View {
         content
-            .background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
+            .background(color ?? (self.colorScheme == .dark ? Color(uiColor: UIColor.systemGray5) : Color.white))
             .cornerRadius(20)
             .padding(.vertical)
             .padding(.horizontal, 20)
-            .shadow(radius: 7)
+            //.shadow(radius: 7)
             .edgesIgnoringSafeArea([.bottom])
     }
 }

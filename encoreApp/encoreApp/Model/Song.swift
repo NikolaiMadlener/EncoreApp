@@ -36,6 +36,20 @@ struct Song: Codable, Hashable, Identifiable {
 //    "time_added": "time string",
 //    "upvoters": ["omar", "cybotter", "anton"],
 //    "downvoters": []
+    init() {
+        self.id = "0"
+        self.name = "empty_song"
+        self.artists = [""]
+        self.duration_ms = 1
+        self.cover_url = "https://musicnotesbox.com/media/catalog/product/7/3/73993_image.png"
+        self.album_name = ""
+        self.preview_url = ""
+        self.suggested_by = ""
+        self.score = 0
+        self.time_added = ""
+        self.upvoters = []
+        self.downvoters = []
+    }
     
     init(id: String,
         name: String,

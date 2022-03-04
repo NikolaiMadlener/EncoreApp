@@ -16,6 +16,7 @@ extension JoinViaURLView {
         @Published var username: String = ""
         @Published var invalidUsername: Bool = false
         @Published var showActivityIndicator: Bool = false
+        @Published var members: [UserListElement] = []
         
         @Published var showServerErrorAlert: Bool = false
         @Published var showWrongIDAlert: Bool = false
@@ -24,11 +25,12 @@ extension JoinViaURLView {
         
         // Misc
         @Dependency(\.loginService) private var loginService
+        @Dependency(\.sessionService) private var sessionService
         
         // Functions
-        func joinSession(username: String, sessionID: String) async {
+        func joinSession(sessionID: String) async {
             do {
-                try await loginService.joinSession(username: username, sessionID: sessionID)
+                try await loginService.joinSession(username: self.username, sessionID: sessionID)
                 try await loginService.getClientToken()
                 showActivityIndicator = false
             }
@@ -44,6 +46,10 @@ extension JoinViaURLView {
                 showActivityIndicator = false
                 showWrongIDAlert = true
             }
+        }
+        
+        func getMembers(sessionID: String) {
+            sessionService.getMembers(sessionID: sessionID)
         }
     }
 }

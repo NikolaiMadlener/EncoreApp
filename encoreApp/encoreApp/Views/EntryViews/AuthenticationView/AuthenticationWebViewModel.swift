@@ -13,12 +13,18 @@ extension AuthenticationWebView {
     @MainActor class ViewModel: ObservableObject {
         
         // State
-        @Published var link: String
+        @Published var link: String = ""
         @Published var didFinishLoading: Bool = false
 
         // Misc
-        init (link: String) {
-            self.link = link
+        @Dependency(\.appState) private var appState
+        private var cancelBag = CancelBag()
+        init () {
+            cancelBag.collect {
+                appState.map(\.session.auth_url)
+                    .removeDuplicates()
+                    .assign(to: \.link, on: self)
+            }
         }
     }
 }

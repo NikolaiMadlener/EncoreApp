@@ -10,12 +10,7 @@ import SwiftUI
 import URLImage
 
 struct SuggestSongCell: View {
-    @ObservedObject var searchResultListVM: SearchResultListVM
-    @ObservedObject var songListVM: SongListVM
-    @ObservedObject var playerStateVM: PlayerStateVM
-    @State var currentImage: Image = Image("albumPlaceholder")
-    @State var addingInProcess = false
-    var song: SpotifySearchPayload.Tracks.Item
+    @StateObject var viewModel: ViewModel
     
     var body: some View {
         HStack {
@@ -27,9 +22,9 @@ struct SuggestSongCell: View {
     }
     
     private var albumView: some View {
-        URLImage(URL(string: song.album.images[1].url)!, placeholder: { _ in
-                // Replace placeholder image with text
-                self.currentImage.opacity(0.0)
+        URLImage(URL(string: self.viewModel.song.album.images[1].url)!, placeholder: { _ in
+            // Replace placeholder image with text
+            self.viewModel.currentImage.opacity(0.0)
         }, content: {
                $0.image
                 .resizable()
@@ -41,23 +36,23 @@ struct SuggestSongCell: View {
     
     private var songView: some View {
         VStack(alignment: .leading) {
-            Text(self.song.name)
+            Text(self.viewModel.song.name)
                 .font(.system(size: 18, weight: .semibold))
-            Text(self.song.artists[0].name)
+            Text(self.viewModel.song.artists[0].name)
                 .font(.system(size: 16, weight: .regular))
         }
     }
     
     private var addButton: some View {
         Button(action: {
-            self.searchResultListVM.suggestSong(songID: self.song.id)
-            self.addingInProcess = true
+            self.viewModel.suggestSong(songID: self.viewModel.song.id)
+            self.viewModel.addingInProcess = true
         }) {
-            if songListVM.songs.map({ $0.id }).contains(song.id) || playerStateVM.song.id == song.id {
+            if self.viewModel.songs.map({ $0.id }).contains(self.viewModel.song.id) || viewModel.currentSong.id == viewModel.song.id {
                 Image(systemName: "checkmark.square")
                     .font(.system(size: 35, weight: .light))
                     .foregroundColor(Color("purpleblue"))
-            } else if self.addingInProcess {
+            } else if self.viewModel.addingInProcess {
                 ZStack {
                     Image(systemName: "square")
                         .font(.system(size: 35, weight: .light))
@@ -78,9 +73,9 @@ struct SuggestSongCell: View {
 
 
 struct SuggestSongCell_Previews: PreviewProvider {
-    static var searchResultListVM = SearchResultListVM(username: "", secret: "", sessionID: "", clientToken: "")
     static var song = Mockmodel.getSongPayload()
+    @State static var songs = [song]
     static var previews: some View {
-        SuggestSongCell(searchResultListVM: searchResultListVM, songListVM: SongListVM(username: "", sessionID: ""), playerStateVM: PlayerStateVM(username: "", sessionID: "", secret: ""), song: song)
+        SuggestSongCell(viewModel: .init(song: song))
     }
 }

@@ -11,21 +11,7 @@ import CodeScanner
 
 // MARK: - View
 struct ScannerSheetView: View {
-    //@Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: ViewModel
-    @EnvironmentObject var appState: AppState
-   
-//    @Binding var currentlyInSession: Bool
-//    @Binding var showScannerSheet: Bool
-//    @Binding var showAuthSheet: Bool
-//    @Binding var scannedCode: String?
-//    @Binding var sessionID: String
-//    @Binding var username: String
-//    @Binding var secret: String
-//    @Binding var invalidUsername: Bool
-//    @Binding var showWrongIDAlert: Bool
-//    @Binding var showUsernameExistsAlert: Bool
-//    @Binding var showNetworkErrorAlert: Bool
+    @StateObject var viewModel: ViewModel
     
     var body: some View {
         ZStack {
@@ -35,7 +21,7 @@ struct ScannerSheetView: View {
                     if case let .success(code) = result {
                         viewModel.scanCompletion(code: code)
                         Task.init {
-                            await self.viewModel.joinSession(username: appState.user.username, sessionID: viewModel.sessionID)
+                            await self.viewModel.joinSession()
                         }
                         
                     }
