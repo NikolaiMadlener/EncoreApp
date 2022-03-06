@@ -17,11 +17,9 @@ extension JoinViaURLView {
         @Published var invalidUsername: Bool = false
         @Published var showActivityIndicator: Bool = false
         @Published var members: [UserListElement] = []
-        
-        @Published var showServerErrorAlert: Bool = false
-        @Published var showWrongIDAlert: Bool = false
-        @Published var showUsernameExistsAlert: Bool = false
-        @Published var showNetworkErrorAlert: Bool = false
+        @Published var showAlert: Bool = false
+        var alertInfo: AlertInfo = AlertInfo(title: "", message: "")
+    
         
         // Misc
         @Dependency(\.loginService) private var loginService
@@ -36,15 +34,18 @@ extension JoinViaURLView {
             }
             catch LoginError.invalidServerResponse {
                 showActivityIndicator = false
-                showServerErrorAlert = true
+                alertInfo = AlertInfo(title: "Server Error", message: "")
+                showAlert = true
             }
             catch LoginError.usernameAlreadyExists {
                 showActivityIndicator = false
-                showUsernameExistsAlert = true
+                alertInfo = AlertInfo(title: "Invalid Name", message: "A user with the given username already exists in this session.")
+                showAlert = true
             }
             catch {
                 showActivityIndicator = false
-                showWrongIDAlert = true
+                alertInfo = AlertInfo(title: "Something went wrong", message: "Try again")
+                showAlert = true
             }
         }
         

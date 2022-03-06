@@ -13,9 +13,9 @@ extension MenuView {
     @MainActor class ViewModel: ObservableObject {
         
         // State
-        @Published var showDeleteAlert = false
-        @Published var showLeaveAlert = false
-        @Published var showSessionExpiredAlert = false
+        @Published var showDeleteAlert: Bool = false
+        @Published var showLeaveAlert: Bool = false
+        @Published var showSessionExpiredAlert: Bool = false
         @Published var showShareSheet: Bool = false
         @Published var showPopupQRCode: Bool = false
         @Published var sessionID: String = ""
@@ -61,6 +61,14 @@ extension MenuView {
         
         func leaveSession() {
             sessionService.leaveSession()
+        }
+        
+        func showAlert() {
+            if isUserAdmin {
+                self.showDeleteAlert = true
+            } else {
+                self.showLeaveAlert = true
+            }
         }
     }
 }

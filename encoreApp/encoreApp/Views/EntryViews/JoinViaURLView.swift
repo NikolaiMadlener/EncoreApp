@@ -19,11 +19,11 @@ struct JoinViaURLView: View {
                 .padding(.bottom, 10)
             Spacer().frame(height: 40)
             TextField("Enter your Name", text: self.$viewModel.username)
-            .padding(15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.gray, lineWidth: 1)
-            ).padding(.horizontal, 25)
+                .padding(15)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.gray, lineWidth: 1)
+                ).padding(.horizontal, 25)
             if viewModel.invalidUsername {
                 Text("Name should be between three and 10 characters long and free of special characters and spaces.")
                     .font(.system(size: 12))
@@ -40,27 +40,31 @@ struct JoinViaURLView: View {
                     if !viewModel.showActivityIndicator {
                         Text("Join Session")
                     } else {
-                        ActivityIndicator()
-                            .frame(width: 20, height: 20).foregroundColor(Color.white)
+                        ProgressView().progressViewStyle(CircularProgressViewStyle(tint: Color("purpleblue")))
                     }
                 }
                 .modifier(ButtonHeavyModifier(isDisabled: viewModel.username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
             }.padding(.bottom)
                 .disabled(viewModel.username.count < 1)
-                .alert(isPresented: $viewModel.showWrongIDAlert) {
-                    Alert(title: Text("Session doesn't exist"),
-                          message: Text(""),
-                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
-            }
-                .alert(isPresented: $viewModel.showUsernameExistsAlert) {
-                    Alert(title: Text("Invalid Name"),
-                          message: Text("A user with the given username already exists."),
-                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
-            }
-                .alert(isPresented: $viewModel.showNetworkErrorAlert) {
-                    Alert(title: Text("Network Error"),
-                          message: Text("The Internet connection appears to be offline."),
-                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
+                .alert(isPresented: $viewModel.showAlert) {
+                    Alert(title: Text(viewModel.alertInfo.title),
+                          message: Text(viewModel.alertInfo.message),
+                          dismissButton: .default(Text("OK"), action: { self.viewModel.showAlert = false }))
+                    
+                    //                .alert(isPresented: $viewModel.showWrongIDAlert) {
+                    //                    Alert(title: Text("Session doesn't exist"),
+                    //                          message: Text(""),
+                    //                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
+                    //            }
+                    //                .alert(isPresented: $viewModel.showUsernameExistsAlert) {
+                    //                    Alert(title: Text("Invalid Name"),
+                    //                          message: Text("A user with the given username already exists."),
+                    //                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
+                    //            }
+                    //                .alert(isPresented: $viewModel.showNetworkErrorAlert) {
+                    //                    Alert(title: Text("Network Error"),
+                    //                          message: Text("The Internet connection appears to be offline."),
+                    //                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
                 }.onAppear{
                     viewModel.getMembers(sessionID: sessionID)
                 }

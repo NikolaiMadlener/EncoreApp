@@ -17,15 +17,11 @@ extension LoginView {
         @Published var scannedCode: String?
         @Published var invalidUsername: Bool = false
         @Published var showActivityIndicator: Bool = false
-        
         @Published var showAuthSheet: Bool = false
         @Published var showScannerSheet: Bool = false
-        
-        @Published var showServerErrorAlert: Bool = false
-        @Published var showWrongIDAlert: Bool = false
-        @Published var showUsernameExistsAlert: Bool = false
-        @Published var showNetworkErrorAlert: Bool = false
-        
+        @Published var showAlert: Bool = false
+        var alertInfo: AlertInfo = AlertInfo(title: "", message: "")
+
         // Misc
         @Dependency(\.loginService) private var loginService
         
@@ -49,14 +45,18 @@ extension LoginView {
             }
             catch LoginError.invalidServerResponse {
                 showActivityIndicator = false
-                showServerErrorAlert = true
+                alertInfo = AlertInfo(title: "Server Error", message: "")
+                showAlert = true
             }
             catch LoginError.unsupportedFormat {
                 showActivityIndicator = false
-                showServerErrorAlert = true
+                alertInfo = AlertInfo(title: "Unsupported Format", message: "")
+                showAlert = true
             }
             catch {
                 showActivityIndicator = false
+                alertInfo = AlertInfo(title: "Something went wrong", message: "Try again")
+                showAlert = true
             }
         }
         
@@ -79,14 +79,18 @@ extension LoginView {
             }
             catch LoginError.invalidServerResponse {
                 showActivityIndicator = false
-                showServerErrorAlert = true
+                alertInfo = AlertInfo(title: "Server Error", message: "")
+                showAlert = true
             }
             catch LoginError.unsupportedFormat {
                 showActivityIndicator = false
-                showServerErrorAlert = true
+                alertInfo = AlertInfo(title: "Unsupported Format", message: "")
+                showAlert = true
             }
             catch {
                 showActivityIndicator = false
+                alertInfo = AlertInfo(title: "Something went wrong", message: "Try again")
+                showAlert = true
             }
         }
     }

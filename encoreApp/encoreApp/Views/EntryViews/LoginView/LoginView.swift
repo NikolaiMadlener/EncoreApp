@@ -48,7 +48,10 @@ struct LoginView: View {
                             viewModel.joinSession()
                         }) {
                             Text("Join Session")
-                                        .modifier(ButtonHeavyModifier(isDisabled: viewModel.username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+                                        .modifier(ButtonHeavyModifier(
+                                            isDisabled: viewModel.username.count < 1,
+                                            backgroundColor: Color("purpleblue"),
+                                            foregroundColor: Color.white))
                         }
                                 .disabled(viewModel.username.count < 1)
                                 .fullScreenCover(isPresented: self.$viewModel.showScannerSheet) {
@@ -66,8 +69,7 @@ struct LoginView: View {
                                         if !viewModel.showActivityIndicator {
                                             Text("Create Session")
                                         } else {
-                                            ActivityIndicator()
-                                                .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
+                                            ProgressView().progressViewStyle(CircularProgressViewStyle(tint: Color("purpleblue")))
                                         }
                                     }
                                     .modifier(ButtonLightModifier(isDisabled: viewModel.username.count < 1, foregroundColor: Color("purpleblue")))
@@ -85,23 +87,28 @@ struct LoginView: View {
                         }
                         Spacer()
                     }
-                }.alert(isPresented: $viewModel.showServerErrorAlert) {
-                    Alert(title: Text("Server Error"),
-                          message: Text(""),
-                          dismissButton: .default(Text("OK"), action: { self.viewModel.showServerErrorAlert = false }))
-                }.alert(isPresented: $viewModel.showWrongIDAlert) {
-                    Alert(title: Text("Session doesn't exist"),
-                          message: Text("Try again"),
-                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
-                }.alert(isPresented: $viewModel.showUsernameExistsAlert) {
-                    Alert(title: Text("Invalid Name"),
-                          message: Text("A user with the given username already exists."),
-                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
-                }.alert(isPresented: $viewModel.showNetworkErrorAlert) {
-                    Alert(title: Text("Network Error"),
-                          message: Text("The Internet connection appears to be offline."),
-                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
+                }.alert(isPresented: $viewModel.showAlert) {
+                    Alert(title: Text(viewModel.alertInfo.title),
+                          message: Text(viewModel.alertInfo.message),
+                          dismissButton: .default(Text("OK"), action: { self.viewModel.showAlert = false }))
                 }
+//                }.alert(isPresented: $viewModel.showServerErrorAlert) {
+//                    Alert(title: Text("Server Error"),
+//                          message: Text(""),
+//                          dismissButton: .default(Text("OK"), action: { self.viewModel.showServerErrorAlert = false }))
+//                }.alert(isPresented: $viewModel.showWrongIDAlert) {
+//                    Alert(title: Text("Session doesn't exist"),
+//                          message: Text("Try again"),
+//                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
+//                }.alert(isPresented: $viewModel.showUsernameExistsAlert) {
+//                    Alert(title: Text("Invalid Name"),
+//                          message: Text("A user with the given username already exists."),
+//                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
+//                }.alert(isPresented: $viewModel.showNetworkErrorAlert) {
+//                    Alert(title: Text("Network Error"),
+//                          message: Text("The Internet connection appears to be offline."),
+//                          dismissButton: .default(Text("OK"), action: { self.viewModel.showWrongIDAlert = false }))
+//                }
             }
         }
     }

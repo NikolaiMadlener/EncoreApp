@@ -36,6 +36,7 @@
 		23106F6027D21928008B237A /* ProgressBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23106F5F27D21928008B237A /* ProgressBarViewModel.swift */; };
 		23106F6427D21D8F008B237A /* CurrentSongViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23106F6327D21D8F008B237A /* CurrentSongViewModel.swift */; };
 		23106F6627D24C47008B237A /* SessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23106F6527D24C47008B237A /* SessionService.swift */; };
+		23106F6827D4EE5C008B237A /* AlertInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23106F6727D4EE5B008B237A /* AlertInfo.swift */; };
 		23117C5224895F6B0023B680 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23117C5124895F6B0023B680 /* ActivityViewController.swift */; };
 		23190660247DA25F00DA550B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2319065F247DA25F00DA550B /* AppDelegate.swift */; };
 		23190662247DA25F00DA550B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23190661247DA25F00DA550B /* SceneDelegate.swift */; };
@@ -61,7 +62,6 @@
 		234B8D9924884EBC00C0F7F3 /* Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234B8D9824884EBC00C0F7F3 /* Blur.swift */; };
 		235EB4CF247FB79A007A720D /* AppContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4CE247FB79A007A720D /* AppContentView.swift */; };
 		235EB4D12480F6CC007A720D /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235EB4D02480F6CC007A720D /* MenuView.swift */; };
-		2361911B24B3B93D0096D806 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361911A24B3B93D0096D806 /* ActivityIndicator.swift */; };
 		2361911D24B45F790096D806 /* SongTitleBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2361911C24B45F790096D806 /* SongTitleBarView.swift */; };
 		23DBB9BE27CA2CE700D521CF /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DBB9BD27CA2CE700D521CF /* UIImage+Extension.swift */; };
 		23DBB9C027CA2D0200D521CF /* TimeInterval+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DBB9BF27CA2D0200D521CF /* TimeInterval+Extension.swift */; };
@@ -120,6 +120,7 @@
 		23106F5F27D21928008B237A /* ProgressBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarViewModel.swift; sourceTree = "<group>"; };
 		23106F6327D21D8F008B237A /* CurrentSongViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongViewModel.swift; sourceTree = "<group>"; };
 		23106F6527D24C47008B237A /* SessionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionService.swift; sourceTree = "<group>"; };
+		23106F6727D4EE5B008B237A /* AlertInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertInfo.swift; sourceTree = "<group>"; };
 		23117C5124895F6B0023B680 /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		2319065C247DA25F00DA550B /* encoreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = encoreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2319065F247DA25F00DA550B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -147,7 +148,6 @@
 		234B8D9824884EBC00C0F7F3 /* Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
 		235EB4CE247FB79A007A720D /* AppContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContentView.swift; sourceTree = "<group>"; };
 		235EB4D02480F6CC007A720D /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
-		2361911A24B3B93D0096D806 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		2361911C24B45F790096D806 /* SongTitleBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongTitleBarView.swift; sourceTree = "<group>"; };
 		23DBB9BD27CA2CE700D521CF /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		23DBB9BF27CA2D0200D521CF /* TimeInterval+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Extension.swift"; sourceTree = "<group>"; };
@@ -203,7 +203,6 @@
 		23106F3327CE3E11008B237A /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				2361911A24B3B93D0096D806 /* ActivityIndicator.swift */,
 				8F6ADE8824C3716100D8F1F8 /* LabeledDivider.swift */,
 			);
 			path = Helpers;
@@ -336,6 +335,7 @@
 				23106F2D27CE17DF008B237A /* Session.swift */,
 				23106F2F27CE18C2008B237A /* User.swift */,
 				23106F5927D2102B008B237A /* Player.swift */,
+				23106F6727D4EE5B008B237A /* AlertInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -620,12 +620,12 @@
 				23106F4E27D018C8008B237A /* SuggestSongCellViewModel.swift in Sources */,
 				23106F6427D21D8F008B237A /* CurrentSongViewModel.swift in Sources */,
 				23106F5227D02046008B237A /* AddSongBarViewModel.swift in Sources */,
-				2361911B24B3B93D0096D806 /* ActivityIndicator.swift in Sources */,
 				8F8FE232249E679C006674E8 /* SearchBar.swift in Sources */,
 				8FE5348F24812EFB00D4D630 /* VoteState.swift in Sources */,
 				23106F4027CF9570008B237A /* Loadable.swift in Sources */,
 				8F0CAC3124A2001100531BB0 /* ButtonHeavyModifier.swift in Sources */,
 				8FA39C2C2535DE52009460F9 /* RoundedCorner.swift in Sources */,
+				23106F6827D4EE5C008B237A /* AlertInfo.swift in Sources */,
 				23DBB9D127CCD2D100D521CF /* ScannerSheetViewModel.swift in Sources */,
 				23106F3827CEA4E6008B237A /* HomeViewModel.swift in Sources */,
 				234B8D952483A4BF00C0F7F3 /* AppState.swift in Sources */,

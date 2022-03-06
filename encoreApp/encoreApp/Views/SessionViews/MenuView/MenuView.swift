@@ -23,7 +23,11 @@ struct MenuView: View {
                     membersList
                     Spacer()
                 }.modifier(BlueCardModifier())
-                leaveButton
+                if viewModel.isUserAdmin {
+                    deleteButton
+                } else {
+                    leaveButton
+                }
             }.background(Color(uiColor: UIColor.systemGray6))
                 .sheet(isPresented: self.$viewModel.showShareSheet) {
                     ActivityViewController(activityItems: ["encoreApp://\(self.viewModel.sessionID)"] as [Any], applicationActivities: nil)
@@ -100,9 +104,9 @@ struct MenuView: View {
         }
     }
     
-    var leaveButton: some View {
-        Button(action: { self.viewModel.isUserAdmin ? (self.viewModel.showDeleteAlert = true) : (self.viewModel.showLeaveAlert = true) }) {
-            Text(self.viewModel.isUserAdmin ? "Delete Session" : "Leave Session")
+    var deleteButton: some View {
+        Button(action: { viewModel.showAlert() }) {
+            Text("Delete Session")
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
         }.padding(.bottom)
             .alert(isPresented: self.$viewModel.showDeleteAlert) {
@@ -115,6 +119,13 @@ struct MenuView: View {
                       secondaryButton: .cancel(Text("Cancel"), action: {
                     self.viewModel.showDeleteAlert = false
                 }))}
+    }
+    
+    var leaveButton: some View {
+        Button(action: { viewModel.showAlert() }) {
+            Text("Leave Session")
+                .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
+        }.padding(.bottom)
             .alert(isPresented: self.$viewModel.showLeaveAlert) {
                 Alert(title: Text("Leave Session"),
                       message: Text("Are you sure you want to leave this session?"),

@@ -82,8 +82,8 @@ struct SongListCell: View {
                 self.viewModel.upvote()
             }
         }) {
-            Image(systemName: viewModel.voteState == VoteState.UPVOTE ? "triangle.fill" : "triangle")
-                .font(.system(size: 22, weight: .regular))
+            Image(systemName: "chevron.up")
+                .font(.system(size: 22, weight: .bold))
                 .foregroundColor(viewModel.voteState == VoteState.UPVOTE ? viewModel.voteState.color : Color.gray)
                 .padding(.bottom, 3)
         }
@@ -100,10 +100,10 @@ struct SongListCell: View {
             case .DOWNVOTE: break
             }
         }) {
-            Image(systemName: viewModel.voteState == VoteState.DOWNVOTE ? "triangle.fill" : "triangle")
-                .font(.system(size: 23, weight: .regular))
+            Image(systemName: "chevron.down")
+                .font(.system(size: 23, weight: .bold))
                 .foregroundColor(viewModel.voteState == VoteState.DOWNVOTE ? viewModel.voteState.color : Color.gray)
-                .rotationEffect(.degrees(-180))
+                //.rotationEffect(.degrees(-180))
                 .padding(.top, 3)
         }
     }

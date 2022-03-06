@@ -14,15 +14,15 @@ struct AddSongsBarView: View {
     
     @ViewBuilder
     var body: some View {
-        if self.viewModel.isUserAdmin {
-            HStack {
-                playPauseButton
-                Spacer().frame(width: 50)
+       if self.viewModel.isUserAdmin {
+           HStack {
+                playPauseButton.frame(width: 50)
+                Spacer().frame(width: 30)
                 addButton
-                Spacer().frame(width: 50)
-                skipButton
+                Spacer().frame(width: 30)
+                skipButton.frame(width: 50)
             }.padding(10)
-            .padding(.horizontal, 10)
+            .frame(width: 280)
             .background(self.colorScheme == .dark ? Color("darkgray") : Color(.white))
             .cornerRadius(25)
             .shadow(radius: 10)
