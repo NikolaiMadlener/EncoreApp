@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct ProgressBarView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var playerStateVM: PlayerStateVM
     @Binding var showMenuSheet: Bool
     var isWide: Bool
@@ -21,7 +20,7 @@ struct ProgressBarView: View {
     var body: some View {
         ZStack(alignment: .leading) {
             Rectangle()
-                .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color.gray)
+                .foregroundColor(Color("darkgray"))
                 .frame(width: width, height: 4.0)
                 .cornerRadius(isWide ? 0 : 5)
             Rectangle()

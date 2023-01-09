@@ -27,7 +27,7 @@ public enum VoteState: Int32 {
     var color: Color {
         switch self {
         case .NEUTRAL:
-            return Color.gray
+            return Color.white
         case .UPVOTE:
             return Color.green
         case .DOWNVOTE:

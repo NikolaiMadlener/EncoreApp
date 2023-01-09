@@ -28,7 +28,6 @@ struct SuggestSongCell: View {
     
     private var albumView: some View {
         URLImage(URL(string: song.album.images[1].url)!, placeholder: { _ in
-                // Replace placeholder image with text
                 self.currentImage.opacity(0.0)
         }, content: {
                $0.image
@@ -45,6 +44,7 @@ struct SuggestSongCell: View {
                 .font(.system(size: 18, weight: .semibold))
             Text(self.song.artists[0].name)
                 .font(.system(size: 16, weight: .regular))
+                .foregroundColor(Color("fontLightGray"))
         }
     }
     
@@ -54,23 +54,28 @@ struct SuggestSongCell: View {
             self.addingInProcess = true
         }) {
             if songListVM.songs.map({ $0.id }).contains(song.id) || playerStateVM.song.id == song.id {
-                Image(systemName: "checkmark.square")
-                    .font(.system(size: 35, weight: .light))
-                    .foregroundColor(Color("purpleblue"))
-            } else if self.addingInProcess {
                 ZStack {
-                    Image(systemName: "square")
+                    Rectangle().frame(width: 20, height: 20).foregroundColor(Color.white)
+                    Image(systemName: "checkmark.square.fill")
                         .font(.system(size: 35, weight: .light))
                         .foregroundColor(Color("purpleblue"))
+                }
+            } else if self.addingInProcess {
+                ZStack {
+                    Image(systemName: "square.fill")
+                        .font(.system(size: 35, weight: .light))
+                        .foregroundColor(Color.white)
                     Image(systemName: "ellipsis")
                         .font(.system(size: 20, weight: .light))
                         .foregroundColor(Color("purpleblue"))
                 }
-            }
-            else {
-                Image(systemName: "plus.square.fill")
-                    .font(.system(size: 35, weight: .light))
-                    .foregroundColor(Color("purpleblue"))
+            } else {
+                ZStack {
+                    Rectangle().frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
+                    Image(systemName: "plus.square.fill")
+                        .font(.system(size: 35, weight: .light))
+                        .foregroundColor(Color.white)
+                }
             }
         }
     }

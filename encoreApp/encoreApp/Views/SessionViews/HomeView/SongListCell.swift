@@ -18,12 +18,13 @@ struct SongListCell: View {
     
     var body: some View {
         HStack {
-            //rankView.frame(width: 55)
             albumView
             songView
             Spacer()
             voteView
-        }.onAppear {
+        }
+        .modifier(SongListCellModifier(voteState: $voteState))
+        .onAppear {
             if self.song.upvoters.contains(self.userVM.username) {
                 self.voteState = .UPVOTE
             } else if self.song.downvoters.contains(self.userVM.username) {
@@ -53,12 +54,23 @@ struct SongListCell: View {
             .padding(.horizontal, 10)
     }
     
+    private var imagePlaceholder: some View {
+        Rectangle()
+            .frame(width: 55, height: 55)
+            .foregroundColor(.blue)
+            .cornerRadius(5)
+            .padding(.horizontal, 10)
+    }
+    
     private var songView: some View {
         VStack(alignment: .leading) {
             Text(self.song.name)
                 .font(.system(size: 18, weight: .semibold))
+                .foregroundColor(Color.white)
+                .lineLimit(2)
             Text(self.song.artists[0])
                 .font(.system(size: 16, weight: .regular))
+                .foregroundColor(Color("fontLightGray"))
         }
     }
     
@@ -88,7 +100,7 @@ struct SongListCell: View {
         }) {
             Image(systemName: voteState == VoteState.UPVOTE ? "triangle.fill" : "triangle")
                 .font(.system(size: 22, weight: .regular))
-                .foregroundColor(voteState == VoteState.UPVOTE ? voteState.color : Color.gray)
+                .foregroundColor(voteState == VoteState.UPVOTE ? voteState.color : Color("fontLightGray"))
                 .padding(.bottom, 3)
         }
     }
@@ -105,8 +117,8 @@ struct SongListCell: View {
             }
         }) {
             Image(systemName: voteState == VoteState.DOWNVOTE ? "triangle.fill" : "triangle")
-                .font(.system(size: 23, weight: .regular))
-                .foregroundColor(voteState == VoteState.DOWNVOTE ? voteState.color : Color.gray)
+                .font(.system(size: 22, weight: .regular))
+                .foregroundColor(voteState == VoteState.DOWNVOTE ? voteState.color : Color("fontLightGray"))
                 .rotationEffect(.degrees(-180))
                 .padding(.top, 3)
         }

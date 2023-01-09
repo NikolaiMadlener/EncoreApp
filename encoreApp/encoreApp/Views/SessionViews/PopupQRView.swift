@@ -10,7 +10,6 @@ import SwiftUI
 import CoreImage.CIFilterBuiltins
 
 struct PopupQRCodeView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @State var showShareSheet: Bool = false
     @Binding var showPopupQRCode: Bool
@@ -19,17 +18,17 @@ struct PopupQRCodeView: View {
     
     var body: some View {
         VStack {
-            Text("Invite your friends")
+            Text("scan this qr code.")
                 .font(.system(size: 25, weight: .bold))
-                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(Color.white)
                 .padding(.top)
             QRCodeView(url: "encoreApp://\(self.userVM.sessionID)", size: 180).padding(10)
-            saveQRCodeButton
+            LabeledDivider(label: "or")
             shareQRCodeButton
             cancelButton
-        }.background(self.colorScheme == .dark ? Color("superdarkgray") : Color.white)
+        }.background(Color("superdarkgray"))
         .cornerRadius(20)
-        .frame(width: UIScreen.main.bounds.width * 0.73, height: UIScreen.main.bounds.height * 0.85)
+        .frame(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.8)
         .sheet(isPresented: self.$showShareSheet) {
             ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
         }
@@ -50,7 +49,7 @@ struct PopupQRCodeView: View {
         }) {
             Text("Share Invite Link")
                 .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-        }.padding()
+        }.padding(10)
     }
     
     var cancelButton: some View {
@@ -59,7 +58,7 @@ struct PopupQRCodeView: View {
         }) {
             Text("Cancel")
                 .font(.headline)
-                .foregroundColor(Color("purpleblue"))
+                .foregroundColor(Color("fontLightGray"))
                 .padding(.bottom)
         }
     }

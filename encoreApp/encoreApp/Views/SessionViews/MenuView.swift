@@ -9,10 +9,9 @@
 import SwiftUI
 
 struct MenuView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var userVM: UserVM
     @ObservedObject var userListVM: UserListVM
-    @ObservedObject var playerStateVM: PlayerStateVM
+    @ObservedObject var pageViewModel: PageViewModel
     
     @Binding var showMenuSheet: Bool
     @Binding var currentlyInSession: Bool
@@ -21,44 +20,44 @@ struct MenuView: View {
     @State var showShareSheet: Bool = false
     @State var showPopupQRCode: Bool = false
     
-    init(userVM: UserVM, playerStateVM: PlayerStateVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>) {
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showMenuSheet: Binding<Bool>, pageViewModel: PageViewModel) {
         self.userVM = userVM
         self.userListVM = UserListVM(userVM: userVM, sessionID: nil)
-        self.playerStateVM = playerStateVM
         self._currentlyInSession = currentlyInSession
         self._showMenuSheet = showMenuSheet
+        self.pageViewModel = pageViewModel
+        self.getMembers(username: self.userVM.username)
     }
     
     var body: some View {
         GeometryReader { geo in
-            
             VStack(spacing: 0) {
-                topBar
+                ZStack {
+                    HStack {
+                        homeButton
+                        Spacer()
+                    }
+                    sessionTitle
+                }
                 
-                sessionTitle
+                membersList
                 
-                qrCode
-                
-                shareLinkButton
-                
-                VStack {
-                    membersList
-                    Spacer()
-                }.modifier(BlueCardModifier())
-                
-                leaveButton
+                HStack {
+                    shareLinkButton
+                    leaveButton
+                }.padding(.top, 10)
+                .padding(.bottom, 15)
             }
-            
             .sheet(isPresented: self.$showShareSheet) {
                 ActivityViewController(activityItems: ["encoreApp://\(self.userVM.sessionID)"] as [Any], applicationActivities: nil)
             }.onAppear{
-                self.getMembers(username: self.userVM.username)
+                print("Refresh Menuview")
             }
-            
             if self.showPopupQRCode {
                 popupQRView
             }
         }
+        
     }
     
     var topBar: some View {
@@ -69,16 +68,24 @@ struct MenuView: View {
         }.padding()
     }
     
+    var homeButton: some View {
+        Button(action: {
+            withAnimation { self.pageViewModel.selectTabIndex = 0 }
+        }) {
+            Image(systemName: "arrow.left")
+                .font(.system(size: 23, weight: .semibold))
+                .foregroundColor(Color.white)
+                .padding(.leading, 20)
+        }.buttonStyle(PlainButtonStyle())
+    }
+    
     var sessionTitle: some View {
-        Text("\(userListVM.members.first(where: { $0.is_admin })?.username ?? "Host")'s session")
-            .overlay(
-                Rectangle()
-                    .foregroundColor(Color("purpleblue"))
-                    .frame(height: 2)
-                    .cornerRadius(100)
-                    .offset(y: 2), alignment: .bottom)
+        Text("members.")
             .font(.system(size: 25, weight: .bold))
-            .padding(.bottom, 10)
+            .frame(maxWidth: .infinity)
+            .foregroundColor(Color.white)
+            .padding(.vertical, 20)
+            .padding(.horizontal, 20)
     }
     
     var qrCode: some View {
@@ -97,70 +104,61 @@ struct MenuView: View {
         .padding(.bottom, 10)
     }
     
-    var shareLinkButton: some View {
-        Button(action: { self.showShareSheet.toggle() }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
-                    .foregroundColor(self.colorScheme == .dark ? Color("darkgray") : Color("lightgray"))
-                HStack {
-                    Text("Share Invite Link")
-                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.headline)
-                        .padding(.leading)
-                    Spacer()
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        .font(.system(size: 20, weight: .medium))
-                        .padding(.trailing)
+    var membersList: some View {
+        VStack(spacing: 0) {
+            GeometryReader { gp in
+                ZStack {
+                    ScrollView {
+                        ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
+                            MemberCell(userVM: userVM, rank: (self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1, member: member, isAdmin: member.is_admin)
+                        }.animation(.easeInOut(duration: 0.3))
+                    }
+                    //fade out gradient
+                    Rectangle()
+                        .fill(
+                            LinearGradient(gradient: Gradient(stops: [
+                                .init(color: Color("superdarkgray").opacity(0.01), location: 0),
+                                .init(color: Color("superdarkgray"), location: 1)
+                            ]), startPoint: .top, endPoint: .bottom)
+                        ).frame(height: 0.06 * gp.size.height)
+                        .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-            }.padding(.horizontal, 20)
+            }
         }
     }
     
-    var membersList: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                Text("Leaderboard")
-                    .font(.system(size: 22, weight: .semibold))
+    var shareLinkButton: some View {
+        Button(action: { withAnimation { self.showPopupQRCode.toggle() } }) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
                     .foregroundColor(Color("purpleblue"))
-                    .padding(10)
-                Spacer()
-            }
-            ScrollView {
-                VStack {
-                    ForEach(self.userListVM.members.sorted(by: { $0.score > $1.score }), id: \.self) { member in
-                        HStack {
-                            Text("\((self.userListVM.members.sorted(by: { $0.score > $1.score }).firstIndex(of: member) ?? -1) + 1)")
-                                .font(.system(size: 17, weight: .light))
-                            if member.username == self.userVM.username {
-                                Text("\(member.username)").font(.system(size: 17, weight: .semibold))
-                            } else {
-                                Text("\(member.username)").font(.system(size: 17, weight: .medium))
-                            }
-                            Spacer()
-                            Text("\(member.score)").font(.system(size: 17, weight: .semibold))
-                            Image(systemName: "heart")
-                                .font(.system(size: 15, weight: .semibold))
-                        }.foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
-                        Divider()
-                    }
-                    Spacer().frame(height: 10)
-                }.padding(.horizontal, 30)
-            }
+                HStack {
+                    Image(systemName: "person.crop.circle.badge.plus")
+                    Text("Invite Friends")
+                }.foregroundColor(Color.white)
+                .font(.headline)
+            }.padding(.leading, 10)
+            .padding(.trailing, 5)
         }
     }
     
     var leaveButton: some View {
         Button(action: { self.userVM.isAdmin ? (self.showAlert = true) : (self.leaveSession(username: self.userVM.username)) }) {
-            Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
-                .modifier(ButtonHeavyModifier(isDisabled: false, backgroundColor: Color.red, foregroundColor: Color.white))
-        }.padding(.bottom)
+            ZStack {
+                RoundedRectangle(cornerRadius: 15).frame(maxWidth: .infinity, maxHeight: 50)
+                    .foregroundColor(Color.red)
+                HStack {
+                    Image(systemName: self.userVM.isAdmin ? "trash.fill" : "chevron.left.circle")
+                    Text(self.userVM.isAdmin ? "Delete Session" : "Leave Session")
+                }.foregroundColor(Color.white)
+                .font(.headline)
+            }.padding(.leading, 5)
+            .padding(.trailing, 10)
+        }
         .alert(isPresented: self.$showAlert) {
             Alert(title: Text("Delete Session"),
                   message: Text("By deleting the current session all members will be kicked."),
                   primaryButton: .destructive(Text("Delete"), action: {
-                    self.playerStateVM.playerPause()
                     self.deleteSession(username: self.userVM.username)
                   }),
                   secondaryButton: .cancel(Text("Cancel"), action: {
@@ -177,7 +175,7 @@ struct MenuView: View {
                     height: geo.size.height,
                     alignment: .center)
         }.background(
-            Color.black.opacity(0.5)
+            Color.black.opacity(0.8)
                 .edgesIgnoringSafeArea(.all)
                 .onTapGesture {
                     self.showPopupQRCode.toggle()
@@ -186,7 +184,7 @@ struct MenuView: View {
     }
     
     func getMembers(username: String) {
-        
+        print("GET MEMBERS")
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/list") else {
             print("Invalid URL")
             return
@@ -318,6 +316,6 @@ struct MenuView_Previews: PreviewProvider {
     @State static var showMenuSheet = false
     
     static var previews: some View {
-        MenuView(userVM: userVM, playerStateVM: playerStateVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet)
+        MenuView(userVM: userVM, currentlyInSession: $currentlyInSession, showMenuSheet: $showMenuSheet, pageViewModel: PageViewModel())
     }
 }

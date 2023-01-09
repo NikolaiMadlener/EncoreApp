@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct AddSongsBarView: View {
-    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var musicController: MusicController = .shared
     @ObservedObject var userVM: UserVM
     @ObservedObject var searchResultListVM: SearchResultListVM
@@ -24,28 +23,30 @@ struct AddSongsBarView: View {
         if self.userVM.isAdmin {
             HStack {
                 playPauseButton
-                Spacer().frame(width: 50)
+                Spacer().frame(width: 30)
                 addButton
-                Spacer().frame(width: 50)
+                Spacer().frame(width: 30)
                 skipButton
-            }.padding(10)
+            }.padding(8)
             .padding(.horizontal, 10)
-            .background(self.colorScheme == .dark ? Color("darkgray") : Color(.white))
+            .background(Color("mediumdarkgray"))
             .cornerRadius(25)
-            .shadow(radius: 10)
+            .shadow(radius: 20)
         } else {
             addButton
+                .shadow(radius: 15)
         }
     }
     
     var addButton: some View {
         Button(action: { self.showAddSongSheet = true }) {
             ZStack {
-                Circle().frame(width: 55, height: 55).foregroundColor(Color.white)
+                Circle().frame(width: 59, height: 59).foregroundColor(Color("purpleblue")).cornerRadius(20)
                 Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 60, weight: .light))
-                    .foregroundColor(Color("purpleblue"))
+                    .font(.system(size: 60, weight: .regular))
+                    .foregroundColor(Color.white)
             }
+            
         }.sheet(isPresented: self.$showAddSongSheet) {
             SuggestSongView(searchResultListVM: self.searchResultListVM, userVM: self.userVM, songListVM: self.songListVM, playerStateVM: self.playerStateVM, currentlyInSession: self.$currentlyInSession)
         }
@@ -65,7 +66,7 @@ struct AddSongsBarView: View {
             ZStack {
                 Image(systemName: self.playerStateVM.isPlaying ? "pause" : "play")
                     .font(.system(size: 30, weight: .semibold))
-                    .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                    .foregroundColor(Color.white)
             }
         }
     }
@@ -74,7 +75,7 @@ struct AddSongsBarView: View {
         Button(action: { self.playerSkipNext() }) {
             Image(systemName: "forward.end")
                 .font(.system(size: 30, weight: .semibold))
-                .foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                .foregroundColor(Color.white)
         }
     }
     

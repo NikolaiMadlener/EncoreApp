@@ -1,85 +1,58 @@
 //
-//  JoinViaURLView.swift
+//  ScannerViewModel.swift
 //  encoreApp
 //
-//  Created by Nikolai Madlener on 04.06.20.
+//  Created by Etienne Köhler on 22.12.20.
 //  Copyright © 2020 NikolaiEtienne. All rights reserved.
 //
 
+import Foundation
 import SwiftUI
 
-struct JoinViaURLView: View {
+class ScannerViewModel: ObservableObject {
+    
+    /// Defines how often we are going to try looking for a new QR-code in the camera feed.
+    let scanInterval: Double = 1.0
     @ObservedObject var userVM: UserVM
-    @ObservedObject var userListVM: UserListVM
-    var sessionID: String
-    @State var username = ""
-    @State var secret: String = ""
-    @State var showWrongIDAlert = false
     @Binding var currentlyInSession: Bool
-    @State var invalidUsername = false
-    @State var showActivityIndicator = false
-    @State var showUsernameExistsAlert = false
-    @State var showNetworkErrorAlert = false
-   
-    init(userVM: UserVM, sessionID: String, currentlyInSession: Binding<Bool>) {
+    @Binding var showScannerSheet: Bool
+    @Binding var showAuthSheet: Bool
+    @Binding var scannedCode: String?
+    @Binding var sessionID: String
+    @Binding var username: String
+    @Binding var secret: String
+    @Binding var invalidUsername: Bool
+    @Binding var showAlert: Bool
+    @Binding var activeAlert: ActiveAlert
+    
+    @Published var torchIsOn: Bool = false
+    @Published var lastQrCode: String?
+    
+    init(userVM: UserVM, currentlyInSession: Binding<Bool>, showScannerSheet: Binding<Bool>, showAuthSheet: Binding<Bool>, scannedCode: Binding<String?>, sessionID: Binding<String>, username: Binding<String>, secret: Binding<String>, invalidUsername: Binding<Bool>, showAlert: Binding<Bool>, activeAlert: Binding<ActiveAlert>) {
         self.userVM = userVM
-        self.userListVM = UserListVM(userVM: userVM, sessionID: sessionID)
-        self.sessionID = sessionID
         self._currentlyInSession = currentlyInSession
+        self._showScannerSheet = showScannerSheet
+        self._showAuthSheet = showAuthSheet
+        self._scannedCode = scannedCode
+        self._sessionID = sessionID
+        self._username = username
+        self._secret = secret
+        self._invalidUsername = invalidUsername
+        self._showAlert = showAlert
+        self._activeAlert = activeAlert
     }
     
-    var body: some View {
-        VStack {
-            sessionTitle
-            Spacer().frame(height: 40)
-            //Text(sessionID)
-            TextField("Enter your Name", text: self.$username)
-            .padding(15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.gray, lineWidth: 1)
-            ).padding(.horizontal, 25)
-            if invalidUsername {
-                Text("Name should be between three and 10 characters long and free of special characters and spaces.")
-                    .font(.system(size: 12))
-                    .foregroundColor(.red)
-                    .padding(.horizontal, 25)
-            }
-            Spacer().frame(height: 20)
-            Button(action: { self.joinSession(username: self.username) }) {
-                ZStack {
-                    if !showActivityIndicator {
-                        Text("Join Session")
-                    } else {
-                        ActivityIndicator()
-                            .frame(width: 20, height: 20).foregroundColor(Color.white)
-                    }
-                }
-                     .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-            }.padding(.bottom)
-            .disabled(username.count < 1)
-            .alert(isPresented: $showWrongIDAlert) {
-                    Alert(title: Text("Session doesn't exist"),
-                          message: Text(""),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
-            }
-            .alert(isPresented: $showUsernameExistsAlert) {
-                    Alert(title: Text("Invalid Name"),
-                          message: Text("A user with the given username already exists."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
-            }
-            .alert(isPresented: $showNetworkErrorAlert) {
-                    Alert(title: Text("Network Error"),
-                          message: Text("The Internet connection appears to be offline."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+    func onFoundQrCode(_ code: String) {
+        self.lastQrCode = code
+        self.showScannerSheet = false
+        if let lastQrCode = self.lastQrCode {
+            if lastQrCode.count > 12 {
+                self.sessionID = self.lastQrCode!.substring(from: self.lastQrCode!.index(self.lastQrCode!.startIndex, offsetBy: 12))
+            } else {
+                self.sessionID = ""
             }
         }
-    }
-    
-    var sessionTitle: some View {
-        Text("encore.")
-            .font(.system(size: 30, weight: .bold))
-            .padding(.bottom, 10)
+        self.joinSession(username: self.username)
     }
     
     func joinSession(username: String) {
@@ -89,45 +62,39 @@ struct JoinViaURLView: View {
         } else {
             invalidUsername = false
         }
-        self.showActivityIndicator = true
         
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(username)"+"/join/"+"\(sessionID)") else {
             print("Invalid URL")
             return
             
         }
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             // Check for Error
             if let error = error {
-                print("Error took placee \(error)")
-                print("locDes: \(error.localizedDescription)")
+                print("Error took placce \(error.localizedDescription)")
                 if error.localizedDescription == "A data connection is not currently allowed." {
-                    self.showNetworkErrorAlert = true
+                    self.showAlert = true
+                    self.activeAlert = .network
                 }
-                self.showActivityIndicator = false
                 return
             }
-            
             
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 if dataString.starts(with: "{\"error") {
                     if dataString.starts(with: "{\"error\":\"UserConflictError\"") {
-                        self.showUsernameExistsAlert = true
+                        self.showAlert = true
+                        self.activeAlert = .usernameExists
                     } else {
-                        self.showWrongIDAlert = true
+                        self.showAlert = true
+                        self.activeAlert = .wrongID
                     }
-                    self.showActivityIndicator = false
                     return
                 } else {
                     do {
@@ -135,24 +102,24 @@ struct JoinViaURLView: View {
                         if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                             // try to read out a string array
                             if let userInfo = json["user_info"] as? [String: Any] {
-                                //self.sessionID = userInfo["session_id"] as! String
+                                self.sessionID = userInfo["session_id"] as! String
                                 self.secret = userInfo["secret"] as! String
                             }
+                            self.currentlyInSession = true
                         }
                     } catch let error as NSError {
                         print("Failed to load: \(error.localizedDescription)")
-                        self.showActivityIndicator = false
+                        self.showAlert = true
+                        self.activeAlert = .wrongID
                     }
                     DispatchQueue.main.async {
                         self.userVM.username = username
                         self.userVM.isAdmin = false
                         self.userVM.secret = self.secret
                         self.userVM.sessionID = self.sessionID
-                        self.showActivityIndicator = false
-                        
+                        self.currentlyInSession = true
                         self.getClientToken()
                     }
-                    self.showWrongIDAlert = false
                     self.currentlyInSession = true
                 }
             }
@@ -174,15 +141,13 @@ struct JoinViaURLView: View {
         request.addValue(userVM.sessionID, forHTTPHeaderField: "Session")
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
             // Check for Error
             if let error = error {
-                print("Error took placeee \(error)")
-                print("locDes: \(error.localizedDescription)")
+                print("Error took placcce \(error)")
                 if error.localizedDescription == "A data connection is not currently allowed." {
-                    self.showNetworkErrorAlert = true
+                    self.showAlert = true
+                    self.activeAlert = .network
                 }
-                self.showActivityIndicator = false
                 return
             }
             
@@ -194,7 +159,7 @@ struct JoinViaURLView: View {
                         clientToken = json["access_token"] as! String
                         DispatchQueue.main.async {
                             self.userVM.clientToken = clientToken
-                            //self.showAuthSheet = true
+                            self.showAuthSheet = true
                         }
                     }
                 } catch {
@@ -216,13 +181,5 @@ struct JoinViaURLView: View {
             return true
         }
         return false
-    }
-}
-
-struct JoinViaURLView_Previews: PreviewProvider {
-    @State static var currentlyInSession = false
-    static var userVM = UserVM()
-    static var previews: some View {
-        JoinViaURLView(userVM: userVM, sessionID: "123", currentlyInSession: $currentlyInSession)
     }
 }

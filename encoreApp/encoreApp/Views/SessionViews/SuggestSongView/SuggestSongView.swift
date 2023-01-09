@@ -29,6 +29,10 @@ struct SuggestSongView: View {
     var body: some View {
         VStack(spacing: 0) {
             topBar.padding(.vertical)
+            Text("add songs.")
+                .font(.system(size: 25, weight: .bold))
+                .foregroundColor(Color.white)
+                .padding(.vertical, 5)
             SearchBar(searchResultListVM: searchResultListVM, userVM: userVM, text: $searchText, songs: $searchResultListVM.items, placeholder: "Search")
             if searchResultListVM.items.isEmpty {
                 VStack(alignment: .center) {
@@ -59,18 +63,19 @@ struct SuggestSongView: View {
             }
             
             
-        }.onAppear {
+        }.background(Color("superdarkgray"))
+        .onAppear {
             self.getMembers(username: self.userVM.username)
         }
     }
     
     var topBar: some View {
-             ZStack {
-                 RoundedRectangle(cornerRadius: 6)
-                     .fill(Color.secondary)
-                     .frame(width: 60, height: 4)
-             }
-         }
+        ZStack {
+            RoundedRectangle(cornerRadius: 6)
+                .fill(Color.secondary)
+                .frame(width: 60, height: 4)
+        }
+    }
     
     func getMembers(username: String) {
         

@@ -9,164 +9,145 @@
 import SwiftUI
 import SafariServices
 
+
+
 struct LoginView: View {
+    
+    // MARK: Stored Instance Properties
     @ObservedObject var userVM: UserVM
     @ObservedObject var musicController: MusicController = .shared
     @Binding var currentlyInSession: Bool
     @State var username: String = ""
     @State var sessionID: String = ""
     @State var secret: String = ""
-    
-    @State var showServerErrorAlert = false
-    @State var showWrongIDAlert = false
-    
     @State var showScannerSheet = false
-    @State var scannedCode: String?
-    
     @State var showAuthSheet = false
-    
+    @State var scannedCode: String?
     @State var invalidUsername = false
-    
     @State var auth_url: String = ""
     @State var sessionCreated: Bool? = false
-    
     @State var deviceID = ""
-    
     @State var showActivityIndicator = false
-    @State var showUsernameExistsAlert = false
-    @State var showNetworkErrorAlert = false
+    @State var showAlert = false
+    @State var activeAlert: ActiveAlert = .server
     
     
-    var body: some View {
-        NavigationView {
-            ZStack {
-                if #available(iOS 14.0, *) {
-                    VStack {
-                        Spacer()
-                        Image("vinyl")
-                            .resizable()
-                            .scaledToFit()
-                            .offset(x:0,y:70)
-                            .scaleEffect(x:1.3, y:1.3)
-                    }.ignoresSafeArea(.keyboard)
-                } else {
-                    VStack {
-                        Spacer()
-                        Image("vinyl")
-                            .resizable()
-                            .scaledToFit()
-                            .offset(x:0,y:70)
-                            .scaleEffect(x:1.3, y:1.3)
-                    }
-                }
-                
+    
+    
+    // MARK: Computed Instance Properties
+    var background: some View {
+        Group {
+            if #available(iOS 14.0, *) {
                 VStack {
-                    Text("encore.")
-                        .font(.largeTitle)
-                        .bold()
-                        .overlay(
-                            Rectangle()
-                                .foregroundColor(Color("purpleblue"))
-                                .frame(height: 2)
-                                .cornerRadius(100)
-                                .offset(y: 2), alignment: .bottom)
-                        
-                    Spacer().frame(height: 40)
-                    TextField("Enter your Name", text: self.$username)
-                        .padding(15)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.gray, lineWidth: 1)
-                        ).padding(.horizontal, 25)
-                    if invalidUsername {
-                        Text("Name should be between 3 and 10 characters long and free of special characters and spaces.")
-                            .font(.system(size: 12))
-                            .foregroundColor(.red)
-                            .padding(.horizontal, 25)
-                    }
-                    Spacer().frame(height: 20)
-                    Group {
-                        if #available(iOS 14.0, *) {
-                            Button(action: {
-                                    if self.checkUsernameInvalid(username: self.username) {
-                                        self.invalidUsername = true
-                                    } else {
-                                        self.showScannerSheet = true
-                                        self.invalidUsername = false
-                                    }}) {
-                                Text("Join Session")
-                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-                            }
-                            .disabled(username.count < 1)
-                            .fullScreenCover(isPresented: self.$showScannerSheet) {
-                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
-                            }
-                        } else {
-                            Button(action: {
-                                    if self.checkUsernameInvalid(username: self.username) {
-                                        self.invalidUsername = true
-                                    } else {
-                                        self.showScannerSheet = true
-                                        self.invalidUsername = false
-                                    }}) {
-                                Text("Join Session")
-                                    .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
-                            }
-                            .disabled(username.count < 1)
-                            .sheet(isPresented: self.$showScannerSheet) {
-                                ScannerSheetView(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showWrongIDAlert: self.$showWrongIDAlert, showUsernameExistsAlert: self.$showUsernameExistsAlert, showNetworkErrorAlert: self.$showNetworkErrorAlert)
-                            }
-                        }
-                        
-                        LabeledDivider(label: "or")
-                        VStack {
-                            ZStack {
-                                Button(action: {
-                                    self.createSession(username: self.username)
-                                }) {
-                                    ZStack {
-                                        if !showActivityIndicator {
-                                            Text("Create Session")
-                                        } else {
-                                            ActivityIndicator()
-                                                .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
-                                        }
-                                    }
-                                    .modifier(ButtonLightModifier(isDisabled: username.count < 1, foregroundColor: Color("purpleblue")))
-                                    
-                                }.disabled(username.count < 1)
-                            }.sheet(isPresented: self.$showAuthSheet, onDismiss: {
-                                
-                                self.getAuthToken()
-                                self.showActivityIndicator = false
-                            }) {
-                                AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
-                            }
-                        }
-                        Spacer()
-                    }
-                }.alert(isPresented: $showServerErrorAlert) {
-                    Alert(title: Text("Server Error"),
-                          message: Text(""),
-                          dismissButton: .default(Text("OK"), action: { self.showServerErrorAlert = false }))
-                }.alert(isPresented: $showWrongIDAlert) {
-                    Alert(title: Text("Session doesn't exist"),
-                          message: Text("Try again"),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
-                    
-                }.alert(isPresented: $showUsernameExistsAlert) {
-                    Alert(title: Text("Invalid Name"),
-                          message: Text("A user with the given username already exists."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
-                }.alert(isPresented: $showNetworkErrorAlert) {
-                    Alert(title: Text("Network Error"),
-                          message: Text("The Internet connection appears to be offline."),
-                          dismissButton: .default(Text("OK"), action: { self.showWrongIDAlert = false }))
+                    Spacer()
+                    Image("entryBackground")
+                        .resizable()
+                        .scaledToFit()
+                        .offset(x:0,y:70)
+                        .scaleEffect(x:1.3, y:1.3)
+                }.ignoresSafeArea(.keyboard)
+            } else {
+                VStack {
+                    Spacer()
+                    Image("entryBackground")
+                        .resizable()
+                        .scaledToFit()
+                        .offset(x:0,y:70)
+                        .scaleEffect(x:1.3, y:1.3)
                 }
             }
         }
     }
     
+    var title: some View {
+        Text("encore.")
+            .font(.largeTitle)
+            .foregroundColor(.white)
+            .bold()
+    }
+    
+    var nameTextField: some View {
+        Group {
+            Spacer().frame(height: 40)
+            TextField("Enter your Name", text: self.$username)
+                .padding(15)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.gray, lineWidth: 1)
+                ).padding(.horizontal, 25)
+            if invalidUsername {
+                Text("Name should be between 3 and 10 characters long and free of special characters and spaces.")
+                    .font(.system(size: 12))
+                    .foregroundColor(.red)
+                    .padding(.horizontal, 25)
+            }
+            Spacer().frame(height: 20)
+        }
+    }
+    
+    var joinButton: some View {
+        Button(action: {
+                if self.checkUsernameInvalid(username: self.username) {
+                    self.invalidUsername = true
+                } else {
+                    self.showScannerSheet = true
+                    self.invalidUsername = false
+                }}) {
+            Text("Join Session")
+                .modifier(ButtonHeavyModifier(isDisabled: username.count < 1, backgroundColor: Color("purpleblue"), foregroundColor: Color.white))
+        }
+        .disabled(username.count < 1)
+        .fullScreenCover(isPresented: self.$showScannerSheet) {
+            ScannerView(viewModel: ScannerViewModel(userVM: self.userVM, currentlyInSession: self.$currentlyInSession, showScannerSheet: self.$showScannerSheet, showAuthSheet: self.$showAuthSheet, scannedCode: self.$scannedCode, sessionID: self.$sessionID, username: self.$username, secret: self.$secret, invalidUsername: self.$invalidUsername, showAlert: self.$showAlert, activeAlert: self.$activeAlert))
+        }
+    }
+    
+    var createButton: some View {
+        VStack {
+            Button(action: {
+                self.createSession(username: self.username)
+            }) {
+                ZStack {
+                    if !showActivityIndicator {
+                        Text("Create Session")
+                    } else {
+                        ActivityIndicator()
+                            .frame(width: 20, height: 20).foregroundColor(Color("purpleblue"))
+                    }
+                }
+                .modifier(ButtonLightModifier(isDisabled: username.count < 1, foregroundColor: Color("purpleblue")))
+                
+            }.disabled(username.count < 1)
+            .sheet(isPresented: self.$showAuthSheet, onDismiss: {
+                
+                self.getAuthToken()
+                self.showActivityIndicator = false
+            }) {
+                AuthenticationWebView(webVM: WebVM(link: self.userVM.auth_url), showAuthSheet: self.$showAuthSheet, showActivityIndicator: self.$showActivityIndicator)
+            }
+            
+        }
+    }
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Color("superdarkgray").edgesIgnoringSafeArea(.all)
+                background
+                VStack {
+                    title
+                    nameTextField
+                    joinButton
+                    LabeledDivider(label: "or")
+                    createButton
+                    Spacer()
+                }
+                .modifier(LoginAlertsModifier(showAlert: self.$showAlert, activeAlert: self.$activeAlert))
+            }
+        }
+    }
+    
+    // MARK: Instance Methods
     func checkUsernameInvalid(username: String) -> Bool {
         let range = NSRange(location: 0, length: username.utf16.count)
         let regex = try! NSRegularExpression(pattern: "[A-Za-z][A-Za-z][A-Za-z][A-Za-z]*")
@@ -181,8 +162,6 @@ struct LoginView: View {
         return false
     }
     
-    
-    
     func createSession(username: String) {
         if checkUsernameInvalid(username: username) {
             invalidUsername = true
@@ -190,31 +169,22 @@ struct LoginView: View {
         } else {
             invalidUsername = false
         }
-        
         self.showActivityIndicator = true
-        
         guard let url = URL(string: "https://api.encore-fm.com/admin/"+"\(username)"+"/createSession") else {
             print("Invalid URL")
             return
         }
         var request = URLRequest(url: url)
-        
         request.httpMethod = "POST"
-        
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
         var auth_url = ""
+        
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
             if let error = error {
                 print("Error took place \(error)")
                 print(error.localizedDescription)
                 if error.localizedDescription == "The Internet connection appears to be offline." {
-                    self.showNetworkErrorAlert = true
+                    self.showAlert = true
+                    self.activeAlert = .network
                 }
                 self.showActivityIndicator = false
                 return
@@ -223,7 +193,6 @@ struct LoginView: View {
             // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
-                
                 do {
                     // make sure this JSON is in the format we expect
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
@@ -233,12 +202,13 @@ struct LoginView: View {
                             self.secret = userInfo["secret"] as! String
                             
                         }
-                        
                         self.auth_url = json["auth_url"] as! String
                     }
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
-                    self.showServerErrorAlert = true
+                    self.showAlert = true
+                    self.activeAlert = .server
+                    self.showAlert = true
                     self.showActivityIndicator = false
                 }
                 
@@ -255,7 +225,6 @@ struct LoginView: View {
         }
         task.resume()
     }
-    
     
     func getClientToken() {
         var clientToken = ""
@@ -295,6 +264,7 @@ struct LoginView: View {
         }
         task.resume()
     }
+    
     func getAuthToken() {
         guard let url = URL(string: "https://api.encore-fm.com/users/"+"\(userVM.username)"+"/authToken") else {
             print("Invalid URL")
@@ -394,20 +364,11 @@ struct LoginView: View {
         request.addValue(userVM.sessionID, forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
         
-        // HTTP Request Parameters which will be sent in HTTP Request Body
-        //let postString = "userId=300&title=My urgent task&completed=false";
-        // Set HTTP Request Body
-        //request.httpBody = postString.data(using: String.Encoding.utf8);
-        // Perform HTTP Request
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            // Check for Error
             if let error = error {
                 print("Error took place \(error)")
                 return
             }
-            
-            // Convert HTTP Response Data to a String
             if let data = data, let dataString = String(data: data, encoding: .utf8) {
                 print("Response data string:\n \(dataString)")
                 

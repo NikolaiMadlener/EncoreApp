@@ -67,6 +67,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
+            window.overrideUserInterfaceStyle = .dark
             connect()
         }
         let tapGesture = AnyGestureRecognizer(target: window, action:#selector(UIView.endEditing))
@@ -78,7 +79,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
     
     // MARK: App IS running and App is called from Join Link
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-         
         guard let url = URLContexts.first?.url else {
             return
         }
@@ -113,6 +113,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SPTAppRemoteDelegate, S
                 window.rootViewController = UIHostingController(rootView: contentView)
                 self.window = window
                 window.makeKeyAndVisible()
+                window.overrideUserInterfaceStyle = .dark
             }
         }
     }
